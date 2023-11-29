@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>labdesk</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{8021572d-fcb1-4026-aa3b-0ff16ee835d7}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>labdesk</RootNamespace>
+    <AssemblyName>labdesk</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <GenerateCreateScript>True</GenerateCreateScript>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\User Defined Types\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\cfield.sql" />
+    <Build Include="dbo\Tables\cvalidate.sql" />
+    <Build Include="dbo\Tables\errorlog.sql" />
+    <Build Include="dbo\Tables\request.sql" />
+    <Build Include="dbo\Tables\workflow.sql" />
+    <Build Include="dbo\Tables\uncertainty.sql" />
+    <Build Include="dbo\Tables\component.sql" />
+    <Build Include="dbo\Tables\condition.sql" />
+    <Build Include="dbo\Tables\workplace.sql" />
+    <Build Include="dbo\Tables\request_customfield.sql" />
+    <Build Include="dbo\Tables\tableflag.sql" />
+    <Build Include="dbo\Tables\request_material.sql" />
+    <Build Include="dbo\Tables\qualification.sql" />
+    <Build Include="dbo\Tables\translation.sql" />
+    <Build Include="dbo\Tables\project_customfield.sql" />
+    <Build Include="dbo\Tables\project.sql" />
+    <Build Include="dbo\Tables\service.sql" />
+    <Build Include="dbo\Tables\task_material.sql" />
+    <Build Include="dbo\Tables\task_service.sql" />
+    <Build Include="dbo\Tables\request_service.sql" />
+    <Build Include="dbo\Tables\task.sql" />
+    <Build Include="dbo\Tables\users.sql" />
+    <Build Include="dbo\Tables\measurement_cfield.sql" />
+    <Build Include="dbo\Tables\attachment.sql" />
+    <Build Include="dbo\Tables\technique.sql" />
+    <Build Include="dbo\Tables\department.sql" />
+    <Build Include="dbo\Tables\analysis.sql" />
+    <Build Include="dbo\Tables\traversal.sql" />
+    <Build Include="dbo\Tables\filter.sql" />
+    <Build Include="dbo\Tables\strposition.sql" />
+    <Build Include="dbo\Tables\measurement_condition.sql" />
+    <Build Include="dbo\Tables\role_permission.sql" />
+    <Build Include="dbo\Tables\task_workload.sql" />
+    <Build Include="dbo\Tables\method_analysis.sql" />
+    <Build Include="dbo\Tables\handbook.sql" />
+    <Build Include="dbo\Tables\step.sql" />
+    <Build Include="dbo\Tables\project_member.sql" />
+    <Build Include="dbo\Tables\billing_customer.sql" />
+    <Build Include="dbo\Tables\instrument.sql" />
+    <Build Include="dbo\Tables\columns.sql" />
+    <Build Include="dbo\Tables\smpcondition.sql" />
+    <Build Include="dbo\Tables\permission.sql" />
+    <Build Include="dbo\Tables\smpcontainer.sql" />
+    <Build Include="dbo\Tables\instype.sql" />
+    <Build Include="dbo\Tables\smpmatrix.sql" />
+    <Build Include="dbo\Tables\setup.sql" />
+    <Build Include="dbo\Tables\laboratory.sql" />
+    <Build Include="dbo\Tables\smppoint.sql" />
+    <Build Include="dbo\Tables\measurement.sql" />
+    <Build Include="dbo\Tables\customer.sql" />
+    <Build Include="dbo\Tables\smppreservation.sql" />
+    <Build Include="dbo\Tables\manufacturer.sql" />
+    <Build Include="dbo\Tables\smptype.sql" />
+    <Build Include="dbo\Tables\material.sql" />
+    <Build Include="dbo\Tables\customfield.sql" />
+    <Build Include="dbo\Tables\spa.sql" />
+    <Build Include="dbo\Tables\state.sql" />
+    <Build Include="dbo\Tables\method.sql" />
+    <Build Include="dbo\Tables\storage.sql" />
+    <Build Include="dbo\Tables\attribute.sql" />
+    <Build Include="dbo\Tables\billing.sql" />
+    <Build Include="dbo\Tables\import.sql" />
+    <Build Include="dbo\Tables\audit.sql" />
+    <Build Include="dbo\Tables\batch.sql" />
+    <Build Include="dbo\Tables\instrument_method.sql" />
+    <Build Include="dbo\Tables\profile_analysis.sql" />
+    <Build Include="dbo\Tables\supplier.sql" />
+    <Build Include="dbo\Tables\btcposition.sql" />
+    <Build Include="dbo\Tables\billing_position.sql" />
+    <Build Include="dbo\Tables\formulation.sql" />
+    <Build Include="dbo\Tables\contact.sql" />
+    <Build Include="dbo\Tables\mailqueue.sql" />
+    <Build Include="dbo\Tables\certificate.sql" />
+    <Build Include="dbo\Tables\request_analysis.sql" />
+    <Build Include="dbo\Tables\method_smptype.sql" />
+    <Build Include="dbo\Tables\profile.sql" />
+    <Build Include="dbo\Tables\priority.sql" />
+    <Build Include="dbo\Tables\role.sql" />
+    <Build Include="dbo\Views\view_request_owner.sql" />
+    <Build Include="dbo\Views\view_worksheet_details.sql" />
+    <Build Include="dbo\Views\view_project_owner.sql" />
+    <Build Include="dbo\Views\view_labreport_details.sql" />
+    <Build Include="dbo\Views\view_task.sql" />
+    <Build Include="dbo\Views\view_attachment_revision.sql" />
+    <Build Include="dbo\Views\view_request_measurement.sql" />
+    <Build Include="dbo\Views\view_billing_position.sql" />
+    <Build Include="dbo\Views\view_measurement.sql" />
+    <Build Include="dbo\Functions\users_get_hourly_rate.sql" />
+    <Build Include="dbo\Functions\users_get_id.sql" />
+    <Build Include="dbo\Functions\users_get_suser.sql" />
+    <Build Include="dbo\Functions\audit_get_value.sql" />
+    <Build Include="dbo\Functions\audit_get_first.sql" />
+    <Build Include="dbo\Functions\xml_diff.sql" />
+    <Build Include="dbo\Stored Procedures\message_substitute_sql.sql" />
+    <Build Include="dbo\Stored Procedures\lims_initialize.sql" />
+    <Build Include="dbo\Stored Procedures\gesd_test.sql" />
+    <Build Include="dbo\Stored Procedures\datetime_get.sql" />
+    <Build Include="dbo\Stored Procedures\users_get_Customer.sql" />
+    <Build Include="dbo\Stored Procedures\version_be.sql" />
+    <Build Include="dbo\Stored Procedures\measurement_pool.sql" />
+    <Build Include="dbo\Stored Procedures\spa_create.sql" />
+    <Build Include="dbo\Stored Procedures\row_duplicate.sql" />
+    <Build Include="dbo\Stored Procedures\audit_xml_diff.sql" />
+    <Build Include="dbo\Stored Procedures\request_create_subrequest.sql" />
+    <Build Include="dbo\Stored Procedures\calculation_iterate.sql" />
+    <Build Include="dbo\Stored Procedures\users_get_name.sql" />
+    <Build Include="dbo\Stored Procedures\measurement_insert.sql" />
+    <Build Include="dbo\Stored Procedures\import_csv.sql" />
+    <Build Include="dbo\Stored Procedures\calculation_perform.sql" />
+    <Build Include="dbo\Stored Procedures\calculation_extract_keyword.sql" />
+    <Build Include="dbo\Stored Procedures\mailqueue_process.sql" />
+    <Build Include="dbo\Stored Procedures\calculation_substitute_keyword.sql" />
+    <Build Include="dbo\Stored Procedures\calculation_test.sql" />
+    <Build Include="dbo\Stored Procedures\import_perform.sql" />
+    <Build Include="dbo\Stored Procedures\folder_create.sql" />
+    <Build Include="dbo\Stored Procedures\attachment_save.sql" />
+    <Build Include="dbo\Stored Procedures\mail_send.sql" />
+    <Build Include="dbo\Stored Procedures\role_duplicate.sql" />
+    <Build Include="dbo\Stored Procedures\message_extract_sql.sql" />
+    <Build Include="dbo\User Defined Types\StringList.sql" />
+    <Build Include="dbo\User Defined Types\KeyValueList.sql" />
+    <Build Include="dbo\User Defined Types\BigIntList.sql" />
+    <Build Include="dbo\User Defined Types\ColumnList.sql" />
+    <Build Include="dbo\User Defined Types\xml_diff_list.sql" />
+  </ItemGroup>
+</Project>

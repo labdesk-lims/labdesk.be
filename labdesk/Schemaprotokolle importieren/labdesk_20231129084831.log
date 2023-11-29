@@ -1,0 +1,87 @@
+29.11.2023 09:48:31	Dieses Protokoll enthält Informationen über den Importvorgang eines Schemas in das Projekt "labdesk" auf dem Computer "LAPTOPF" durch den Benutzer "lkoge".
+29.11.2023 09:48:31	Der Import des Datenbankschemas wurde gestartet.
+29.11.2023 09:48:35	Datenbankanmeldeinformationen werden ermittelt.
+29.11.2023 09:48:35	Datenbankoptionen werden ermittelt.
+29.11.2023 09:48:35	Option zum Erfassen der generischen datenbankweit gültigen Konfiguration
+29.11.2023 09:48:35	Benutzer werden ermittelt.
+29.11.2023 09:48:35	Rollen werden ermittelt.
+29.11.2023 09:48:35	Anwendungsrollen werden ermittelt.
+29.11.2023 09:48:35	Rollenmitgliedschaften werden ermittelt.
+29.11.2023 09:48:35	Dateigruppen werden ermittelt.
+29.11.2023 09:48:35	Volltextkataloge werden ermittelt.
+29.11.2023 09:48:35	Assemblys werden ermittelt.
+29.11.2023 09:48:35	Zertifikate werden ermittelt.
+29.11.2023 09:48:35	Asymmetrische Schlüssel werden ermittelt.
+29.11.2023 09:48:35	Symmetrische Schlüssel werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte symmetrische Schlüssel werden ermittelt.
+29.11.2023 09:48:35	Schemas werden ermittelt.
+29.11.2023 09:48:35	XML-Schemaauflistungen werden ermittelt.
+29.11.2023 09:48:35	Benutzerdefinierte Datentypen werden ermittelt.
+29.11.2023 09:48:35	Benutzerdefinierte Typen werden ermittelt.
+29.11.2023 09:48:35	Tabellentypen werden ermittelt.
+29.11.2023 09:48:35	Eindeutige Schlüssel für Tabellentypen werden ermittelt
+29.11.2023 09:48:35	Primärschlüssel für Tabellentypen werden ermittelt.
+29.11.2023 09:48:35	Indizes für Tabellentypen werden ermittelt
+29.11.2023 09:48:35	CHECK-Einschränkungen für Tabellentypen werden ermittelt.
+29.11.2023 09:48:35	DEFAULT-Einschränkungen für Tabellentypen werden ermittelt.
+29.11.2023 09:48:35	Partitionsfunktionen werden ermittelt.
+29.11.2023 09:48:35	Partitionsschemas werden ermittelt.
+29.11.2023 09:48:35	Funktionen werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte Funktionen werden gesammelt.
+29.11.2023 09:48:35	Aggregate werden ermittelt.
+29.11.2023 09:48:35	Prozeduren werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte Prozeduren werden gesammelt.
+29.11.2023 09:48:35	Tabellen werden ermittelt.
+29.11.2023 09:48:35	Primärschlüssel werden ermittelt.
+29.11.2023 09:48:35	UNIQUE-Einschränkungen werden ermittelt.
+29.11.2023 09:48:35	Fremdschlüssel werden ermittelt.
+29.11.2023 09:48:35	Standardeinschränkungen werden ermittelt.
+29.11.2023 09:48:35	CHECK-Einschränkungen werden ermittelt.
+29.11.2023 09:48:35	Sichten werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte Sichten werden gesammelt.
+29.11.2023 09:48:35	Indizes werden ermittelt.
+29.11.2023 09:48:35	Statistiken werden ermittelt.
+29.11.2023 09:48:35	Volltextindex-Stopplisten werden ermittelt.
+29.11.2023 09:48:35	Sucheigenschaftenlisten werden ermittelt.
+29.11.2023 09:48:35	Sucheigenschaften werden ermittelt.
+29.11.2023 09:48:35	Volltextindizes werden ermittelt.
+29.11.2023 09:48:35	Columnstore-Indizes werden gesammelt
+29.11.2023 09:48:35	Räumliche Indizes werden ermittelt.
+29.11.2023 09:48:35	XML-Indizes werden ermittelt.
+29.11.2023 09:48:35	Selektive XML-Indexe werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte Trigger werden gesammelt.
+29.11.2023 09:48:35	Trigger werden ermittelt.
+29.11.2023 09:48:35	Verschlüsselte Trigger und CLR-DDL-Trigger werden ermittelt.
+29.11.2023 09:48:35	DDL-Trigger werden ermittelt.
+29.11.2023 09:48:35	Edgeeinschränkungen werden erstellt.
+29.11.2023 09:48:35	Synonyme werden ermittelt.
+29.11.2023 09:48:35	Standardwerte werden ermittelt.
+29.11.2023 09:48:35	UDDT-Bindungen für Dateneinschränkungen werden gesammelt.
+29.11.2023 09:48:35	Regeln werden ermittelt.
+29.11.2023 09:48:35	UDDT-Bindungen für Dateneinschränkungen werden gesammelt.
+29.11.2023 09:48:35	Nachrichtentypen werden ermittelt.
+29.11.2023 09:48:35	Warteschlangen werden ermittelt.
+29.11.2023 09:48:35	Verträge werden ermittelt.
+29.11.2023 09:48:35	Dienste werden ermittelt.
+29.11.2023 09:48:35	Ereignisbenachrichtigungen werden ermittelt.
+29.11.2023 09:48:35	Remotedienstbindungen werden ermittelt.
+29.11.2023 09:48:35	Broker-Prioritäten werden ermittelt.
+29.11.2023 09:48:35	Signaturen werden ermittelt.
+29.11.2023 09:48:35	Komprimierungsoptionen werden gesammelt
+29.11.2023 09:48:35	Sequenztypen werden ermittelt.
+29.11.2023 09:48:35	Sicherheitsrichtlinien werden ermittelt
+29.11.2023 09:48:35	Verschlüsselungsschlüssel für Spalten werden ermittelt
+29.11.2023 09:48:35	Hauptschlüssel für Spalten werden ermittelt
+29.11.2023 09:48:35	Externe Datenquellen werden gesammelt
+29.11.2023 09:48:35	Externe Dateiformate werden gesammelt
+29.11.2023 09:48:35	Externe Tabellen werden gesammelt
+29.11.2023 09:48:35	Erweiterte Eigenschaften werden ermittelt.
+29.11.2023 09:48:38	Assemblys werden ermittelt.
+29.11.2023 09:48:38	Anmeldeinformationen werden ermittelt.
+29.11.2023 09:48:38	Anmeldungen werden ermittelt.
+29.11.2023 09:48:38	Serverüberwachungen werden ermittelt.
+29.11.2023 09:48:38	Das Projekt wird auf doppelte Elemente überprüft.
+29.11.2023 09:48:38	Die Verarbeitung doppelter Elemente wurde abgeschlossen.
+29.11.2023 09:48:40	Datenbankimport abgeschlossen.
+29.11.2023 09:48:40	Eine Zusammenfassung des Importvorgangs wurde an folgendem Ort gespeichert: C:\Users\lkoge\Documents\LABDESK\labdesk.be\labdesk\Schemaprotokolle importieren\labdesk_20231129084831.log
+29.11.2023 09:48:40	Klicken Sie auf "Fertig stellen", um den Vorgang fortzusetzen...
