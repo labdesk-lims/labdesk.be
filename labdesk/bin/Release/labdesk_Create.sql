@@ -1275,13 +1275,12 @@ PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
 
 GO
 CREATE TABLE [dbo].[setup] (
-    [id]              INT            IDENTITY (1, 1) NOT NULL,
-    [email_profile]   VARCHAR (255)  NULL,
-    [alert_document]  INT            NULL,
-    [show_desktop]    BIT            NULL,
-    [licence]         NVARCHAR (MAX) NULL,
-    [vat]             FLOAT (53)     NOT NULL,
-    [upload_max_byte] INT            NOT NULL,
+    [id]              INT           IDENTITY (1, 1) NOT NULL,
+    [email_profile]   VARCHAR (255) NULL,
+    [alert_document]  INT           NULL,
+    [show_desktop]    BIT           NULL,
+    [vat]             FLOAT (53)    NOT NULL,
+    [upload_max_byte] INT           NOT NULL,
     CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
@@ -8977,63 +8976,6 @@ BEGIN
 	RECONFIGURE WITH OVERRIDE;
 END
 GO
-PRINT N'Prozedur "[dbo].[measurement_insert]" wird erstellt...';
-
-
-GO
--- =======================================================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Insert a measurement with conditions and calculated fields
--- =======================================================================
-CREATE PROCEDURE [dbo].[measurement_insert]
-	-- Add the parameters for the stored procedure here
-	@request INT,
-	@analysis INT,
-	@method INT = NULL
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	-- DECLARE @method INT, @instrument INT
-	DECLARE @unit VARCHAR(255)
-	DECLARE @id_keys table([id] INT)
-	DECLARE @id INT
-
-	 IF @method IS NULL
-	 	SET @method = (SELECT TOP 1 method FROM method_analysis WHERE analysis = @analysis AND standard = 1 AND applies = 1)
-
-	-- SET @method = (SELECT method FROM method_analysis WHERE analysis = @analysis AND standard = 1 AND applies = 1 AND method IN (SELECT method FROM qualification WHERE valid_from <= GETDATE() AND valid_till >= GETDATE() AND withdraw = 0))
-	-- SET @instrument = (SELECT instrument FROM instrument_method WHERE method = @method AND standard = 1 AND applies = 1 AND instrument IN (SELECT instrument FROM certificate WHERE valid_from <= GETDATE() AND valid_till >= GETDATE() AND withdraw = 0))
-
-	-- INSERT INTO measurement (request, analysis, method, instrument, state) OUTPUT inserted.id INTO @id_keys SELECT @request, @analysis, @method, @instrument, 'CP' WHERE @analysis NOT IN (SELECT @analysis FROM measurement WHERE request = @request AND analysis = @analysis AND (state = 'CP' OR state = 'AQ' OR state = 'VD')) 
-
-	INSERT INTO measurement (request, analysis, method, state) OUTPUT inserted.id INTO @id_keys SELECT @request, @analysis, @method, 'CP' WHERE @analysis NOT IN (SELECT @analysis FROM measurement WHERE request = @request AND analysis = @analysis AND (state = 'CP' OR state = 'AQ' OR state = 'VD')) 
-	
-	SET @id = (SELECT TOP 1 id FROM @id_keys)
-
-	-- Set unit
-	UPDATE measurement SET unit = (SELECT unit FROM analysis WHERE id = (SELECT analysis FROM measurement WHERE id = @id)) WHERE id = @id
-
-	-- Set subcontraction
-	IF @method IS NOT NULL UPDATE measurement SET subcontraction = (SELECT subcontraction FROM method WHERE id = @method) WHERE id = @id
-
-	IF (SELECT condition_activate FROM analysis WHERE id = @analysis) = 1
-	BEGIN
-		-- Insert analysis specific conditions
-		INSERT INTO measurement_condition (condition, measurement) SELECT id, @id FROM condition WHERE analysis = (SELECT analysis FROM measurement WHERE id = @id)
-	END
-
-	IF (SELECT calculation_activate FROM analysis WHERE id = @analysis) = 1
-	BEGIN
-		-- Insert analysis specific cfield
-		INSERT INTO measurement_cfield (cfield, measurement) SELECT id, @id FROM cfield WHERE analysis = (SELECT analysis FROM measurement WHERE id = @id) AND analysis_id IS NULL
-	END
-END
-GO
 PRINT N'Prozedur "[dbo].[users_get_name]" wird erstellt...';
 
 
@@ -9333,7 +9275,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.0.0'
+	SET @version_be = 'v2.1.0'
 END
 GO
 PRINT N'Prozedur "[dbo].[users_get_Customer]" wird erstellt...';
@@ -9358,6 +9300,95 @@ BEGIN
 	SET @response_message = (SELECT customer.id FROM customer INNER JOIN contact ON (customer.id = contact.customer) WHERE contact.id = (SELECT contact FROM users WHERE name = SUSER_NAME()))
 END
 GO
+PRINT N'Prozedur "[dbo].[report_multiple]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2023 December
+-- Description:	Multi-Report table
+-- =============================================
+CREATE PROCEDURE [dbo].[report_multiple] 
+	-- Add the parameters for the stored procedure here
+	@profile as int,
+	@smppoint as int,
+	@top as int,
+	@from as int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @query AS NVARCHAR(MAX)
+	DECLARE @i AS INT
+	DECLARE @f AS INT
+
+	-- Start to prepare sql string for temporary table of the multi-report
+	SET @query = 'CREATE TABLE ##t (analysis_id int, technique_sortkey int, analysis_sortkey int, technique nvarchar(max), analysis nvarchar(max), method nvarchar(max), lsl nvarchar(max), usl nvarchar(max), unit nvarchar(max), '
+
+	-- Cursor to to add all samples as columns
+	DECLARE tbl_cur CURSOR FOR SELECT TOP (@top) request FROM measurement INNER JOIN request ON measurement.request = request.id WHERE request.smppoint = @smppoint AND request <= @from GROUP BY request
+	OPEN tbl_cur
+	FETCH NEXT FROM tbl_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SET @query = @query + 'SMP' + CONVERT(nvarchar(255), @i) + ' nvarchar(max), '
+		FETCH NEXT FROM tbl_cur INTO @i
+	END
+	CLOSE tbl_cur
+	DEALLOCATE tbl_cur
+	SET @query = LEFT(@query, LEN(@query)-1) + ')'
+
+	-- Execute sql statement to create table
+	exec (@query)
+
+	-- Insert all analysis services into the newly created table
+	INSERT INTO ##t (analysis_id) SELECT analysis FROM measurement INNER JOIN request ON measurement.request = request.id WHERE request.smppoint = @smppoint GROUP BY analysis
+
+	-- Start to fill the table with all relevant data
+	DECLARE x_cur CURSOR FOR SELECT TOP (@top) request FROM measurement INNER JOIN request ON measurement.request = request.id WHERE request.smppoint = @smppoint AND request <= @from  GROUP BY request
+	OPEN x_cur
+	FETCH NEXT FROM x_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+
+		DECLARE y_cur CURSOR FOR SELECT analysis FROM measurement WHERE request = @i
+		OPEN y_cur
+		FETCH NEXT FROM y_cur INTO @f
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @query = 'UPDATE ##t SET SMP' + CONVERT(nvarchar(max), @i) + ' = (SELECT value_txt FROM measurement WHERE request = ' + CONVERT(nvarchar(max), @i) + ' AND analysis = ' + CONVERT(nvarchar(max), @f) + ' AND state = ''VD'')' + 
+			', lsl = (SELECT lsl FROM profile_analysis WHERE profile = ' + CONVERT(nvarchar(max), IsNull(@profile, 0)) + ' AND analysis = ' + CONVERT(nvarchar(max), @f) + ' AND applies = 1)' +
+			', usl = (SELECT usl FROM profile_analysis WHERE profile = ' + CONVERT(nvarchar(max), IsNull(@profile, 0)) + ' AND analysis = ' + CONVERT(nvarchar(max), @f) + ' AND applies = 1)' +
+			', technique_sortkey = (SELECT technique.sortkey FROM technique INNER JOIN analysis ON analysis.technique = technique.id WHERE analysis.id = ' + CONVERT(nvarchar(max), @f) + ')' +
+			', analysis_sortkey = (SELECT sortkey FROM analysis WHERE id = ' + CONVERT(nvarchar(max), @f) + ')' +
+			', technique = (SELECT technique.title FROM technique INNER JOIN analysis ON analysis.technique = technique.id WHERE analysis.id = ' + CONVERT(nvarchar(max), @f) + ')' +
+			', analysis = (SELECT title FROM analysis WHERE id = ' + CONVERT(nvarchar(max), @f) + ')' +
+			', method = (SELECT TOP 1 method.title FROM measurement INNER JOIN method ON method.id = measurement.method WHERE analysis = ' + CONVERT(nvarchar(max), @f) + ' ORDER BY measurement.id DESC)' +
+			', unit = (SELECT TOP 1 unit FROM measurement WHERE analysis = ' + CONVERT(nvarchar(max), @f) + ' ORDER BY measurement.id DESC)' +
+			' WHERE analysis_id = ' + CONVERT(nvarchar(max), @f)
+			PRINT (@query)
+			EXEC (@query)
+			FETCH NEXT FROM y_cur INTO @f
+		END
+		CLOSE y_cur
+		DEALLOCATE y_cur
+
+		FETCH NEXT FROM x_cur INTO @i
+	END
+	CLOSE x_cur
+	DEALLOCATE x_cur
+	
+	-- Select all data pushed to table
+	SELECT * FROM ##t
+
+	-- Drop temporary table
+	DROP TABLE ##t
+END
+GO
 PRINT N'Prozedur "[dbo].[datetime_get]" wird erstellt...';
 
 
@@ -9378,52 +9409,6 @@ BEGIN
 
     -- Insert statements for procedure here
 	SET @response_message = (SELECT SYSDATETIME())
-END
-GO
-PRINT N'Prozedur "[dbo].[role_duplicate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Duplicate role
--- =============================================
-CREATE PROCEDURE [dbo].[role_duplicate]
-	-- Add the parameters for the stored procedure here
-	@pRole As INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE role_cur CURSOR FOR SELECT id FROM role_permission WHERE role = @pRole
-	DECLARE @id_keys table([id] INT)
-	DECLARE @id INT
-	DECLARE @i INT
-	DECLARE @permission INT
-
-	INSERT INTO role (title, description) OUTPUT inserted.id INTO @id_keys VALUES((SELECT title FROM role WHERE id = @pRole) + '_duplicate', (SELECT description FROM role WHERE id = @pRole))
-
-	SET @id = (SELECT TOP 1 id FROM @id_keys)
-
-	OPEN role_cur
-	FETCH NEXT FROM role_cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @permission = (SELECT permission FROM role_permission WHERE id = @i)
-		UPDATE role_permission
-		SET
-		can_create = (SELECT can_create FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_read = (SELECT can_read FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_update = (SELECT can_update FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_delete = (SELECT can_delete FROM role_permission WHERE role = @pRole and permission = @permission) WHERE role = @id AND permission = @permission
-		FETCH NEXT FROM role_cur INTO @i
-	END
-	CLOSE role_cur
-	DEALLOCATE role_cur
 END
 GO
 PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
@@ -9675,6 +9660,63 @@ BEGIN
 	END CATCH
 END
 GO
+PRINT N'Prozedur "[dbo].[measurement_insert]" wird erstellt...';
+
+
+GO
+-- =======================================================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Insert a measurement with conditions and calculated fields
+-- =======================================================================
+CREATE PROCEDURE [dbo].[measurement_insert]
+	-- Add the parameters for the stored procedure here
+	@request INT,
+	@analysis INT,
+	@method INT = NULL
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	-- DECLARE @method INT, @instrument INT
+	DECLARE @unit VARCHAR(255)
+	DECLARE @id_keys table([id] INT)
+	DECLARE @id INT
+
+	 IF @method IS NULL
+	 	SET @method = (SELECT TOP 1 method FROM method_analysis WHERE analysis = @analysis AND standard = 1 AND applies = 1)
+
+	-- SET @method = (SELECT method FROM method_analysis WHERE analysis = @analysis AND standard = 1 AND applies = 1 AND method IN (SELECT method FROM qualification WHERE valid_from <= GETDATE() AND valid_till >= GETDATE() AND withdraw = 0))
+	-- SET @instrument = (SELECT instrument FROM instrument_method WHERE method = @method AND standard = 1 AND applies = 1 AND instrument IN (SELECT instrument FROM certificate WHERE valid_from <= GETDATE() AND valid_till >= GETDATE() AND withdraw = 0))
+
+	-- INSERT INTO measurement (request, analysis, method, instrument, state) OUTPUT inserted.id INTO @id_keys SELECT @request, @analysis, @method, @instrument, 'CP' WHERE @analysis NOT IN (SELECT @analysis FROM measurement WHERE request = @request AND analysis = @analysis AND (state = 'CP' OR state = 'AQ' OR state = 'VD')) 
+
+	INSERT INTO measurement (request, analysis, method, state) OUTPUT inserted.id INTO @id_keys SELECT @request, @analysis, @method, 'CP' WHERE @analysis NOT IN (SELECT @analysis FROM measurement WHERE request = @request AND analysis = @analysis AND (state = 'CP' OR state = 'AQ' OR state = 'VD')) 
+	
+	SET @id = (SELECT TOP 1 id FROM @id_keys)
+
+	-- Set unit
+	UPDATE measurement SET unit = (SELECT unit FROM analysis WHERE id = (SELECT analysis FROM measurement WHERE id = @id)) WHERE id = @id
+
+	-- Set subcontraction
+	IF @method IS NOT NULL UPDATE measurement SET subcontraction = (SELECT subcontraction FROM method WHERE id = @method) WHERE id = @id
+
+	IF (SELECT condition_activate FROM analysis WHERE id = @analysis) = 1
+	BEGIN
+		-- Insert analysis specific conditions
+		INSERT INTO measurement_condition (condition, measurement) SELECT id, @id FROM condition WHERE analysis = (SELECT analysis FROM measurement WHERE id = @id)
+	END
+
+	IF (SELECT calculation_activate FROM analysis WHERE id = @analysis) = 1
+	BEGIN
+		-- Insert analysis specific cfield
+		INSERT INTO measurement_cfield (cfield, measurement) SELECT id, @id FROM cfield WHERE analysis = (SELECT analysis FROM measurement WHERE id = @id) AND analysis_id IS NULL
+	END
+END
+GO
 PRINT N'Prozedur "[dbo].[message_extract_sql]" wird erstellt...';
 
 
@@ -9728,6 +9770,52 @@ BEGIN
 	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
 
 	SELECT * FROM @keys
+END
+GO
+PRINT N'Prozedur "[dbo].[role_duplicate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Duplicate role
+-- =============================================
+CREATE PROCEDURE [dbo].[role_duplicate]
+	-- Add the parameters for the stored procedure here
+	@pRole As INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE role_cur CURSOR FOR SELECT id FROM role_permission WHERE role = @pRole
+	DECLARE @id_keys table([id] INT)
+	DECLARE @id INT
+	DECLARE @i INT
+	DECLARE @permission INT
+
+	INSERT INTO role (title, description) OUTPUT inserted.id INTO @id_keys VALUES((SELECT title FROM role WHERE id = @pRole) + '_duplicate', (SELECT description FROM role WHERE id = @pRole))
+
+	SET @id = (SELECT TOP 1 id FROM @id_keys)
+
+	OPEN role_cur
+	FETCH NEXT FROM role_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SET @permission = (SELECT permission FROM role_permission WHERE id = @i)
+		UPDATE role_permission
+		SET
+		can_create = (SELECT can_create FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_read = (SELECT can_read FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_update = (SELECT can_update FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_delete = (SELECT can_delete FROM role_permission WHERE role = @pRole and permission = @permission) WHERE role = @id AND permission = @permission
+		FETCH NEXT FROM role_cur INTO @i
+	END
+	CLOSE role_cur
+	DEALLOCATE role_cur
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -10227,7 +10315,7 @@ BEGIN
 		SET @tmp = REPLACE(REPLACE(@sql, ']', ''), '[', '')
 
 		-- Prevent data from being manipulated
-		IF CHARINDEX('INSERT', @tmp) <> 0 OR CHARINDEX('UPDATE', @tmp) <> 0 OR CHARINDEX('DELETE', @tmp) <> 0 
+		IF CHARINDEX('INSERT', @tmp) <> 0 OR CHARINDEX('UPDATE', @tmp) <> 0 OR CHARINDEX('DELETE', @tmp) <> 0 OR CHARINDEX('CREATE', @tmp) <> 0 OR CHARINDEX('DROP', @tmp) <> 0 
 			THROW 51000, 'Forbidden statement.', 1
 
 		-- Execute sql statement

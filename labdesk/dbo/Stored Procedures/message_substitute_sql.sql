@@ -33,7 +33,7 @@ BEGIN
 		SET @tmp = REPLACE(REPLACE(@sql, ']', ''), '[', '')
 
 		-- Prevent data from being manipulated
-		IF CHARINDEX('INSERT', @tmp) <> 0 OR CHARINDEX('UPDATE', @tmp) <> 0 OR CHARINDEX('DELETE', @tmp) <> 0 
+		IF CHARINDEX('INSERT', @tmp) <> 0 OR CHARINDEX('UPDATE', @tmp) <> 0 OR CHARINDEX('DELETE', @tmp) <> 0 OR CHARINDEX('CREATE', @tmp) <> 0 OR CHARINDEX('DROP', @tmp) <> 0 
 			THROW 51000, 'Forbidden statement.', 1
 
 		-- Execute sql statement

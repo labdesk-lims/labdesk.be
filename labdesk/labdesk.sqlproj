@@ -164,6 +164,7 @@
     <Build Include="dbo\Stored Procedures\lims_initialize.sql" />
     <Build Include="dbo\Stored Procedures\gesd_test.sql" />
     <Build Include="dbo\Stored Procedures\datetime_get.sql" />
+    <Build Include="dbo\Stored Procedures\report_multiple.sql" />
     <Build Include="dbo\Stored Procedures\users_get_Customer.sql" />
     <Build Include="dbo\Stored Procedures\version_be.sql" />
     <Build Include="dbo\Stored Procedures\measurement_pool.sql" />
