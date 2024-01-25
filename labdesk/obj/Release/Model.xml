@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="labdesk.dll" />
-			<Metadata Name="FileName" Value="C:\USERS\LKOGE\DOCUMENTS\LABDESK\LABDESK.BE\LABDESK\OBJ\RELEASE\LABDESK.DLL" />
+			<Metadata Name="FileName" Value="C:\USERS\LKOGE\DOCUMENTS\GITHUB\LABDESK.BE\LABDESK\OBJ\RELEASE\LABDESK.DLL" />
 			<Metadata Name="AssemblyName" Value="labdesk" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="C:\Users\lkoge\Documents\LABDESK\labdesk.be\labdesk\obj\Release\labdesk.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Users\lkoge\Documents\GitHub\labdesk.be\labdesk\obj\Release\labdesk.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
@@ -33613,22 +33613,6 @@ END]]></Value>
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[licence]">
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Property Name="IsMax" Value="True" />
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[role]">
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -33804,10 +33788,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="766" />
+				<Property Name="Offset" Value="727" />
 				<Property Name="CreateOffset" Value="194" />
 				<Property Name="Length" Value="1449" />
-				<Property Name="StartLine" Value="21" />
+				<Property Name="StartLine" Value="20" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER users_audit &#xD;&#xA;   ON  users&#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>

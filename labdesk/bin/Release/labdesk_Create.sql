@@ -487,7 +487,6 @@ CREATE TABLE [dbo].[users] (
     [id]       INT              IDENTITY (1, 1) NOT NULL,
     [name]     VARCHAR (255)    NOT NULL,
     [uid]      UNIQUEIDENTIFIER NULL,
-    [licence]  NVARCHAR (MAX)   NULL,
     [role]     INT              NULL,
     [contact]  INT              NULL,
     [language] VARCHAR (32)     NOT NULL,
@@ -1485,6 +1484,89 @@ CREATE TABLE [dbo].[spa] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[formulation]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[formulation] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [instruction] NVARCHAR (MAX) NULL,
+    [owner]       VARCHAR (255)  NOT NULL,
+    [project]     INT            NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_formulation] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[billing_position]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[billing_position] (
+    [id]               INT            IDENTITY (1, 1) NOT NULL,
+    [category]         INT            NULL,
+    [profile]          INT            NULL,
+    [method]           INT            NULL,
+    [analysis]         INT            NULL,
+    [material]         INT            NULL,
+    [service]          INT            NULL,
+    [other]            NVARCHAR (MAX) NULL,
+    [amount]           INT            NOT NULL,
+    [price]            MONEY          NOT NULL,
+    [billing_customer] INT            NOT NULL,
+    CONSTRAINT [PK_billing_position] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[btcposition]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[btcposition] (
+    [id]       INT           IDENTITY (1, 1) NOT NULL,
+    [position] VARCHAR (255) NULL,
+    [request]  INT           NULL,
+    [batch]    INT           NOT NULL,
+    CONSTRAINT [PK_btcposition] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[supplier]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[supplier] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [rating]      FLOAT (53)     NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_supplier] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[role]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[role] (
+    [id]             INT            IDENTITY (1, 1) NOT NULL,
+    [title]          VARCHAR (255)  NULL,
+    [description]    NVARCHAR (MAX) NULL,
+    [hourly_rate]    MONEY          NOT NULL,
+    [administrative] BIT            NOT NULL,
+    [deactivate]     BIT            NOT NULL,
+    CONSTRAINT [PK_role] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'Tabelle "[dbo].[priority]" wird erstellt...';
 
 
@@ -1623,89 +1705,6 @@ CREATE TABLE [dbo].[contact] (
     [deactivate]          BIT             NOT NULL,
     [customer]            INT             NULL,
     CONSTRAINT [PK_contact] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[formulation]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[formulation] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [instruction] NVARCHAR (MAX) NULL,
-    [owner]       VARCHAR (255)  NOT NULL,
-    [project]     INT            NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_formulation] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[billing_position]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[billing_position] (
-    [id]               INT            IDENTITY (1, 1) NOT NULL,
-    [category]         INT            NULL,
-    [profile]          INT            NULL,
-    [method]           INT            NULL,
-    [analysis]         INT            NULL,
-    [material]         INT            NULL,
-    [service]          INT            NULL,
-    [other]            NVARCHAR (MAX) NULL,
-    [amount]           INT            NOT NULL,
-    [price]            MONEY          NOT NULL,
-    [billing_customer] INT            NOT NULL,
-    CONSTRAINT [PK_billing_position] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[btcposition]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[btcposition] (
-    [id]       INT           IDENTITY (1, 1) NOT NULL,
-    [position] VARCHAR (255) NULL,
-    [request]  INT           NULL,
-    [batch]    INT           NOT NULL,
-    CONSTRAINT [PK_btcposition] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[supplier]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[supplier] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [rating]      FLOAT (53)     NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_supplier] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[role]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[role] (
-    [id]             INT            IDENTITY (1, 1) NOT NULL,
-    [title]          VARCHAR (255)  NULL,
-    [description]    NVARCHAR (MAX) NULL,
-    [hourly_rate]    MONEY          NOT NULL,
-    [administrative] BIT            NOT NULL,
-    [deactivate]     BIT            NOT NULL,
-    CONSTRAINT [PK_role] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -2520,6 +2519,60 @@ ALTER TABLE [dbo].[method]
 
 
 GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_formulation_owner]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[formulation]
+    ADD CONSTRAINT [DF_formulation_owner] DEFAULT (suser_name()) FOR [owner];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_formulation_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[formulation]
+    ADD CONSTRAINT [DF_formulation_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_supplier_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[supplier]
+    ADD CONSTRAINT [DF_supplier_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_hourly_rate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_hourly_rate] DEFAULT ((0)) FOR [hourly_rate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_adminrole]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_adminrole] DEFAULT ((0)) FOR [administrative];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_priority_deactivate]" wird erstellt...';
 
 
@@ -2598,60 +2651,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_contact_deactivate]" wird erstellt...'
 GO
 ALTER TABLE [dbo].[contact]
     ADD CONSTRAINT [DF_contact_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_formulation_owner]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[formulation]
-    ADD CONSTRAINT [DF_formulation_owner] DEFAULT (suser_name()) FOR [owner];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_formulation_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[formulation]
-    ADD CONSTRAINT [DF_formulation_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_supplier_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[supplier]
-    ADD CONSTRAINT [DF_supplier_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_hourly_rate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_hourly_rate] DEFAULT ((0)) FOR [hourly_rate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_adminrole]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_adminrole] DEFAULT ((0)) FOR [administrative];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
@@ -3492,6 +3491,87 @@ ALTER TABLE [dbo].[state]
 
 
 GO
+PRINT N'Fremdschlüssel "[dbo].[FK_formulation_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[formulation]
+    ADD CONSTRAINT [FK_formulation_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_billing_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_material]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_profile]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_service]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_position]
+    ADD CONSTRAINT [FK_billing_position_service] FOREIGN KEY ([service]) REFERENCES [dbo].[service] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_btcposition_batch]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[btcposition]
+    ADD CONSTRAINT [FK_btcposition_batch] FOREIGN KEY ([batch]) REFERENCES [dbo].[batch] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_btcposition_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[btcposition]
+    ADD CONSTRAINT [FK_btcposition_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]);
+
+
+GO
 PRINT N'Fremdschlüssel "[dbo].[FK_profile_customer]" wird erstellt...';
 
 
@@ -3597,87 +3677,6 @@ PRINT N'Fremdschlüssel "[dbo].[FK_contact_customer1]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[contact]
     ADD CONSTRAINT [FK_contact_customer1] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_formulation_project]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[formulation]
-    ADD CONSTRAINT [FK_formulation_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_billing_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_material]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_method]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_profile]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_position_service]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[billing_position]
-    ADD CONSTRAINT [FK_billing_position_service] FOREIGN KEY ([service]) REFERENCES [dbo].[service] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_btcposition_batch]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[btcposition]
-    ADD CONSTRAINT [FK_btcposition_batch] FOREIGN KEY ([batch]) REFERENCES [dbo].[batch] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_btcposition_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[btcposition]
-    ADD CONSTRAINT [FK_btcposition_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]);
 
 
 GO
@@ -7877,6 +7876,326 @@ DISABLE TRIGGER [dbo].[state_update]
 
 
 GO
+PRINT N'Trigger "[dbo].[formulation_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[formulation_audit]
+   ON  dbo.formulation
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[billing_position_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER billing_position_update
+   ON  dbo.billing_position 
+   INSTEAD OF UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+
+END
+GO
+PRINT N'Trigger "[dbo].[billing_position_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER billing_position_audit
+   ON  dbo.billing_position
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[btcposition_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[btcposition_audit]
+   ON  [dbo].[btcposition]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[supplier_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[supplier_audit]
+   ON  [dbo].[supplier]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[role_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[role_insert_update]
+   ON  dbo.role 
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	IF (SELECT COUNT(*) FROM role WHERE administrative = 1) > 1
+		THROW 51000, 'Only one administrative role allowed.', 1
+
+    -- Insert statements for trigger here
+	DECLARE @role INT
+	SET @role = (SELECT id FROM inserted)
+	INSERT INTO role_permission (role, permission)
+	SELECT @role, id FROM permission WHERE id NOT IN (SELECT DISTINCT(role_permission.permission) FROM role_permission WHERE role = @role)
+END
+GO
+PRINT N'Trigger "[dbo].[role_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[role_audit]
+   ON  dbo.role
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
 PRINT N'Trigger "[dbo].[priority_audit]" wird erstellt...';
 
 
@@ -8198,325 +8517,35 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[formulation_audit]" wird erstellt...';
+PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
 
 GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[formulation_audit]
-   ON  dbo.formulation
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
+CREATE VIEW dbo.view_billing_position
+AS
+SELECT        dbo.billing_position.id, dbo.billing_position.category, CONVERT(int, ISNULL(CONVERT(varchar(255), dbo.method.id), '') + ISNULL(CONVERT(varchar(255), dbo.service.id), '') + ISNULL(CONVERT(varchar(255), dbo.analysis.id), '') 
+                         + ISNULL(CONVERT(varchar(255), dbo.material.id), '') + ISNULL(CONVERT(varchar(255), dbo.profile.id), '')) AS article_no, ISNULL(dbo.billing_position.other, '') + ISNULL(dbo.method.title, '') + ISNULL(dbo.analysis.title, '') 
+                         + ISNULL(dbo.material.title, '') + ISNULL(dbo.service.title, '') + ISNULL(dbo.profile.title, '') AS description, dbo.billing_position.amount, dbo.billing_position.price, 
+                         dbo.billing_position.amount * dbo.billing_position.price AS extended_price, dbo.billing_position.billing_customer
+FROM            dbo.billing_position LEFT OUTER JOIN
+                         dbo.profile ON dbo.billing_position.profile = dbo.profile.id LEFT OUTER JOIN
+                         dbo.material ON dbo.billing_position.material = dbo.material.id LEFT OUTER JOIN
+                         dbo.analysis ON dbo.billing_position.analysis = dbo.analysis.id LEFT OUTER JOIN
+                         dbo.service ON dbo.billing_position.service = dbo.service.id LEFT OUTER JOIN
+                         dbo.method ON dbo.billing_position.method = dbo.method.id
 GO
-PRINT N'Trigger "[dbo].[billing_position_update]" wird erstellt...';
+PRINT N'Sicht "[dbo].[view_attachment_revision]" wird erstellt...';
 
 
 GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER billing_position_update
-   ON  dbo.billing_position 
-   INSTEAD OF UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-
-END
-GO
-PRINT N'Trigger "[dbo].[billing_position_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER billing_position_audit
-   ON  dbo.billing_position
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[btcposition_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[btcposition_audit]
-   ON  [dbo].[btcposition]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[supplier_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[supplier_audit]
-   ON  [dbo].[supplier]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[role_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[role_insert_update]
-   ON  dbo.role 
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-	IF (SELECT COUNT(*) FROM role WHERE administrative = 1) > 1
-		THROW 51000, 'Only one administrative role allowed.', 1
-
-    -- Insert statements for trigger here
-	DECLARE @role INT
-	SET @role = (SELECT id FROM inserted)
-	INSERT INTO role_permission (role, permission)
-	SELECT @role, id FROM permission WHERE id NOT IN (SELECT DISTINCT(role_permission.permission) FROM role_permission WHERE role = @role)
-END
-GO
-PRINT N'Trigger "[dbo].[role_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[role_audit]
-   ON  dbo.role
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
+CREATE VIEW dbo.view_attachment_revision
+AS
+SELECT        dbo.attachment.id, dbo.users.name AS responsible, dbo.attachment.reminder, dbo.attachment.title, dbo.attachment.file_name
+FROM            dbo.attachment INNER JOIN
+                         dbo.users ON dbo.attachment.responsible = dbo.users.id
+WHERE        (GETDATE() >= DATEADD(day, -
+                             (SELECT        TOP (1) alert_document
+                               FROM            dbo.setup), dbo.attachment.reminder))
 GO
 PRINT N'Sicht "[dbo].[view_labreport_details]" wird erstellt...';
 
@@ -8577,64 +8606,6 @@ SELECT        dbo.request.id, dbo.request.description, dbo.request.photo, dbo.re
 FROM            dbo.request INNER JOIN
                          dbo.audit ON dbo.request.id = dbo.audit.table_id
 WHERE        (dbo.audit.table_name = 'request') AND (dbo.audit.action_type = 'I') AND (dbo.audit.changed_by = SUSER_SNAME())
-GO
-PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_billing_position
-AS
-SELECT        dbo.billing_position.id, dbo.billing_position.category, CONVERT(int, ISNULL(CONVERT(varchar(255), dbo.method.id), '') + ISNULL(CONVERT(varchar(255), dbo.service.id), '') + ISNULL(CONVERT(varchar(255), dbo.analysis.id), '') 
-                         + ISNULL(CONVERT(varchar(255), dbo.material.id), '') + ISNULL(CONVERT(varchar(255), dbo.profile.id), '')) AS article_no, ISNULL(dbo.billing_position.other, '') + ISNULL(dbo.method.title, '') + ISNULL(dbo.analysis.title, '') 
-                         + ISNULL(dbo.material.title, '') + ISNULL(dbo.service.title, '') + ISNULL(dbo.profile.title, '') AS description, dbo.billing_position.amount, dbo.billing_position.price, 
-                         dbo.billing_position.amount * dbo.billing_position.price AS extended_price, dbo.billing_position.billing_customer
-FROM            dbo.billing_position LEFT OUTER JOIN
-                         dbo.profile ON dbo.billing_position.profile = dbo.profile.id LEFT OUTER JOIN
-                         dbo.material ON dbo.billing_position.material = dbo.material.id LEFT OUTER JOIN
-                         dbo.analysis ON dbo.billing_position.analysis = dbo.analysis.id LEFT OUTER JOIN
-                         dbo.service ON dbo.billing_position.service = dbo.service.id LEFT OUTER JOIN
-                         dbo.method ON dbo.billing_position.method = dbo.method.id
-GO
-PRINT N'Sicht "[dbo].[view_attachment_revision]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_attachment_revision
-AS
-SELECT        dbo.attachment.id, dbo.users.name AS responsible, dbo.attachment.reminder, dbo.attachment.title, dbo.attachment.file_name
-FROM            dbo.attachment INNER JOIN
-                         dbo.users ON dbo.attachment.responsible = dbo.users.id
-WHERE        (GETDATE() >= DATEADD(day, -
-                             (SELECT        TOP (1) alert_document
-                               FROM            dbo.setup), dbo.attachment.reminder))
-GO
-PRINT N'Funktion "[dbo].[users_get_hourly_rate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: November 2023
--- Description:	Get hourly rate of users
--- =============================================
-CREATE FUNCTION users_get_hourly_rate
-(
-	-- Add the parameters for the function here
-	@user_name VARCHAR(255)
-)
-RETURNS money
-AS
-BEGIN
-	-- Declare the return variable here
-	DECLARE @rate money
-
-	-- Add the T-SQL statements to compute the return value here
-	SET @rate = (SELECT role.hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE name = @user_name)
-
-	-- Return the result of the function
-	RETURN @rate
-
-END
 GO
 PRINT N'Funktion "[dbo].[audit_get_first]" wird erstellt...';
 
@@ -8762,19 +8733,33 @@ BEGIN
 
 END
 GO
-PRINT N'Sicht "[dbo].[view_project_owner]" wird erstellt...';
+PRINT N'Funktion "[dbo].[users_get_hourly_rate]" wird erstellt...';
 
 
 GO
-CREATE VIEW dbo.view_project_owner
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: November 2023
+-- Description:	Get hourly rate of users
+-- =============================================
+CREATE FUNCTION users_get_hourly_rate
+(
+	-- Add the parameters for the function here
+	@user_name VARCHAR(255)
+)
+RETURNS money
 AS
-SELECT        dbo.project.id, dbo.project.title, dbo.project.description, dbo.project.profile, dbo.project.owner, dbo.project.started, dbo.project.deactivate
-FROM            dbo.project LEFT OUTER JOIN
-                             (SELECT        TOP (1) id, users, project
-                               FROM            dbo.project_member
-                               WHERE        (users = dbo.users_get_id(SUSER_NAME()))) AS a ON dbo.project.id = a.project
-WHERE        (dbo.project.owner = SUSER_NAME()) OR
-                         (a.project = dbo.project.id)
+BEGIN
+	-- Declare the return variable here
+	DECLARE @rate money
+
+	-- Add the T-SQL statements to compute the return value here
+	SET @rate = (SELECT role.hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE name = @user_name)
+
+	-- Return the result of the function
+	RETURN @rate
+
+END
 GO
 PRINT N'Sicht "[dbo].[view_measurement]" wird erstellt...';
 
@@ -8824,6 +8809,20 @@ SELECT        dbo.task.id, dbo.task.title, dbo.project.id AS project_id, dbo.pro
 FROM            dbo.task INNER JOIN
                          dbo.project ON dbo.task.project = dbo.project.id
 WHERE        (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1)
+GO
+PRINT N'Sicht "[dbo].[view_project_owner]" wird erstellt...';
+
+
+GO
+CREATE VIEW dbo.view_project_owner
+AS
+SELECT        dbo.project.id, dbo.project.title, dbo.project.description, dbo.project.profile, dbo.project.owner, dbo.project.started, dbo.project.deactivate
+FROM            dbo.project LEFT OUTER JOIN
+                             (SELECT        TOP (1) id, users, project
+                               FROM            dbo.project_member
+                               WHERE        (users = dbo.users_get_id(SUSER_NAME()))) AS a ON dbo.project.id = a.project
+WHERE        (dbo.project.owner = SUSER_NAME()) OR
+                         (a.project = dbo.project.id)
 GO
 PRINT N'Funktion "[dbo].[xml_diff]" wird erstellt...';
 
@@ -9411,81 +9410,6 @@ BEGIN
 	SET @response_message = (SELECT SYSDATETIME())
 END
 GO
-PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[folder_create]
-	-- Add the parameters for the stored procedure here
-	@strFolder NVARCHAR(200) -- Folder to be created
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
-	DECLARE @s NVARCHAR(200)
-	DECLARE @tmpFolder NVARCHAR(MAX)
-
-	-- Create table with subfolder names
-	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
-
-	-- Check if folder already exists
-	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
-	BEGIN
-		-- Create folder
-		SET @s = 'MD ' + 'c:\' + @strFolder
-		exec master.dbo.xp_cmdshell @s
-	END
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_substitute_keyword]" wird erstellt...';
-
-
-GO
--- ===============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Substitute keywords in calculation
--- ===============================================
-CREATE PROCEDURE [dbo].[calculation_substitute_keyword] 
-	-- Add the parameters for the stored procedure here
-	@keywords StringList READONLY,
-	@values KeyValueList READONLY,
-	@equation NVARCHAR(MAX),
-	@return_message NVARCHAR(MAX) OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT
-	DECLARE @key NVARCHAR(MAX)
-	DECLARE @value NVARCHAR(MAX)
-
-	SET @i = 0
-	WHILE @i < (SELECT COUNT(*) FROM @keywords)
-	BEGIN
-		SET @key = (SELECT value FROM @keywords WHERE id = @i)
-		SET @value = (SELECT value FROM @values WHERE keyword = @key)
-		IF CHARINDEX('.', @value) = 0
-			SET @value = @value + '.0'
-		SET @equation = REPLACE(@equation, @key, @value )
-		SET @i = @i + 1
-	END
-
-	SET @return_message = @equation
-END
-GO
 PRINT N'Prozedur "[dbo].[calculation_extract_keyword]" wird erstellt...';
 
 
@@ -9539,82 +9463,6 @@ BEGIN
 	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
 
 	SELECT * FROM @keys
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_perform]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_perform]
-	@measurement INT,
-	@response_message FLOAT OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @f KeyValueList
-	DECLARE @t StringList
-	DECLARE @equation NVARCHAR(MAX)
-	DECLARE @i INT
-	DECLARE @id INT
-	DECLARE @s NVARCHAR(MAX)
-	DECLARE @sql NVARCHAR(MAX)
-	DECLARE @result FLOAT
-	DECLARE @analysis INT
-
-	SET @analysis = (SELECT analysis FROM measurement WHERE id = @measurement)
-
-	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
-
-	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
-	
-	-- Get key and value
-	OPEN cur
-	FETCH NEXT FROM cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement_cfield WHERE measurement = @measurement AND cfield = @id))
-		END
-
-		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement WHERE request = (SELECT request FROM measurement WHERE id = @measurement) AND analysis = @id AND state = 'VD'))
-		END
-
-		FETCH NEXT FROM cur INTO @i
-	END
-	CLOSE cur
-	DEALLOCATE cur
-
-	-- SELECT * FROM @f
-
-	-- Extract keywors of equation
-	INSERT INTO @t
-	EXEC calculation_extract_keyword @equation
-
-	-- Substitute keywords by value
-	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
-
-	-- Evaluate euqation
-	SET @sql = 'select @result = ' + @s
-	EXEC sp_executesql @sql, N'@result float output', @result OUT
-
-	-- Return value being calculated
-	SET @response_message = @result
 END
 GO
 PRINT N'Prozedur "[dbo].[import_csv]" wird erstellt...';
@@ -9816,6 +9664,81 @@ BEGIN
 	END
 	CLOSE role_cur
 	DEALLOCATE role_cur
+END
+GO
+PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[folder_create]
+	-- Add the parameters for the stored procedure here
+	@strFolder NVARCHAR(200) -- Folder to be created
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
+	DECLARE @s NVARCHAR(200)
+	DECLARE @tmpFolder NVARCHAR(MAX)
+
+	-- Create table with subfolder names
+	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
+
+	-- Check if folder already exists
+	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
+	BEGIN
+		-- Create folder
+		SET @s = 'MD ' + 'c:\' + @strFolder
+		exec master.dbo.xp_cmdshell @s
+	END
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_substitute_keyword]" wird erstellt...';
+
+
+GO
+-- ===============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Substitute keywords in calculation
+-- ===============================================
+CREATE PROCEDURE [dbo].[calculation_substitute_keyword] 
+	-- Add the parameters for the stored procedure here
+	@keywords StringList READONLY,
+	@values KeyValueList READONLY,
+	@equation NVARCHAR(MAX),
+	@return_message NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @key NVARCHAR(MAX)
+	DECLARE @value NVARCHAR(MAX)
+
+	SET @i = 0
+	WHILE @i < (SELECT COUNT(*) FROM @keywords)
+	BEGIN
+		SET @key = (SELECT value FROM @keywords WHERE id = @i)
+		SET @value = (SELECT value FROM @values WHERE keyword = @key)
+		IF CHARINDEX('.', @value) = 0
+			SET @value = @value + '.0'
+		SET @equation = REPLACE(@equation, @key, @value )
+		SET @i = @i + 1
+	END
+
+	SET @return_message = @equation
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -10330,41 +10253,6 @@ BEGIN
 	SET @return_message = @p_message
 END
 GO
-PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_iterate]
-	-- Add the parameters for the stored procedure here
-	@request INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT
-	DECLARE @f FLOAT
-	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
-
-	OPEN c_cur
-	FETCH NEXT FROM c_cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		EXEC calculation_perform @i, @f OUTPUT
-		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
-		FETCH NEXT FROM c_cur INTO @i
-	END
-	CLOSE c_cur
-	DEALLOCATE c_cur
-END
-GO
 PRINT N'Prozedur "[dbo].[request_create_subrequest]" wird erstellt...';
 
 
@@ -10395,6 +10283,82 @@ BEGIN
 	-- Attach newly created request to parent
 	UPDATE request SET subrequest = @p_id WHERE id = @p_id
 	UPDATE request SET subrequest = @p_id WHERE id = @pk
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_perform]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_perform]
+	@measurement INT,
+	@response_message FLOAT OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @f KeyValueList
+	DECLARE @t StringList
+	DECLARE @equation NVARCHAR(MAX)
+	DECLARE @i INT
+	DECLARE @id INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @sql NVARCHAR(MAX)
+	DECLARE @result FLOAT
+	DECLARE @analysis INT
+
+	SET @analysis = (SELECT analysis FROM measurement WHERE id = @measurement)
+
+	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
+
+	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
+	
+	-- Get key and value
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement_cfield WHERE measurement = @measurement AND cfield = @id))
+		END
+
+		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement WHERE request = (SELECT request FROM measurement WHERE id = @measurement) AND analysis = @id AND state = 'VD'))
+		END
+
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
+
+	-- SELECT * FROM @f
+
+	-- Extract keywors of equation
+	INSERT INTO @t
+	EXEC calculation_extract_keyword @equation
+
+	-- Substitute keywords by value
+	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
+
+	-- Evaluate euqation
+	SET @sql = 'select @result = ' + @s
+	EXEC sp_executesql @sql, N'@result float output', @result OUT
+
+	-- Return value being calculated
+	SET @response_message = @result
 END
 GO
 PRINT N'Prozedur "[dbo].[mail_send]" wird erstellt...';
@@ -10482,112 +10446,6 @@ BEGIN
 	SET @strFile = @strPath
 END
 GO
-PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[import_perform] 
-	-- Add the parameters for the stored procedure here
-	@strFolder nvarchar(max)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT, @j INT
-	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
-	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
-	DECLARE @strCmd VARCHAR(1024)
-	DECLARE @strFile nvarchar(max)
-	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
-
-	BEGIN TRY
-		TRUNCATE TABLE import
-
-		-- Concatenate command string
-		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
-
-		-- Create file list
-		INSERT INTO @files execute xp_cmdshell @strCmd
-		DELETE FROM @files WHERE FileName IS NULL
-
-		-- Import measurement values from import file
-		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
-		OPEN import_cur
-		FETCH NEXT FROM import_cur INTO @i
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			-- Perform import of measurement data
-			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
-			EXEC import_csv @strFile, @imported OUT
-
-			-- Delete imported file
-			IF @imported = 1
-			BEGIN
-				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
-				EXEC (@cmd)
-			END
-			
-			FETCH NEXT FROM import_cur INTO @i
-		END
-		CLOSE import_cur
-		DEALLOCATE import_cur
-
-		-- Update measurements
-		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
-		OPEN consume_cur
-		FETCH NEXT FROM consume_cur INTO @j
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			-- Consume imported values as measurement data
-			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
-			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
-			SET @request = (SELECT request FROM import WHERE id = @j)
-			SET @method = (SELECT method FROM import WHERE id = @j)
-			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
-			
-			-- Handle analysis services
-			IF SUBSTRING(@keyword, 1, 1) = 'A'
-			BEGIN
-				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
-				
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
-				
-				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
-					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
-			END
-
-			-- Handle calculated fields
-			IF SUBSTRING(@keyword, 1, 1) = 'F'
-			BEGIN
-				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
-
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
-			END
-
-			EXEC calculation_iterate @request
-
-			FETCH NEXT FROM consume_cur INTO @j
-		END
-		CLOSE consume_cur
-		DEALLOCATE consume_cur
-
-	END TRY
-	BEGIN CATCH
-		DEALLOCATE import_cur
-		DEALLOCATE consume_cur
-	END CATCH
-END
-GO
 PRINT N'Prozedur "[dbo].[calculation_test]" wird erstellt...';
 
 
@@ -10657,6 +10515,41 @@ BEGIN
 
 	-- Return value being calculated
 	SET @response_message = @result
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_iterate]
+	-- Add the parameters for the stored procedure here
+	@request INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @f FLOAT
+	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
+
+	OPEN c_cur
+	FETCH NEXT FROM c_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		EXEC calculation_perform @i, @f OUTPUT
+		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
+		FETCH NEXT FROM c_cur INTO @i
+	END
+	CLOSE c_cur
+	DEALLOCATE c_cur
 END
 GO
 PRINT N'Prozedur "[dbo].[mailqueue_process]" wird erstellt...';
@@ -10771,6 +10664,112 @@ BEGIN
 	DEALLOCATE mailqueue_cur
 END
 GO
+PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[import_perform] 
+	-- Add the parameters for the stored procedure here
+	@strFolder nvarchar(max)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT, @j INT
+	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
+	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
+	DECLARE @strCmd VARCHAR(1024)
+	DECLARE @strFile nvarchar(max)
+	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
+
+	BEGIN TRY
+		TRUNCATE TABLE import
+
+		-- Concatenate command string
+		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
+
+		-- Create file list
+		INSERT INTO @files execute xp_cmdshell @strCmd
+		DELETE FROM @files WHERE FileName IS NULL
+
+		-- Import measurement values from import file
+		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
+		OPEN import_cur
+		FETCH NEXT FROM import_cur INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Perform import of measurement data
+			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
+			EXEC import_csv @strFile, @imported OUT
+
+			-- Delete imported file
+			IF @imported = 1
+			BEGIN
+				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
+				EXEC (@cmd)
+			END
+			
+			FETCH NEXT FROM import_cur INTO @i
+		END
+		CLOSE import_cur
+		DEALLOCATE import_cur
+
+		-- Update measurements
+		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
+		OPEN consume_cur
+		FETCH NEXT FROM consume_cur INTO @j
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Consume imported values as measurement data
+			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
+			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
+			SET @request = (SELECT request FROM import WHERE id = @j)
+			SET @method = (SELECT method FROM import WHERE id = @j)
+			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
+			
+			-- Handle analysis services
+			IF SUBSTRING(@keyword, 1, 1) = 'A'
+			BEGIN
+				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
+				
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
+				
+				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
+					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
+			END
+
+			-- Handle calculated fields
+			IF SUBSTRING(@keyword, 1, 1) = 'F'
+			BEGIN
+				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
+
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
+			END
+
+			EXEC calculation_iterate @request
+
+			FETCH NEXT FROM consume_cur INTO @j
+		END
+		CLOSE consume_cur
+		DEALLOCATE consume_cur
+
+	END TRY
+	BEGIN CATCH
+		DEALLOCATE import_cur
+		DEALLOCATE consume_cur
+	END CATCH
+END
+GO
 PRINT N'Erweiterte Eigenschaft "[dbo].[condition].[type].[MS_Description]" wird erstellt...';
 
 
@@ -10824,684 +10823,6 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[state].[state].[MS_Description]" wird ers
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, RT - Retract, RC - Received, VD - Validated, MA - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'state';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[31] 4[39] 2[10] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "measurement"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "analysis"
-            Begin Extent = 
-               Top = 6
-               Left = 246
-               Bottom = 136
-               Right = 441
-            End
-            DisplayFlags = 280
-            TopColumn = 11
-         End
-         Begin Table = "technique"
-            Begin Extent = 
-               Top = 6
-               Left = 895
-               Bottom = 119
-               Right = 1065
-            End
-            DisplayFlags = 280
-            TopColumn = 2
-         End
-         Begin Table = "method"
-            Begin Extent = 
-               Top = 6
-               Left = 479
-               Bottom = 136
-               Right = 649
-            End
-            DisplayFlags = 280
-            TopColumn = 3
-         End
-         Begin Table = "t"
-            Begin Extent = 
-               Top = 6
-               Left = 687
-               Bottom = 136
-               Right = 857
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 16
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane2]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 2895
-         Table = 2820
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_project_owner].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[41] 4[20] 2[15] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = -1001
-      End
-      Begin Tables = 
-         Begin Table = "project"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 3
-         End
-         Begin Table = "a"
-            Begin Extent = 
-               Top = 6
-               Left = 246
-               Bottom = 119
-               Right = 416
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 10
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 2205
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_project_owner';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_project_owner].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_project_owner';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[35] 4[25] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "measurement"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "analysis"
-            Begin Extent = 
-               Top = 6
-               Left = 246
-               Bottom = 136
-               Right = 441
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "technique"
-            Begin Extent = 
-               Top = 6
-               Left = 479
-               Bottom = 136
-               Right = 649
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "method"
-            Begin Extent = 
-               Top = 6
-               Left = 687
-               Bottom = 136
-               Right = 857
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "t"
-            Begin Extent = 
-               Top = 6
-               Left = 895
-               Bottom = 136
-               Right = 1065
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 9
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 2745
-         Ta', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPane2]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'ble = 4020
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "request"
-            Begin Extent = 
-               Top = 12
-               Left = 76
-               Bottom = 259
-               Right = 369
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "audit"
-            Begin Extent = 
-               Top = 12
-               Left = 445
-               Bottom = 259
-               Right = 720
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 27
-         Width = 284
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
 
 
 GO
@@ -12395,6 +11716,684 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPaneCount]" wird er
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[31] 4[39] 2[10] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "measurement"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 136
+               Right = 208
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "analysis"
+            Begin Extent = 
+               Top = 6
+               Left = 246
+               Bottom = 136
+               Right = 441
+            End
+            DisplayFlags = 280
+            TopColumn = 11
+         End
+         Begin Table = "technique"
+            Begin Extent = 
+               Top = 6
+               Left = 895
+               Bottom = 119
+               Right = 1065
+            End
+            DisplayFlags = 280
+            TopColumn = 2
+         End
+         Begin Table = "method"
+            Begin Extent = 
+               Top = 6
+               Left = 479
+               Bottom = 136
+               Right = 649
+            End
+            DisplayFlags = 280
+            TopColumn = 3
+         End
+         Begin Table = "t"
+            Begin Extent = 
+               Top = 6
+               Left = 687
+               Bottom = 136
+               Right = 857
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 16
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane2]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 2895
+         Table = 2820
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_project_owner].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[41] 4[20] 2[15] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = -1001
+      End
+      Begin Tables = 
+         Begin Table = "project"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 136
+               Right = 208
+            End
+            DisplayFlags = 280
+            TopColumn = 3
+         End
+         Begin Table = "a"
+            Begin Extent = 
+               Top = 6
+               Left = 246
+               Bottom = 119
+               Right = 416
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 10
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 2205
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_project_owner';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_project_owner].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_project_owner';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[35] 4[25] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "measurement"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 136
+               Right = 208
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "analysis"
+            Begin Extent = 
+               Top = 6
+               Left = 246
+               Bottom = 136
+               Right = 441
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "technique"
+            Begin Extent = 
+               Top = 6
+               Left = 479
+               Bottom = 136
+               Right = 649
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "method"
+            Begin Extent = 
+               Top = 6
+               Left = 687
+               Bottom = 136
+               Right = 857
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "t"
+            Begin Extent = 
+               Top = 6
+               Left = 895
+               Bottom = 136
+               Right = 1065
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 9
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 2745
+         Ta', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPane2]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'ble = 4020
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "request"
+            Begin Extent = 
+               Top = 12
+               Left = 76
+               Bottom = 259
+               Right = 369
+            End
+            DisplayFlags = 280
+            TopColumn = 4
+         End
+         Begin Table = "audit"
+            Begin Extent = 
+               Top = 12
+               Left = 445
+               Bottom = 259
+               Right = 720
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 27
+         Width = 284
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
 
 
 GO

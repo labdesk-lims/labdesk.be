@@ -2,7 +2,6 @@
     [id]       INT              IDENTITY (1, 1) NOT NULL,
     [name]     VARCHAR (255)    NOT NULL,
     [uid]      UNIQUEIDENTIFIER CONSTRAINT [DF_users_uid] DEFAULT (newid()) NULL,
-    [licence]  NVARCHAR (MAX)   NULL,
     [role]     INT              NULL,
     [contact]  INT              NULL,
     [language] VARCHAR (32)     CONSTRAINT [DF_users_language] DEFAULT (N'en') NOT NULL,
