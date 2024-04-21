@@ -96,6 +96,7 @@
     <Build Include="dbo\Tables\analysis.sql" />
     <Build Include="dbo\Tables\traversal.sql" />
     <Build Include="dbo\Tables\filter.sql" />
+    <Build Include="dbo\Tables\setup.sql" />
     <Build Include="dbo\Tables\strposition.sql" />
     <Build Include="dbo\Tables\measurement_condition.sql" />
     <Build Include="dbo\Tables\role_permission.sql" />
@@ -112,7 +113,6 @@
     <Build Include="dbo\Tables\smpcontainer.sql" />
     <Build Include="dbo\Tables\instype.sql" />
     <Build Include="dbo\Tables\smpmatrix.sql" />
-    <Build Include="dbo\Tables\setup.sql" />
     <Build Include="dbo\Tables\laboratory.sql" />
     <Build Include="dbo\Tables\smppoint.sql" />
     <Build Include="dbo\Tables\measurement.sql" />

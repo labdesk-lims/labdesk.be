@@ -5,6 +5,7 @@
     [show_desktop]    BIT           CONSTRAINT [DF_setup_show_desktop] DEFAULT ((0)) NULL,
     [vat]             FLOAT (53)    CONSTRAINT [DF_setup_vat] DEFAULT ((0)) NOT NULL,
     [upload_max_byte] INT           CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) NOT NULL,
+    [version_fe]      VARCHAR (255) NULL,
     CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100))
 );

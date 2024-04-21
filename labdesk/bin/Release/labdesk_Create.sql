@@ -674,23 +674,6 @@ CREATE TABLE [dbo].[request_material] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[task_workload]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[task_workload] (
-    [id]               INT           IDENTITY (1, 1) NOT NULL,
-    [workday]          DATETIME      NULL,
-    [workload]         FLOAT (53)    NULL,
-    [created_by]       VARCHAR (255) NULL,
-    [created_at]       DATETIME      NULL,
-    [task]             INT           NULL,
-    [billing_customer] INT           NULL,
-    CONSTRAINT [PK_workload] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[role_permission]" wird erstellt...';
 
 
@@ -740,6 +723,23 @@ CREATE TABLE [dbo].[strposition] (
     [unit]       VARCHAR (255) NULL,
     [storage]    INT           NOT NULL,
     CONSTRAINT [PK_strposition] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[setup] (
+    [id]              INT           IDENTITY (1, 1) NOT NULL,
+    [email_profile]   VARCHAR (255) NULL,
+    [alert_document]  INT           NULL,
+    [show_desktop]    BIT           NULL,
+    [vat]             FLOAT (53)    NOT NULL,
+    [upload_max_byte] INT           NOT NULL,
+    [version_fe]      VARCHAR (255) NULL,
+    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -875,20 +875,6 @@ CREATE TABLE [dbo].[measurement_cfield] (
     [cfield]      INT        NOT NULL,
     [measurement] INT        NOT NULL,
     CONSTRAINT [PK_measurement_cfield] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[instype]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[instype] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_instrument_type] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1061,6 +1047,23 @@ CREATE TABLE [dbo].[method_analysis] (
     [applies]  BIT NOT NULL,
     [standard] BIT NOT NULL,
     CONSTRAINT [PK_method_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[task_workload]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[task_workload] (
+    [id]               INT           IDENTITY (1, 1) NOT NULL,
+    [workday]          DATETIME      NULL,
+    [workload]         FLOAT (53)    NULL,
+    [created_by]       VARCHAR (255) NULL,
+    [created_at]       DATETIME      NULL,
+    [task]             INT           NULL,
+    [billing_customer] INT           NULL,
+    CONSTRAINT [PK_workload] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1269,22 +1272,6 @@ CREATE TABLE [dbo].[laboratory] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[setup] (
-    [id]              INT           IDENTITY (1, 1) NOT NULL,
-    [email_profile]   VARCHAR (255) NULL,
-    [alert_document]  INT           NULL,
-    [show_desktop]    BIT           NULL,
-    [vat]             FLOAT (53)    NOT NULL,
-    [upload_max_byte] INT           NOT NULL,
-    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[smpmatrix]" wird erstellt...';
 
 
@@ -1295,6 +1282,20 @@ CREATE TABLE [dbo].[smpmatrix] (
     [description] NVARCHAR (MAX) NULL,
     [deactivate]  BIT            NULL,
     CONSTRAINT [PK_smpmatrix] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[instype]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[instype] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_instrument_type] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1934,15 +1935,6 @@ ALTER TABLE [dbo].[request_material]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workload_created_by]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [DF_workload_created_by] DEFAULT (suser_name()) FOR [created_by];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_c]" wird erstellt...';
 
 
@@ -1976,6 +1968,33 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_d]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[role_permission]
     ADD CONSTRAINT [DF_Table_1_d] DEFAULT ((0)) FOR [can_delete];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_show_desktop]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_show_desktop] DEFAULT ((0)) FOR [show_desktop];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_vat]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_vat] DEFAULT ((0)) FOR [vat];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
 
 
 GO
@@ -2087,15 +2106,6 @@ ALTER TABLE [dbo].[attachment]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_type_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[instype]
-    ADD CONSTRAINT [DF_instrument_type_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpcontainer_deactivate]" wird erstellt...';
 
 
@@ -2174,6 +2184,15 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_analysis_standard]" wird erstel
 GO
 ALTER TABLE [dbo].[method_analysis]
     ADD CONSTRAINT [DF_method_analysis_standard] DEFAULT ((0)) FOR [standard];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workload_created_by]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [DF_workload_created_by] DEFAULT (suser_name()) FOR [created_by];
 
 
 GO
@@ -2393,39 +2412,21 @@ ALTER TABLE [dbo].[laboratory]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_show_desktop]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_show_desktop] DEFAULT ((0)) FOR [show_desktop];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_vat]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_vat] DEFAULT ((0)) FOR [vat];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpmatrix_deactivate]" wird erstellt...';
 
 
 GO
 ALTER TABLE [dbo].[smpmatrix]
     ADD CONSTRAINT [DF_smpmatrix_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_type_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instype]
+    ADD CONSTRAINT [DF_instrument_type_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
@@ -3014,24 +3015,6 @@ ALTER TABLE [dbo].[request_material]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_task_workload_billing_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [FK_task_workload_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_workload_task]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [FK_workload_task] FOREIGN KEY ([task]) REFERENCES [dbo].[task] ([id]) ON DELETE CASCADE;
-
-
-GO
 PRINT N'Fremdschlüssel "[dbo].[FK_role_permission_permission]" wird erstellt...';
 
 
@@ -3365,6 +3348,24 @@ ALTER TABLE [dbo].[method_analysis]
 
 
 GO
+PRINT N'Fremdschlüssel "[dbo].[FK_task_workload_billing_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [FK_task_workload_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_workload_task]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [FK_workload_task] FOREIGN KEY ([task]) REFERENCES [dbo].[task] ([id]) ON DELETE CASCADE;
+
+
+GO
 PRINT N'Fremdschlüssel "[dbo].[FK_material_supplier]" wird erstellt...';
 
 
@@ -3680,21 +3681,21 @@ ALTER TABLE [dbo].[btcposition]
 
 
 GO
-PRINT N'CHECK-Einschränkung "[dbo].[CK_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[customer]
-    ADD CONSTRAINT [CK_customer] CHECK ([discount]>=(0) AND [discount]<=(100));
-
-
-GO
 PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
 
 
 GO
 ALTER TABLE [dbo].[setup]
     ADD CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100));
+
+
+GO
+PRINT N'CHECK-Einschränkung "[dbo].[CK_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[customer]
+    ADD CONSTRAINT [CK_customer] CHECK ([discount]>=(0) AND [discount]<=(100));
 
 
 GO
@@ -4948,60 +4949,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[workload_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER workload_audit 
-   ON  [dbo].[task_workload]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
 PRINT N'Trigger "[dbo].[role_permission_audit]" wird erstellt...';
 
 
@@ -5236,6 +5183,29 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[setup_insert]
+   ON  dbo.setup
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT COUNT(id) FROM setup) > 1
+		THROW 51000, 'Only one row config is allowed.', 1 
 END
 GO
 PRINT N'Trigger "[dbo].[filter_insert_update]" wird erstellt...';
@@ -5708,60 +5678,6 @@ BEGIN
 		IF @state <> 'CP' 
 			THROW 51000, 'Not able to capture. State does not match CP.', 1
 	END
-END
-GO
-PRINT N'Trigger "[dbo].[instype_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[instype_audit]
-   ON  [dbo].[instype]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
 PRINT N'Trigger "[dbo].[smpcontainer_audit]" wird erstellt...';
@@ -6278,6 +6194,60 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[method_analysis_audit]
    ON  [dbo].[method_analysis]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[workload_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER workload_audit 
+   ON  [dbo].[task_workload]
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -6855,29 +6825,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[setup_insert]
-   ON  dbo.setup
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT COUNT(id) FROM setup) > 1
-		THROW 51000, 'Only one row config is allowed.', 1 
-END
-GO
 PRINT N'Trigger "[dbo].[smpmatrix_audit]" wird erstellt...';
 
 
@@ -6889,6 +6836,60 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[smpmatrix_audit]
    ON  [dbo].[smpmatrix]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[instype_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[instype_audit]
+   ON  [dbo].[instype]
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN

@@ -28605,6 +28605,22 @@ END]]></Value>
 						<AttachedAnnotation Disambiguator="140" />
 					</Element>
 				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[setup].[version_fe]">
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Length" Value="255" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[varchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
 				<Entry>
@@ -28644,10 +28660,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="602" />
+				<Property Name="Offset" Value="645" />
 				<Property Name="CreateOffset" Value="174" />
 				<Property Name="Length" Value="518" />
-				<Property Name="StartLine" Value="14" />
+				<Property Name="StartLine" Value="15" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[setup_insert]&#xD;&#xA;   ON  dbo.setup&#xD;&#xA;   AFTER INSERT&#xD;&#xA;AS" />
 			</Annotation>
