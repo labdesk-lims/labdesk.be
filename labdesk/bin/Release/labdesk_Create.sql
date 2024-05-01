@@ -8518,29 +8518,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Sicht "[dbo].[view_labreport_details]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_labreport_details
-AS
-SELECT   TOP (100) PERCENT dbo.measurement.id AS measurement_id, dbo.measurement.request AS request_id, dbo.technique.id AS technique, dbo.technique.title AS technique_title, 
-                         dbo.analysis.title AS analysis, dbo.method.title AS method, t.lsl, dbo.measurement.value_txt, t.usl, dbo.measurement.uncertainty, dbo.analysis.unit, 
-                         CASE WHEN dbo.measurement.accredited = 0 THEN '* ' ELSE '' END + CASE WHEN dbo.measurement.subcontraction = 1 THEN 'x ' ELSE '' END + CASE WHEN dbo.measurement.out_of_spec
-                          = 1 THEN '+ ' ELSE '' END + CASE WHEN dbo.measurement.out_of_range = 1 THEN '<> ' ELSE '' END + CASE WHEN dbo.measurement.not_detectable = 1 THEN '- ' ELSE '' END AS remark, 
-                         dbo.analysis.sortkey AS sortkey_analysis, dbo.technique.sortkey AS sortkey_technique, dbo.measurement.sortkey AS sortkey_measurement
-FROM         dbo.measurement INNER JOIN
-                         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
-                         dbo.technique ON dbo.analysis.technique = dbo.technique.id LEFT OUTER JOIN
-                         dbo.method ON dbo.measurement.method = dbo.method.id LEFT OUTER JOIN
-                             (SELECT   dbo.request.id, dbo.profile_analysis.analysis, dbo.profile_analysis.lsl, dbo.profile_analysis.usl
-                                FROM         dbo.request INNER JOIN
-                                                         dbo.profile ON dbo.request.profile = dbo.profile.id INNER JOIN
-                                                         dbo.profile_analysis ON dbo.profile_analysis.profile = dbo.profile.id
-                                WHERE     (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
-WHERE     (dbo.measurement.state = 'VD')
-ORDER BY dbo.measurement.sortkey, dbo.technique.sortkey, dbo.analysis.sortkey
-GO
 PRINT N'Sicht "[dbo].[view_worksheet_details]" wird erstellt...';
 
 
@@ -8608,33 +8585,28 @@ WHERE        (GETDATE() >= DATEADD(day, -
                              (SELECT        TOP (1) alert_document
                                FROM            dbo.setup), dbo.attachment.reminder))
 GO
-PRINT N'Funktion "[dbo].[users_get_hourly_rate]" wird erstellt...';
+PRINT N'Sicht "[dbo].[view_labreport_details]" wird erstellt...';
 
 
 GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: November 2023
--- Description:	Get hourly rate of users
--- =============================================
-CREATE FUNCTION users_get_hourly_rate
-(
-	-- Add the parameters for the function here
-	@user_name VARCHAR(255)
-)
-RETURNS money
+CREATE VIEW dbo.view_labreport_details
 AS
-BEGIN
-	-- Declare the return variable here
-	DECLARE @rate money
-
-	-- Add the T-SQL statements to compute the return value here
-	SET @rate = (SELECT role.hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE name = @user_name)
-
-	-- Return the result of the function
-	RETURN @rate
-
-END
+SELECT   TOP (100) PERCENT dbo.measurement.id AS measurement_id, dbo.measurement.request AS request_id, dbo.technique.id AS technique, dbo.technique.title AS technique_title, 
+                         dbo.analysis.title AS analysis, dbo.method.title AS method, t.lsl, dbo.measurement.value_txt, t.usl, dbo.measurement.uncertainty, dbo.analysis.unit, 
+                         CASE WHEN dbo.measurement.accredited = 0 THEN '* ' ELSE '' END + CASE WHEN dbo.measurement.subcontraction = 1 THEN 'x ' ELSE '' END + CASE WHEN dbo.measurement.out_of_spec
+                          = 1 THEN '+ ' ELSE '' END + CASE WHEN dbo.measurement.out_of_range = 1 THEN '<> ' ELSE '' END + CASE WHEN dbo.measurement.not_detectable = 1 THEN '- ' ELSE '' END AS remark, 
+                         dbo.analysis.sortkey AS sortkey_analysis, dbo.technique.sortkey AS sortkey_technique, dbo.measurement.sortkey AS sortkey_measurement
+FROM         dbo.measurement INNER JOIN
+                         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
+                         dbo.technique ON dbo.analysis.technique = dbo.technique.id LEFT OUTER JOIN
+                         dbo.method ON dbo.measurement.method = dbo.method.id LEFT OUTER JOIN
+                             (SELECT   dbo.request.id, dbo.profile_analysis.analysis, dbo.profile_analysis.lsl, dbo.profile_analysis.usl
+                                FROM         dbo.request INNER JOIN
+                                                         dbo.profile ON dbo.request.profile = dbo.profile.id INNER JOIN
+                                                         dbo.profile_analysis ON dbo.profile_analysis.profile = dbo.profile.id
+                                WHERE     (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
+WHERE     (dbo.measurement.state = 'VD')
+ORDER BY dbo.measurement.sortkey, dbo.technique.sortkey, dbo.analysis.sortkey
 GO
 PRINT N'Funktion "[dbo].[audit_get_first]" wird erstellt...';
 
@@ -8759,6 +8731,34 @@ BEGIN
 
 	-- Return the result of the function
 	RETURN @id
+
+END
+GO
+PRINT N'Funktion "[dbo].[users_get_hourly_rate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: November 2023
+-- Description:	Get hourly rate of users
+-- =============================================
+CREATE FUNCTION users_get_hourly_rate
+(
+	-- Add the parameters for the function here
+	@user_name VARCHAR(255)
+)
+RETURNS money
+AS
+BEGIN
+	-- Declare the return variable here
+	DECLARE @rate money
+
+	-- Add the T-SQL statements to compute the return value here
+	SET @rate = (SELECT role.hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE name = @user_name)
+
+	-- Return the result of the function
+	RETURN @rate
 
 END
 GO
@@ -9411,212 +9411,6 @@ BEGIN
 	SET @response_message = (SELECT SYSDATETIME())
 END
 GO
-PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[folder_create]
-	-- Add the parameters for the stored procedure here
-	@strFolder NVARCHAR(200) -- Folder to be created
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
-	DECLARE @s NVARCHAR(200)
-	DECLARE @tmpFolder NVARCHAR(MAX)
-
-	-- Create table with subfolder names
-	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
-
-	-- Check if folder already exists
-	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
-	BEGIN
-		-- Create folder
-		SET @s = 'MD ' + 'c:\' + @strFolder
-		exec master.dbo.xp_cmdshell @s
-	END
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_substitute_keyword]" wird erstellt...';
-
-
-GO
--- ===============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Substitute keywords in calculation
--- ===============================================
-CREATE PROCEDURE [dbo].[calculation_substitute_keyword] 
-	-- Add the parameters for the stored procedure here
-	@keywords StringList READONLY,
-	@values KeyValueList READONLY,
-	@equation NVARCHAR(MAX),
-	@return_message NVARCHAR(MAX) OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT
-	DECLARE @key NVARCHAR(MAX)
-	DECLARE @value NVARCHAR(MAX)
-
-	SET @i = 0
-	WHILE @i < (SELECT COUNT(*) FROM @keywords)
-	BEGIN
-		SET @key = (SELECT value FROM @keywords WHERE id = @i)
-		SET @value = (SELECT value FROM @values WHERE keyword = @key)
-		IF CHARINDEX('.', @value) = 0
-			SET @value = @value + '.0'
-		SET @equation = REPLACE(@equation, @key, @value )
-		SET @i = @i + 1
-	END
-
-	SET @return_message = @equation
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_extract_keyword]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_extract_keyword]
-	-- Add the parameters for the stored procedure here
-	@equation NVARCHAR(MAX)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @key_open BigIntList, @key_close BigIntList, @keys StringList, @pos INT, @i INT
-
-	-- Store the position of opening brackets
-	SET @i = 0
-	SET @pos = 1
-	WHILE CHARINDEX('[', @equation, @pos) > 0
-	BEGIN
-		INSERT INTO @key_open VALUES(@i, CHARINDEX('[', @equation, @pos))
-		SET @pos = (SELECT value FROM @key_open WHERE id = @i) + 1
-		SET @i = @i + 1
-	END
-
-	-- Store the position of closing brackets
-	SET @i = 0
-	SET @pos = 1
-	WHILE CHARINDEX(']', @equation, @pos) > 0
-	BEGIN
-		INSERT INTO @key_close VALUES(@i, CHARINDEX(']', @equation, @pos))
-		SET @pos = (SELECT value FROM @key_close WHERE id = @i) + 1
-		SET @i = @i + 1
-	END
-
-	-- Store the fields named in brackets
-	SET @i = 0
-	WHILE @i < (SELECT COUNT(*) FROM @key_Open)
-	BEGIN
-		INSERT INTO @keys VALUES(@i, SUBSTRING(@equation, (SELECT value FROM @key_open WHERE id = @i), (SELECT value FROM @key_close WHERE id = @i) - (SELECT value FROM @key_open WHERE id = @i) + 1))
-		SET @i = @i + 1
-	END
-
-	-- Delete field duplicates
-	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
-
-	SELECT * FROM @keys
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_perform]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_perform]
-	@measurement INT,
-	@response_message FLOAT OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @f KeyValueList
-	DECLARE @t StringList
-	DECLARE @equation NVARCHAR(MAX)
-	DECLARE @i INT
-	DECLARE @id INT
-	DECLARE @s NVARCHAR(MAX)
-	DECLARE @sql NVARCHAR(MAX)
-	DECLARE @result FLOAT
-	DECLARE @analysis INT
-
-	SET @analysis = (SELECT analysis FROM measurement WHERE id = @measurement)
-
-	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
-
-	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
-	
-	-- Get key and value
-	OPEN cur
-	FETCH NEXT FROM cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement_cfield WHERE measurement = @measurement AND cfield = @id))
-		END
-
-		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement WHERE request = (SELECT request FROM measurement WHERE id = @measurement) AND analysis = @id AND state = 'VD'))
-		END
-
-		FETCH NEXT FROM cur INTO @i
-	END
-	CLOSE cur
-	DEALLOCATE cur
-
-	-- SELECT * FROM @f
-
-	-- Extract keywors of equation
-	INSERT INTO @t
-	EXEC calculation_extract_keyword @equation
-
-	-- Substitute keywords by value
-	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
-
-	-- Evaluate euqation
-	SET @sql = 'select @result = ' + @s
-	EXEC sp_executesql @sql, N'@result float output', @result OUT
-
-	-- Return value being calculated
-	SET @response_message = @result
-END
-GO
 PRINT N'Prozedur "[dbo].[import_csv]" wird erstellt...';
 
 
@@ -9816,6 +9610,136 @@ BEGIN
 	END
 	CLOSE role_cur
 	DEALLOCATE role_cur
+END
+GO
+PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[folder_create]
+	-- Add the parameters for the stored procedure here
+	@strFolder NVARCHAR(200) -- Folder to be created
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
+	DECLARE @s NVARCHAR(200)
+	DECLARE @tmpFolder NVARCHAR(MAX)
+
+	-- Create table with subfolder names
+	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
+
+	-- Check if folder already exists
+	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
+	BEGIN
+		-- Create folder
+		SET @s = 'MD ' + 'c:\' + @strFolder
+		exec master.dbo.xp_cmdshell @s
+	END
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_substitute_keyword]" wird erstellt...';
+
+
+GO
+-- ===============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Substitute keywords in calculation
+-- ===============================================
+CREATE PROCEDURE [dbo].[calculation_substitute_keyword] 
+	-- Add the parameters for the stored procedure here
+	@keywords StringList READONLY,
+	@values KeyValueList READONLY,
+	@equation NVARCHAR(MAX),
+	@return_message NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @key NVARCHAR(MAX)
+	DECLARE @value NVARCHAR(MAX)
+
+	SET @i = 0
+	WHILE @i < (SELECT COUNT(*) FROM @keywords)
+	BEGIN
+		SET @key = (SELECT value FROM @keywords WHERE id = @i)
+		SET @value = (SELECT value FROM @values WHERE keyword = @key)
+		IF CHARINDEX('.', @value) = 0
+			SET @value = @value + '.0'
+		SET @equation = REPLACE(@equation, @key, @value )
+		SET @i = @i + 1
+	END
+
+	SET @return_message = @equation
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_extract_keyword]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_extract_keyword]
+	-- Add the parameters for the stored procedure here
+	@equation NVARCHAR(MAX)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @key_open BigIntList, @key_close BigIntList, @keys StringList, @pos INT, @i INT
+
+	-- Store the position of opening brackets
+	SET @i = 0
+	SET @pos = 1
+	WHILE CHARINDEX('[', @equation, @pos) > 0
+	BEGIN
+		INSERT INTO @key_open VALUES(@i, CHARINDEX('[', @equation, @pos))
+		SET @pos = (SELECT value FROM @key_open WHERE id = @i) + 1
+		SET @i = @i + 1
+	END
+
+	-- Store the position of closing brackets
+	SET @i = 0
+	SET @pos = 1
+	WHILE CHARINDEX(']', @equation, @pos) > 0
+	BEGIN
+		INSERT INTO @key_close VALUES(@i, CHARINDEX(']', @equation, @pos))
+		SET @pos = (SELECT value FROM @key_close WHERE id = @i) + 1
+		SET @i = @i + 1
+	END
+
+	-- Store the fields named in brackets
+	SET @i = 0
+	WHILE @i < (SELECT COUNT(*) FROM @key_Open)
+	BEGIN
+		INSERT INTO @keys VALUES(@i, SUBSTRING(@equation, (SELECT value FROM @key_open WHERE id = @i), (SELECT value FROM @key_close WHERE id = @i) - (SELECT value FROM @key_open WHERE id = @i) + 1))
+		SET @i = @i + 1
+	END
+
+	-- Delete field duplicates
+	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
+
+	SELECT * FROM @keys
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -10330,41 +10254,6 @@ BEGIN
 	SET @return_message = @p_message
 END
 GO
-PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_iterate]
-	-- Add the parameters for the stored procedure here
-	@request INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT
-	DECLARE @f FLOAT
-	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
-
-	OPEN c_cur
-	FETCH NEXT FROM c_cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		EXEC calculation_perform @i, @f OUTPUT
-		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
-		FETCH NEXT FROM c_cur INTO @i
-	END
-	CLOSE c_cur
-	DEALLOCATE c_cur
-END
-GO
 PRINT N'Prozedur "[dbo].[request_create_subrequest]" wird erstellt...';
 
 
@@ -10395,6 +10284,82 @@ BEGIN
 	-- Attach newly created request to parent
 	UPDATE request SET subrequest = @p_id WHERE id = @p_id
 	UPDATE request SET subrequest = @p_id WHERE id = @pk
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_perform]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_perform]
+	@measurement INT,
+	@response_message FLOAT OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @f KeyValueList
+	DECLARE @t StringList
+	DECLARE @equation NVARCHAR(MAX)
+	DECLARE @i INT
+	DECLARE @id INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @sql NVARCHAR(MAX)
+	DECLARE @result FLOAT
+	DECLARE @analysis INT
+
+	SET @analysis = (SELECT analysis FROM measurement WHERE id = @measurement)
+
+	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
+
+	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
+	
+	-- Get key and value
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement_cfield WHERE measurement = @measurement AND cfield = @id))
+		END
+
+		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value_num FROM measurement WHERE request = (SELECT request FROM measurement WHERE id = @measurement) AND analysis = @id AND state = 'VD'))
+		END
+
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
+
+	-- SELECT * FROM @f
+
+	-- Extract keywors of equation
+	INSERT INTO @t
+	EXEC calculation_extract_keyword @equation
+
+	-- Substitute keywords by value
+	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
+
+	-- Evaluate euqation
+	SET @sql = 'select @result = ' + @s
+	EXEC sp_executesql @sql, N'@result float output', @result OUT
+
+	-- Return value being calculated
+	SET @response_message = @result
 END
 GO
 PRINT N'Prozedur "[dbo].[mail_send]" wird erstellt...';
@@ -10480,112 +10445,6 @@ BEGIN
 	EXEC sp_OADestroy @init; -- Destroy Object
 
 	SET @strFile = @strPath
-END
-GO
-PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[import_perform] 
-	-- Add the parameters for the stored procedure here
-	@strFolder nvarchar(max)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT, @j INT
-	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
-	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
-	DECLARE @strCmd VARCHAR(1024)
-	DECLARE @strFile nvarchar(max)
-	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
-
-	BEGIN TRY
-		TRUNCATE TABLE import
-
-		-- Concatenate command string
-		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
-
-		-- Create file list
-		INSERT INTO @files execute xp_cmdshell @strCmd
-		DELETE FROM @files WHERE FileName IS NULL
-
-		-- Import measurement values from import file
-		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
-		OPEN import_cur
-		FETCH NEXT FROM import_cur INTO @i
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			-- Perform import of measurement data
-			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
-			EXEC import_csv @strFile, @imported OUT
-
-			-- Delete imported file
-			IF @imported = 1
-			BEGIN
-				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
-				EXEC (@cmd)
-			END
-			
-			FETCH NEXT FROM import_cur INTO @i
-		END
-		CLOSE import_cur
-		DEALLOCATE import_cur
-
-		-- Update measurements
-		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
-		OPEN consume_cur
-		FETCH NEXT FROM consume_cur INTO @j
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			-- Consume imported values as measurement data
-			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
-			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
-			SET @request = (SELECT request FROM import WHERE id = @j)
-			SET @method = (SELECT method FROM import WHERE id = @j)
-			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
-			
-			-- Handle analysis services
-			IF SUBSTRING(@keyword, 1, 1) = 'A'
-			BEGIN
-				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
-				
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
-				
-				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
-					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
-			END
-
-			-- Handle calculated fields
-			IF SUBSTRING(@keyword, 1, 1) = 'F'
-			BEGIN
-				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
-
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
-			END
-
-			EXEC calculation_iterate @request
-
-			FETCH NEXT FROM consume_cur INTO @j
-		END
-		CLOSE consume_cur
-		DEALLOCATE consume_cur
-
-	END TRY
-	BEGIN CATCH
-		DEALLOCATE import_cur
-		DEALLOCATE consume_cur
-	END CATCH
 END
 GO
 PRINT N'Prozedur "[dbo].[calculation_test]" wird erstellt...';
@@ -10771,6 +10630,147 @@ BEGIN
 	DEALLOCATE mailqueue_cur
 END
 GO
+PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_iterate]
+	-- Add the parameters for the stored procedure here
+	@request INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @f FLOAT
+	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
+
+	OPEN c_cur
+	FETCH NEXT FROM c_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		EXEC calculation_perform @i, @f OUTPUT
+		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
+		FETCH NEXT FROM c_cur INTO @i
+	END
+	CLOSE c_cur
+	DEALLOCATE c_cur
+END
+GO
+PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[import_perform] 
+	-- Add the parameters for the stored procedure here
+	@strFolder nvarchar(max)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT, @j INT
+	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
+	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
+	DECLARE @strCmd VARCHAR(1024)
+	DECLARE @strFile nvarchar(max)
+	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
+
+	BEGIN TRY
+		TRUNCATE TABLE import
+
+		-- Concatenate command string
+		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
+
+		-- Create file list
+		INSERT INTO @files execute xp_cmdshell @strCmd
+		DELETE FROM @files WHERE FileName IS NULL
+
+		-- Import measurement values from import file
+		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
+		OPEN import_cur
+		FETCH NEXT FROM import_cur INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Perform import of measurement data
+			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
+			EXEC import_csv @strFile, @imported OUT
+
+			-- Delete imported file
+			IF @imported = 1
+			BEGIN
+				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
+				EXEC (@cmd)
+			END
+			
+			FETCH NEXT FROM import_cur INTO @i
+		END
+		CLOSE import_cur
+		DEALLOCATE import_cur
+
+		-- Update measurements
+		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
+		OPEN consume_cur
+		FETCH NEXT FROM consume_cur INTO @j
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Consume imported values as measurement data
+			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
+			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
+			SET @request = (SELECT request FROM import WHERE id = @j)
+			SET @method = (SELECT method FROM import WHERE id = @j)
+			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
+			
+			-- Handle analysis services
+			IF SUBSTRING(@keyword, 1, 1) = 'A'
+			BEGIN
+				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
+				
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
+				
+				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
+					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
+			END
+
+			-- Handle calculated fields
+			IF SUBSTRING(@keyword, 1, 1) = 'F'
+			BEGIN
+				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
+
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
+			END
+
+			EXEC calculation_iterate @request
+
+			FETCH NEXT FROM consume_cur INTO @j
+		END
+		CLOSE consume_cur
+		DEALLOCATE consume_cur
+
+	END TRY
+	BEGIN CATCH
+		DEALLOCATE import_cur
+		DEALLOCATE consume_cur
+	END CATCH
+END
+GO
 PRINT N'Erweiterte Eigenschaft "[dbo].[condition].[type].[MS_Description]" wird erstellt...';
 
 
@@ -10824,195 +10824,6 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[state].[state].[MS_Description]" wird ers
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, RT - Retract, RC - Received, VD - Validated, MA - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'state';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[31] 4[39] 2[10] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "measurement"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 208
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "analysis"
-            Begin Extent = 
-               Top = 6
-               Left = 246
-               Bottom = 136
-               Right = 441
-            End
-            DisplayFlags = 280
-            TopColumn = 11
-         End
-         Begin Table = "technique"
-            Begin Extent = 
-               Top = 6
-               Left = 895
-               Bottom = 119
-               Right = 1065
-            End
-            DisplayFlags = 280
-            TopColumn = 2
-         End
-         Begin Table = "method"
-            Begin Extent = 
-               Top = 6
-               Left = 479
-               Bottom = 136
-               Right = 649
-            End
-            DisplayFlags = 280
-            TopColumn = 3
-         End
-         Begin Table = "t"
-            Begin Extent = 
-               Top = 6
-               Left = 687
-               Bottom = 136
-               Right = 857
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 16
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane2]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 2895
-         Table = 2820
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
 
 
 GO
@@ -12395,6 +12206,195 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPaneCount]" wird er
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[31] 4[39] 2[10] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "measurement"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 136
+               Right = 208
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "analysis"
+            Begin Extent = 
+               Top = 6
+               Left = 246
+               Bottom = 136
+               Right = 441
+            End
+            DisplayFlags = 280
+            TopColumn = 11
+         End
+         Begin Table = "technique"
+            Begin Extent = 
+               Top = 6
+               Left = 895
+               Bottom = 119
+               Right = 1065
+            End
+            DisplayFlags = 280
+            TopColumn = 2
+         End
+         Begin Table = "method"
+            Begin Extent = 
+               Top = 6
+               Left = 479
+               Bottom = 136
+               Right = 649
+            End
+            DisplayFlags = 280
+            TopColumn = 3
+         End
+         Begin Table = "t"
+            Begin Extent = 
+               Top = 6
+               Left = 687
+               Bottom = 136
+               Right = 857
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 16
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPane2]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 2895
+         Table = 2820
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_labreport_details].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_labreport_details';
 
 
 GO
