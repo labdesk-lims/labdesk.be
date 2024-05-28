@@ -5,6 +5,7 @@
     [title]  VARCHAR (255)  NULL,
     [filter] NVARCHAR (MAX) NULL,
     [global] BIT            CONSTRAINT [DF_filter_global] DEFAULT ((0)) NOT NULL,
+    [active] BIT            CONSTRAINT [DF_filter_active] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_filter] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
@@ -27,4 +28,7 @@ BEGIN
     -- Insert statements for trigger here
 	IF (SELECT userid FROM inserted) IS NULL AND (SELECT global FROM inserted) = 0
 		THROW 51000, 'Filter without user id need to be global.', 1
+
+	-- Allow just one filter by form to be activated
+	UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END

@@ -1,3 +1,6 @@
+USE [master];
+
+GO
 CREATE TRIGGER prevent_login
 ON ALL SERVER WITH EXECUTE AS 'sa'
 FOR LOGON
@@ -11,8 +14,9 @@ BEGIN
 	SET @app = (SELECT app_name())
 	SET @LoginName = ORIGINAL_LOGIN()
 
-	IF (@app != 'labdesk-ui' And @db_name = 'labdesk') And (SELECT IS_SRVROLEMEMBER('sysadmin', @LoginName)) != 1
+	IF @app != 'labdesk-ui' And (SELECT IS_SRVROLEMEMBER('sysadmin', @LoginName)) != 1
 	BEGIN
 		ROLLBACK; --Disconnect the session
 	END
 END
+

@@ -71,8 +71,8 @@ GO
 -- Create date: 2022 January
 -- Description:	-
 -- ==============================================
-CREATE TRIGGER profile_insert_update
-   ON  dbo.profile
+CREATE TRIGGER [dbo].[profile_insert_update]
+   ON  [dbo].[profile]
    AFTER INSERT,UPDATE
 AS 
 BEGIN
@@ -83,6 +83,9 @@ BEGIN
     -- Insert statements for trigger here
 	DECLARE @id INT
 	SET @id = (SELECT id FROM inserted)
+	-- SELECT Count(*) AS cnt FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = " & Me.ID
+	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(template.id) FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = (SELECT (id) FROM inserted)) > 0
+	THROW 51000, 'Deactivation failed. Profile is still in use.', 1
 
 	INSERT INTO profile_analysis (profile, analysis) SELECT @id, id FROM analysis WHERE id NOT IN (SELECT analysis FROM profile_analysis WHERE profile = @id) AND deactivate = 0
 END

@@ -5,7 +5,8 @@
     [en]        NVARCHAR (MAX) NULL,
     [de]        NVARCHAR (MAX) NULL,
     [custom]    NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC)
+    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
 );
 
 
