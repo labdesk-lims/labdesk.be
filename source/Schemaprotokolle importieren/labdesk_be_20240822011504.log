@@ -1,0 +1,84 @@
+22.08.2024 15:15:04	Dieses Protokoll enthält Informationen über den Importvorgang eines Schemas in das Projekt "labdesk_be" auf dem Computer "LAPTOPF" durch den Benutzer "lkoge".
+22.08.2024 15:15:04	Der Import des Datenbankschemas wurde gestartet.
+22.08.2024 15:15:05	Datenbankanmeldeinformationen werden ermittelt.
+22.08.2024 15:15:05	Datenbankoptionen werden ermittelt.
+22.08.2024 15:15:05	Option zum Erfassen der generischen datenbankweit gültigen Konfiguration
+22.08.2024 15:15:05	Benutzer werden ermittelt.
+22.08.2024 15:15:05	Rollen werden ermittelt.
+22.08.2024 15:15:05	Anwendungsrollen werden ermittelt.
+22.08.2024 15:15:05	Rollenmitgliedschaften werden ermittelt.
+22.08.2024 15:15:05	Dateigruppen werden ermittelt.
+22.08.2024 15:15:05	Volltextkataloge werden ermittelt.
+22.08.2024 15:15:05	Assemblys werden ermittelt.
+22.08.2024 15:15:05	Zertifikate werden ermittelt.
+22.08.2024 15:15:05	Asymmetrische Schlüssel werden ermittelt.
+22.08.2024 15:15:05	Symmetrische Schlüssel werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte symmetrische Schlüssel werden ermittelt.
+22.08.2024 15:15:05	Schemas werden ermittelt.
+22.08.2024 15:15:05	XML-Schemaauflistungen werden ermittelt.
+22.08.2024 15:15:05	Benutzerdefinierte Datentypen werden ermittelt.
+22.08.2024 15:15:05	Benutzerdefinierte Typen werden ermittelt.
+22.08.2024 15:15:05	Tabellentypen werden ermittelt.
+22.08.2024 15:15:05	Eindeutige Schlüssel für Tabellentypen werden ermittelt
+22.08.2024 15:15:05	Primärschlüssel für Tabellentypen werden ermittelt.
+22.08.2024 15:15:05	Indizes für Tabellentypen werden ermittelt
+22.08.2024 15:15:05	CHECK-Einschränkungen für Tabellentypen werden ermittelt.
+22.08.2024 15:15:05	DEFAULT-Einschränkungen für Tabellentypen werden ermittelt.
+22.08.2024 15:15:05	Partitionsfunktionen werden ermittelt.
+22.08.2024 15:15:05	Partitionsschemas werden ermittelt.
+22.08.2024 15:15:05	Funktionen werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte Funktionen werden gesammelt.
+22.08.2024 15:15:05	Aggregate werden ermittelt.
+22.08.2024 15:15:05	Prozeduren werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte Prozeduren werden gesammelt.
+22.08.2024 15:15:05	Tabellen werden ermittelt.
+22.08.2024 15:15:05	Primärschlüssel werden ermittelt.
+22.08.2024 15:15:05	UNIQUE-Einschränkungen werden ermittelt.
+22.08.2024 15:15:05	Fremdschlüssel werden ermittelt.
+22.08.2024 15:15:05	Standardeinschränkungen werden ermittelt.
+22.08.2024 15:15:05	CHECK-Einschränkungen werden ermittelt.
+22.08.2024 15:15:05	Sichten werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte Sichten werden gesammelt.
+22.08.2024 15:15:05	Indizes werden ermittelt.
+22.08.2024 15:15:05	Statistiken werden ermittelt.
+22.08.2024 15:15:05	Volltextindex-Stopplisten werden ermittelt.
+22.08.2024 15:15:05	Sucheigenschaftenlisten werden ermittelt.
+22.08.2024 15:15:05	Sucheigenschaften werden ermittelt.
+22.08.2024 15:15:05	Volltextindizes werden ermittelt.
+22.08.2024 15:15:05	Columnstore-Indizes werden gesammelt
+22.08.2024 15:15:05	Räumliche Indizes werden ermittelt.
+22.08.2024 15:15:05	XML-Indizes werden ermittelt.
+22.08.2024 15:15:05	Selektive XML-Indexe werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte Trigger werden gesammelt.
+22.08.2024 15:15:05	Trigger werden ermittelt.
+22.08.2024 15:15:05	Verschlüsselte Trigger und CLR-DDL-Trigger werden ermittelt.
+22.08.2024 15:15:05	DDL-Trigger werden ermittelt.
+22.08.2024 15:15:05	Edgeeinschränkungen werden erstellt.
+22.08.2024 15:15:05	Synonyme werden ermittelt.
+22.08.2024 15:15:05	Standardwerte werden ermittelt.
+22.08.2024 15:15:05	UDDT-Bindungen für Dateneinschränkungen werden gesammelt.
+22.08.2024 15:15:05	Regeln werden ermittelt.
+22.08.2024 15:15:05	UDDT-Bindungen für Dateneinschränkungen werden gesammelt.
+22.08.2024 15:15:05	Nachrichtentypen werden ermittelt.
+22.08.2024 15:15:05	Warteschlangen werden ermittelt.
+22.08.2024 15:15:05	Verträge werden ermittelt.
+22.08.2024 15:15:05	Dienste werden ermittelt.
+22.08.2024 15:15:05	Ereignisbenachrichtigungen werden ermittelt.
+22.08.2024 15:15:05	Remotedienstbindungen werden ermittelt.
+22.08.2024 15:15:05	Broker-Prioritäten werden ermittelt.
+22.08.2024 15:15:05	Signaturen werden ermittelt.
+22.08.2024 15:15:05	Komprimierungsoptionen werden gesammelt
+22.08.2024 15:15:05	Sequenztypen werden ermittelt.
+22.08.2024 15:15:05	Sicherheitsrichtlinien werden ermittelt
+22.08.2024 15:15:05	Verschlüsselungsschlüssel für Spalten werden ermittelt
+22.08.2024 15:15:05	Hauptschlüssel für Spalten werden ermittelt
+22.08.2024 15:15:05	Externe Datenquellen werden gesammelt
+22.08.2024 15:15:05	Externe Dateiformate werden gesammelt
+22.08.2024 15:15:05	Externe Tabellen werden gesammelt
+22.08.2024 15:15:05	Erweiterte Eigenschaften werden ermittelt.
+22.08.2024 15:15:05	Assemblys werden ermittelt.
+22.08.2024 15:15:06	Das Projekt wird auf doppelte Elemente überprüft.
+22.08.2024 15:15:06	Die Verarbeitung doppelter Elemente wurde abgeschlossen.
+22.08.2024 15:15:07	Datenbankimport abgeschlossen.
+22.08.2024 15:15:07	Eine Zusammenfassung des Importvorgangs wurde an folgendem Ort gespeichert: C:\Users\lkoge\Documents\GitHub\labdesk.be\source\Schemaprotokolle importieren\labdesk_be_20240822011504.log
+22.08.2024 15:15:07	Klicken Sie auf "Fertig stellen", um den Vorgang fortzusetzen...
