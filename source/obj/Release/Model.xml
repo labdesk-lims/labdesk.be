@@ -26257,7 +26257,7 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="14333" />
+				<Property Name="Offset" Value="14330" />
 				<Property Name="CreateOffset" Value="180" />
 				<Property Name="Length" Value="1450" />
 				<Property Name="StartLine" Value="266" />
@@ -26581,7 +26581,7 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="13818" />
+				<Property Name="Offset" Value="13815" />
 				<Property Name="CreateOffset" Value="193" />
 				<Property Name="Length" Value="507" />
 				<Property Name="StartLine" Value="247" />
@@ -26656,7 +26656,7 @@ BEGIN
 	END
 
 	-- Assign subrequest to acual id
-	-- UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
+	UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
 
 	-- Insert custom fields
 	INSERT INTO request_customfield (field_name, request) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'request'
@@ -26902,6 +26902,9 @@ END]]></Value>
 					<References Name="[dbo].[measurement].[analysis]" />
 				</Entry>
 				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
 					<References Name="[dbo].[request_customfield]" />
 				</Entry>
 				<Entry>
@@ -26958,7 +26961,7 @@ END]]></Value>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="Offset" Value="9465" />
 				<Property Name="CreateOffset" Value="175" />
-				<Property Name="Length" Value="4345" />
+				<Property Name="Length" Value="4342" />
 				<Property Name="StartLine" Value="166" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 February&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[request_insert]&#xD;&#xA;   ON  [dbo].[request] &#xD;&#xA;   AFTER INSERT&#xD;&#xA;AS" />
@@ -33846,7 +33849,8 @@ BEGIN
 		FETCH NEXT FROM tmpl INTO @i
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
-			INSERT INTO request (customer, priority, profile, workflow, smppoint,subrequest) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint, @id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
 			FETCH NEXT FROM tmpl INTO @i
 		END
 		CLOSE tmpl
@@ -33920,9 +33924,6 @@ END]]></Value>
 					<References Name="[dbo].[request].[smppoint]" />
 				</Entry>
 				<Entry>
-					<References Name="[dbo].[request].[subrequest]" />
-				</Entry>
-				<Entry>
 					<References Name="[dbo].[template].[customer]" />
 				</Entry>
 				<Entry>
@@ -33936,6 +33937,12 @@ END]]></Value>
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[template_profile].[smppoint]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="Parameters">
@@ -33992,7 +33999,7 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="CreateOffset" Value="201" />
-				<Property Name="Length" Value="1511" />
+				<Property Name="Length" Value="1563" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 March&#xD;&#xA;-- Description:&#x9;Create audit trail from record&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[template_run]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@template INT,&#xD;&#xA;&#x9;@priority INT,&#xD;&#xA;&#x9;@workflow INT&#xD;&#xA;AS" />
@@ -35218,7 +35225,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.2.1'
+	SET @version_be = 'v2.2.2'
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />

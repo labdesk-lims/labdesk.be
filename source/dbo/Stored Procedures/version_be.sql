@@ -13,5 +13,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.2.1'
+	SET @version_be = 'v2.2.2'
 END

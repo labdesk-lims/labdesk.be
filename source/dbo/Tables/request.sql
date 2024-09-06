@@ -234,7 +234,7 @@ BEGIN
 	END
 
 	-- Assign subrequest to acual id
-	-- UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
+	UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
 
 	-- Insert custom fields
 	INSERT INTO request_customfield (field_name, request) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'request'

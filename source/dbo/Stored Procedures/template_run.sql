@@ -29,7 +29,8 @@ BEGIN
 		FETCH NEXT FROM tmpl INTO @i
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
-			INSERT INTO request (customer, priority, profile, workflow, smppoint,subrequest) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint, @id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
 			FETCH NEXT FROM tmpl INTO @i
 		END
 		CLOSE tmpl
