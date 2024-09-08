@@ -180,19 +180,19 @@ BEGIN
 			SET @profile = (SELECT request.profile FROM request INNER JOIN measurement ON (request.id = measurement.request) WHERE measurement.id = (SELECT id FROM inserted))
 			IF @profile IS NOT NULL AND (SELECT tsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) IS NULL
 			BEGIN
-				IF (SELECT value_num FROM inserted) > (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
+				IF (SELECT value_num FROM inserted) >= (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) >= (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
+				IF (SELECT value_num FROM inserted) > (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) < (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
+				IF (SELECT value_num FROM inserted) <= (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) <= (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
+				IF (SELECT value_num FROM inserted) < (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END

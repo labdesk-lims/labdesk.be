@@ -1096,45 +1096,6 @@ CREATE TABLE [dbo].[smptype] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[request]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[request] (
-    [id]               INT             IDENTITY (1, 1) NOT NULL,
-    [description]      NVARCHAR (MAX)  NULL,
-    [photo]            VARBINARY (MAX) NULL,
-    [customer]         INT             NOT NULL,
-    [cc_email]         NVARCHAR (MAX)  NULL,
-    [smp_date]         DATETIME        NULL,
-    [smptype]          INT             NULL,
-    [smpmatrix]        INT             NULL,
-    [smpcontainer]     INT             NULL,
-    [smpcondition]     INT             NULL,
-    [smppreservation]  INT             NULL,
-    [smppoint]         INT             NULL,
-    [sampler]          INT             NULL,
-    [smp_composit]     BIT             NOT NULL,
-    [client_sample_id] VARCHAR (255)   NULL,
-    [client_order_id]  VARCHAR (255)   NULL,
-    [priority]         INT             NOT NULL,
-    [internal_use]     BIT             NOT NULL,
-    [profile]          INT             NULL,
-    [project]          INT             NULL,
-    [formulation]      INT             NULL,
-    [workflow]         INT             NOT NULL,
-    [recipients]       NVARCHAR (MAX)  NULL,
-    [subject]          NVARCHAR (MAX)  NULL,
-    [body]             NVARCHAR (MAX)  NULL,
-    [invoice]          BIT             NOT NULL,
-    [billing_customer] INT             NULL,
-    [state]            INT             NULL,
-    [subrequest]       INT             NULL,
-    CONSTRAINT [PK_request] PRIMARY KEY CLUSTERED ([id] DESC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[template_profile]" wird erstellt...';
 
 
@@ -1208,38 +1169,6 @@ CREATE TABLE [dbo].[customer] (
     [discount]            FLOAT (53)     NOT NULL,
     [deactivate]          BIT            NOT NULL,
     CONSTRAINT [PK_customer] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[measurement]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[measurement] (
-    [id]             INT            IDENTITY (1, 1) NOT NULL,
-    [comment]        NVARCHAR (MAX) NULL,
-    [request]        INT            NOT NULL,
-    [sortkey]        INT            NULL,
-    [analysis]       INT            NOT NULL,
-    [method]         INT            NULL,
-    [instrument]     INT            NULL,
-    [value_txt]      NVARCHAR (MAX) NULL,
-    [value_num]      FLOAT (53)     NULL,
-    [unit]           VARCHAR (255)  NULL,
-    [uncertainty]    FLOAT (53)     NULL,
-    [out_of_range]   BIT            NOT NULL,
-    [not_detectable] BIT            NOT NULL,
-    [out_of_spec]    BIT            NOT NULL,
-    [state]          CHAR (2)       NULL,
-    [hide]           BIT            NOT NULL,
-    [acquired_by]    VARCHAR (255)  NULL,
-    [acquired_at]    DATETIME       NULL,
-    [validated_by]   VARCHAR (255)  NULL,
-    [validated_at]   DATETIME       NULL,
-    [accredited]     BIT            NOT NULL,
-    [subcontraction] BIT            NOT NULL,
-    CONSTRAINT [PK_measurement] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1779,6 +1708,77 @@ CREATE TABLE [dbo].[profile] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[request]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[request] (
+    [id]               INT             IDENTITY (1, 1) NOT NULL,
+    [description]      NVARCHAR (MAX)  NULL,
+    [photo]            VARBINARY (MAX) NULL,
+    [customer]         INT             NOT NULL,
+    [cc_email]         NVARCHAR (MAX)  NULL,
+    [smp_date]         DATETIME        NULL,
+    [smptype]          INT             NULL,
+    [smpmatrix]        INT             NULL,
+    [smpcontainer]     INT             NULL,
+    [smpcondition]     INT             NULL,
+    [smppreservation]  INT             NULL,
+    [smppoint]         INT             NULL,
+    [sampler]          INT             NULL,
+    [smp_composit]     BIT             NOT NULL,
+    [client_sample_id] VARCHAR (255)   NULL,
+    [client_order_id]  VARCHAR (255)   NULL,
+    [priority]         INT             NOT NULL,
+    [internal_use]     BIT             NOT NULL,
+    [profile]          INT             NULL,
+    [project]          INT             NULL,
+    [formulation]      INT             NULL,
+    [workflow]         INT             NOT NULL,
+    [recipients]       NVARCHAR (MAX)  NULL,
+    [subject]          NVARCHAR (MAX)  NULL,
+    [body]             NVARCHAR (MAX)  NULL,
+    [invoice]          BIT             NOT NULL,
+    [billing_customer] INT             NULL,
+    [state]            INT             NULL,
+    [subrequest]       INT             NULL,
+    CONSTRAINT [PK_request] PRIMARY KEY CLUSTERED ([id] DESC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[measurement]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[measurement] (
+    [id]             INT            IDENTITY (1, 1) NOT NULL,
+    [comment]        NVARCHAR (MAX) NULL,
+    [request]        INT            NOT NULL,
+    [sortkey]        INT            NULL,
+    [analysis]       INT            NOT NULL,
+    [method]         INT            NULL,
+    [instrument]     INT            NULL,
+    [value_txt]      NVARCHAR (MAX) NULL,
+    [value_num]      FLOAT (53)     NULL,
+    [unit]           VARCHAR (255)  NULL,
+    [uncertainty]    FLOAT (53)     NULL,
+    [out_of_range]   BIT            NOT NULL,
+    [not_detectable] BIT            NOT NULL,
+    [out_of_spec]    BIT            NOT NULL,
+    [state]          CHAR (2)       NULL,
+    [hide]           BIT            NOT NULL,
+    [acquired_by]    VARCHAR (255)  NULL,
+    [acquired_at]    DATETIME       NULL,
+    [validated_by]   VARCHAR (255)  NULL,
+    [validated_at]   DATETIME       NULL,
+    [accredited]     BIT            NOT NULL,
+    [subcontraction] BIT            NOT NULL,
+    CONSTRAINT [PK_measurement] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_material_amount]" wird erstellt...';
 
 
@@ -2265,33 +2265,6 @@ ALTER TABLE [dbo].[smptype]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_composit]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_Table_1_composit] DEFAULT ((0)) FOR [smp_composit];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_internal_user]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_Table_1_internal_user] DEFAULT ((0)) FOR [internal_use];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_exec_invoice]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_request_exec_invoice] DEFAULT ((0)) FOR [invoice];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_manufacturer_deactivate]" wird erstellt...';
 
 
@@ -2325,60 +2298,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_customer_deactivate]" wird erstellt...
 GO
 ALTER TABLE [dbo].[customer]
     ADD CONSTRAINT [DF_customer_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_range]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_out_of_range] DEFAULT ((0)) FOR [out_of_range];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_not_detectable]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_not_detectable] DEFAULT ((0)) FOR [not_detectable];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_spec]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_out_of_spec] DEFAULT ((0)) FOR [out_of_spec];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_hide]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_hide] DEFAULT ((0)) FOR [hide];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_accredited]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_accredited] DEFAULT ((0)) FOR [accredited];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_subcontracted]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_subcontracted] DEFAULT ((0)) FOR [subcontraction];
 
 
 GO
@@ -2739,6 +2658,87 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_deactivate]" wird erstellt...'
 GO
 ALTER TABLE [dbo].[profile]
     ADD CONSTRAINT [DF_profile_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_composit]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_Table_1_composit] DEFAULT ((0)) FOR [smp_composit];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_internal_user]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_Table_1_internal_user] DEFAULT ((0)) FOR [internal_use];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_exec_invoice]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_request_exec_invoice] DEFAULT ((0)) FOR [invoice];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_range]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_out_of_range] DEFAULT ((0)) FOR [out_of_range];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_not_detectable]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_not_detectable] DEFAULT ((0)) FOR [not_detectable];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_spec]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_out_of_spec] DEFAULT ((0)) FOR [out_of_spec];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_hide]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_hide] DEFAULT ((0)) FOR [hide];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_accredited]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_accredited] DEFAULT ((0)) FOR [accredited];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_subcontracted]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_subcontracted] DEFAULT ((0)) FOR [subcontraction];
 
 
 GO
@@ -3354,141 +3354,6 @@ ALTER TABLE [dbo].[task_workload]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_billing_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_contact]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_contact] FOREIGN KEY ([sampler]) REFERENCES [dbo].[contact] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_formulation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_priority]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_priority] FOREIGN KEY ([priority]) REFERENCES [dbo].[priority] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_profile]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_project]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcondition]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpcondition] FOREIGN KEY ([smpcondition]) REFERENCES [dbo].[smpcondition] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcontainer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpcontainer] FOREIGN KEY ([smpcontainer]) REFERENCES [dbo].[smpcontainer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpmatrix]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpmatrix] FOREIGN KEY ([smpmatrix]) REFERENCES [dbo].[smpmatrix] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smppoint]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smppoint] FOREIGN KEY ([smppoint]) REFERENCES [dbo].[smppoint] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smppreservation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smppreservation] FOREIGN KEY ([smppreservation]) REFERENCES [dbo].[smppreservation] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smptype]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smptype] FOREIGN KEY ([smptype]) REFERENCES [dbo].[smptype] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_state]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_workflow]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
-
-
-GO
 PRINT N'Fremdschlüssel "[dbo].[FK_template_profile_priority]" wird erstellt...';
 
 
@@ -3531,42 +3396,6 @@ PRINT N'Fremdschlüssel "[dbo].[FK_template_profile_workflow]" wird erstellt...'
 GO
 ALTER TABLE [dbo].[template_profile]
     ADD CONSTRAINT [FK_template_profile_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_instrument]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_method]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
 
 
 GO
@@ -3846,6 +3675,177 @@ PRINT N'Fremdschlüssel "[dbo].[FK_profile_strposition]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[profile]
     ADD CONSTRAINT [FK_profile_strposition] FOREIGN KEY ([reference_material]) REFERENCES [dbo].[strposition] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_billing_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_contact]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_contact] FOREIGN KEY ([sampler]) REFERENCES [dbo].[contact] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_formulation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_priority]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_priority] FOREIGN KEY ([priority]) REFERENCES [dbo].[priority] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_profile]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcondition]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpcondition] FOREIGN KEY ([smpcondition]) REFERENCES [dbo].[smpcondition] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcontainer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpcontainer] FOREIGN KEY ([smpcontainer]) REFERENCES [dbo].[smpcontainer] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpmatrix]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpmatrix] FOREIGN KEY ([smpmatrix]) REFERENCES [dbo].[smpmatrix] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smppoint]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smppoint] FOREIGN KEY ([smppoint]) REFERENCES [dbo].[smppoint] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smppreservation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smppreservation] FOREIGN KEY ([smppreservation]) REFERENCES [dbo].[smppreservation] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smptype]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smptype] FOREIGN KEY ([smptype]) REFERENCES [dbo].[smptype] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_state]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_workflow]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_instrument]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
 
 
 GO
@@ -6519,82 +6519,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[request_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	Delete sub requests
--- =============================================
-CREATE TRIGGER request_delete
-   ON  dbo.request 
-   AFTER DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DELETE FROM request WHERE subrequest = (SELECT id FROM deleted)
-END
-GO
-PRINT N'Trigger "[dbo].[request_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Audit Log
--- =============================================
-CREATE TRIGGER [dbo].[request_audit]
-   ON  dbo.request
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
 PRINT N'Trigger "[dbo].[template_profile_audit]" wird erstellt...';
 
 
@@ -6768,60 +6692,6 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[customer_audit]
    ON  dbo.customer
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[measurement_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[measurement_audit]
-   ON  dbo.measurement 
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -8800,6 +8670,136 @@ BEGIN
 	INSERT INTO profile_analysis (profile, analysis) SELECT @id, id FROM analysis WHERE id NOT IN (SELECT analysis FROM profile_analysis WHERE profile = @id) AND deactivate = 0
 END
 GO
+PRINT N'Trigger "[dbo].[request_delete]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	Delete sub requests
+-- =============================================
+CREATE TRIGGER request_delete
+   ON  dbo.request 
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DELETE FROM request WHERE subrequest = (SELECT id FROM deleted)
+END
+GO
+PRINT N'Trigger "[dbo].[request_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Audit Log
+-- =============================================
+CREATE TRIGGER [dbo].[request_audit]
+   ON  dbo.request
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[measurement_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[measurement_audit]
+   ON  dbo.measurement 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
 PRINT N'Sicht "[dbo].[view_request_owner]" wird erstellt...';
 
 
@@ -9471,49 +9471,6 @@ OutputDataSet = pd.DataFrame(esd_test(InputDataSet["value"], ' + CAST(@max_outli
 '
 
 	EXECUTE sp_execute_external_script @language = N'Python', @script = @s, @input_data_1 = @inquery
-END
-GO
-PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Create audit trail from record
--- =============================================
-CREATE PROCEDURE [dbo].[template_run]
-	-- Add the parameters for the stored procedure here
-	@template INT,
-	@priority INT,
-	@workflow INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @id INT = NULL
-	DECLARE @i INT
-
-	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
-
-	SET @id = SCOPE_IDENTITY()
-
-	BEGIN
-		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
-
-		OPEN tmpl
-		FETCH NEXT FROM tmpl INTO @i
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			INSERT INTO request (customer, priority, profile, workflow, smppoint,subrequest) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint, @id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
-			FETCH NEXT FROM tmpl INTO @i
-		END
-		CLOSE tmpl
-		DEALLOCATE tmpl
-	END
 END
 GO
 PRINT N'Prozedur "[dbo].[lims_initialize]" wird erstellt...';
@@ -10214,6 +10171,50 @@ BEGIN
 	END CATCH
 END
 GO
+PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Create audit trail from record
+-- =============================================
+CREATE PROCEDURE [dbo].[template_run]
+	-- Add the parameters for the stored procedure here
+	@template INT,
+	@priority INT,
+	@workflow INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @id INT = NULL
+	DECLARE @i INT
+
+	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
+
+	SET @id = SCOPE_IDENTITY()
+
+	BEGIN
+		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
+
+		OPEN tmpl
+		FETCH NEXT FROM tmpl INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
+			FETCH NEXT FROM tmpl INTO @i
+		END
+		CLOSE tmpl
+		DEALLOCATE tmpl
+	END
+END
+GO
 PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
 
 
@@ -10233,7 +10234,76 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.2.1'
+	SET @version_be = 'v2.2.2'
+END
+GO
+PRINT N'Trigger "[dbo].[request_analysis_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[request_analysis_update] 
+   ON  [dbo].[request_analysis]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+	BEGIN
+		DECLARE @request INT, @analysis INT, @method INT, @i INT, @j INT
+
+		SET @request = (SELECT request FROM inserted)
+		SET @analysis = (SELECT analysis FROM inserted)
+		SET @method = (SELECT method FROM inserted)
+
+		IF (SELECT applies FROM inserted) = 1
+		BEGIN
+			-- Insert measurments according selected analsis
+			EXEC measurement_insert @request, @analysis, @method
+
+			-- Insert dependant analysis if applies
+			DECLARE cur CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @analysis AND analysis_id IS NOT NULL ORDER BY id
+			OPEN cur
+			FETCH NEXT FROM cur INTO @i
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				EXEC measurement_insert @request, @i
+				
+				-- Handle any subdependence of analysis service
+				IF (SELECT calculation_activate FROM analysis WHERE id = @i) = 1
+				BEGIN
+					DECLARE cur2 CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @i AND analysis_id IS NOT NULL ORDER BY id
+					OPEN cur2
+					FETCH NEXT FROM cur2 INTO @j
+					WHILE @@FETCH_STATUS = 0
+					BEGIN
+						EXEC measurement_insert @request, @j
+						UPDATE request_analysis SET applies = 1 WHERE analysis = @j
+						FETCH NEXT FROM cur2 INTO @j
+					END
+					CLOSE cur2
+					DEALLOCATE cur2
+				END
+
+				UPDATE request_analysis SET applies = 1 WHERE analysis = @i
+				FETCH NEXT FROM cur INTO @i
+			END
+			CLOSE cur
+			DEALLOCATE cur
+		END
+
+		-- Retract if unapplied
+		IF (SELECT applies FROM inserted) = 0
+			UPDATE measurement SET state = 'RT' WHERE request = (SELECT request FROM inserted) AND analysis = (SELECT analysis FROM inserted)
+	END
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -10429,7 +10499,7 @@ BEGIN
 	END
 
 	-- Assign subrequest to acual id
-	-- UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
+	UPDATE request SET subrequest = (SELECT id FROM inserted) WHERE id = (SELECT id FROM inserted)
 
 	-- Insert custom fields
 	INSERT INTO request_customfield (field_name, request) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'request'
@@ -10541,19 +10611,19 @@ BEGIN
 			SET @profile = (SELECT request.profile FROM request INNER JOIN measurement ON (request.id = measurement.request) WHERE measurement.id = (SELECT id FROM inserted))
 			IF @profile IS NOT NULL AND (SELECT tsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) IS NULL
 			BEGIN
-				IF (SELECT value_num FROM inserted) > (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
+				IF (SELECT value_num FROM inserted) >= (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) >= (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
+				IF (SELECT value_num FROM inserted) > (SELECT usl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT usl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) < (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
+				IF (SELECT value_num FROM inserted) <= (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 0
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
-				IF (SELECT value_num FROM inserted) <= (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
+				IF (SELECT value_num FROM inserted) < (SELECT lsl FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) AND (SELECT lsl_include FROM profile_analysis WHERE profile = @profile AND analysis = (SELECT analysis FROM inserted)) = 1
 				BEGIN
 					UPDATE measurement SET out_of_spec = 1 WHERE id = (SELECT id FROM inserted)
 				END
@@ -10622,75 +10692,6 @@ BEGIN
 			UPDATE measurement SET validated_by = SUSER_NAME() WHERE id = (SELECT id FROM inserted)
 			UPDATE measurement SET validated_at = GETDATE() WHERE id = (SELECT id FROM inserted)
 		END
-	END
-END
-GO
-PRINT N'Trigger "[dbo].[request_analysis_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[request_analysis_update] 
-   ON  [dbo].[request_analysis]
-   AFTER UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF ( (SELECT trigger_nestlevel() ) < 2 )
-	BEGIN
-		DECLARE @request INT, @analysis INT, @method INT, @i INT, @j INT
-
-		SET @request = (SELECT request FROM inserted)
-		SET @analysis = (SELECT analysis FROM inserted)
-		SET @method = (SELECT method FROM inserted)
-
-		IF (SELECT applies FROM inserted) = 1
-		BEGIN
-			-- Insert measurments according selected analsis
-			EXEC measurement_insert @request, @analysis, @method
-
-			-- Insert dependant analysis if applies
-			DECLARE cur CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @analysis AND analysis_id IS NOT NULL ORDER BY id
-			OPEN cur
-			FETCH NEXT FROM cur INTO @i
-			WHILE @@FETCH_STATUS = 0
-			BEGIN
-				EXEC measurement_insert @request, @i
-				
-				-- Handle any subdependence of analysis service
-				IF (SELECT calculation_activate FROM analysis WHERE id = @i) = 1
-				BEGIN
-					DECLARE cur2 CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @i AND analysis_id IS NOT NULL ORDER BY id
-					OPEN cur2
-					FETCH NEXT FROM cur2 INTO @j
-					WHILE @@FETCH_STATUS = 0
-					BEGIN
-						EXEC measurement_insert @request, @j
-						UPDATE request_analysis SET applies = 1 WHERE analysis = @j
-						FETCH NEXT FROM cur2 INTO @j
-					END
-					CLOSE cur2
-					DEALLOCATE cur2
-				END
-
-				UPDATE request_analysis SET applies = 1 WHERE analysis = @i
-				FETCH NEXT FROM cur INTO @i
-			END
-			CLOSE cur
-			DEALLOCATE cur
-		END
-
-		-- Retract if unapplied
-		IF (SELECT applies FROM inserted) = 0
-			UPDATE measurement SET state = 'RT' WHERE request = (SELECT request FROM inserted) AND analysis = (SELECT analysis FROM inserted)
 	END
 END
 GO
@@ -11117,14 +11118,6 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Desc
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[measurement].[state].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, AQ - Aquired, RE - Retest, RT - Retract, VD - Validated', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'measurement', @level2type = N'COLUMN', @level2name = N'state';
 
 
 GO
@@ -12720,6 +12713,14 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_worksheet_details].[MS_DiagramPaneCo
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_worksheet_details';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[measurement].[state].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, AQ - Aquired, RE - Retest, RT - Retract, VD - Validated', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'measurement', @level2type = N'COLUMN', @level2name = N'state';
 
 
 GO
