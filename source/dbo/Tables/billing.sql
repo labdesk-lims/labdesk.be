@@ -193,7 +193,9 @@ BEGIN
 		UPDATE billing_customer SET discount = (SELECT discount FROM customer WHERE customer.id = (SELECT customer from billing_customer WHERE id = @i)) / 100 * (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
 
 		-- Insert billing_customer id in table request
+		ALTER TABLE request DISABLE TRIGGER request_update
 		UPDATE request SET billing_customer = @i WHERE request.id IN (SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id)
+		ALTER TABLE request ENABLE TRIGGER request_update
 
 		-- Insert billing_customer id in table workload
 		UPDATE task_workload SET billing_customer = @i WHERE task_workload.id IN (SELECT task_workload.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1) 
@@ -309,7 +311,9 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		ALTER TABLE request DISABLE TRIGGER request_update
 		UPDATE request SET billing_customer = NULL WHERE billing_customer = @i
+		ALTER TABLE request ENABLE TRIGGER request_update
 		UPDATE task_workload SET billing_customer = NULL WHERE billing_customer = @i
 		UPDATE task_material SET billing_customer = NULL WHERE billing_customer = @i
 		UPDATE task_service SET billing_customer = NULL WHERE billing_customer = @i

@@ -274,26 +274,6 @@ RECONFIGURE;
 GO
 
 GO
-PRINT N'Benutzerdefinierter Tabellentyp "[dbo].[KeyValueList]" wird erstellt...';
-
-
-GO
-CREATE TYPE [dbo].[KeyValueList] AS TABLE (
-    [keyword] NVARCHAR (MAX) NULL,
-    [value]   FLOAT (53)     NULL);
-
-
-GO
-PRINT N'Benutzerdefinierter Tabellentyp "[dbo].[StringList]" wird erstellt...';
-
-
-GO
-CREATE TYPE [dbo].[StringList] AS TABLE (
-    [id]    BIGINT         NULL,
-    [value] NVARCHAR (MAX) NULL);
-
-
-GO
 PRINT N'Benutzerdefinierter Tabellentyp "[dbo].[xml_diff_list]" wird erstellt...';
 
 
@@ -325,166 +305,23 @@ CREATE TYPE [dbo].[BigIntList] AS TABLE (
 
 
 GO
-PRINT N'Tabelle "[dbo].[request_material]" wird erstellt...';
+PRINT N'Benutzerdefinierter Tabellentyp "[dbo].[KeyValueList]" wird erstellt...';
 
 
 GO
-CREATE TABLE [dbo].[request_material] (
-    [id]       INT            IDENTITY (1, 1) NOT NULL,
-    [material] INT            NOT NULL,
-    [amount]   INT            NOT NULL,
-    [comment]  NVARCHAR (MAX) NULL,
-    [request]  INT            NOT NULL,
-    CONSTRAINT [PK_request_material] PRIMARY KEY CLUSTERED ([id] ASC)
-);
+CREATE TYPE [dbo].[KeyValueList] AS TABLE (
+    [keyword] NVARCHAR (MAX) NULL,
+    [value]   FLOAT (53)     NULL);
 
 
 GO
-PRINT N'Tabelle "[dbo].[tableflag]" wird erstellt...';
+PRINT N'Benutzerdefinierter Tabellentyp "[dbo].[StringList]" wird erstellt...';
 
 
 GO
-CREATE TABLE [dbo].[tableflag] (
-    [id]         INT            IDENTITY (1, 1) NOT NULL,
-    [user_name]  NVARCHAR (255) NOT NULL,
-    [table_name] NVARCHAR (255) NOT NULL,
-    [table_id]   INT            NOT NULL,
-    CONSTRAINT [PK_tableflag] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[request_customfield]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[request_customfield] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [field_name]  NVARCHAR (MAX) NULL,
-    [field_value] NVARCHAR (MAX) NULL,
-    [request]     INT            NOT NULL,
-    CONSTRAINT [PK_request_customfield] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[workplace]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[workplace] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    [department]  INT            NULL,
-    CONSTRAINT [PK_workplace] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[condition]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[condition] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [type]        CHAR (1)       NOT NULL,
-    [attributes]  NVARCHAR (MAX) NULL,
-    [analysis]    INT            NOT NULL,
-    CONSTRAINT [PK_condition] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[component]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[component] (
-    [id]          INT           IDENTITY (1, 1) NOT NULL,
-    [position]    VARCHAR (255) NULL,
-    [material]    INT           NULL,
-    [treatrate]   FLOAT (53)    NULL,
-    [formulation] INT           NULL,
-    CONSTRAINT [PK_component] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[uncertainty]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[uncertainty] (
-    [id]          INT        IDENTITY (1, 1) NOT NULL,
-    [value_min]   FLOAT (53) NOT NULL,
-    [value_max]   FLOAT (53) NOT NULL,
-    [uncertainty] FLOAT (53) NOT NULL,
-    [analysis]    INT        NOT NULL,
-    CONSTRAINT [PK_uncertainty] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[workflow]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[workflow] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_workflow] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[errorlog]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[errorlog] (
-    [id]                INT            IDENTITY (1, 1) NOT NULL,
-    [user_id]           VARCHAR (255)  NULL,
-    [error_id]          VARCHAR (255)  NULL,
-    [error_description] NVARCHAR (MAX) NULL,
-    [created_at]        DATETIME       NULL,
-    CONSTRAINT [PK_errorlog] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[cvalidate]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[cvalidate] (
-    [id]          INT        IDENTITY (1, 1) NOT NULL,
-    [cfield_id]   INT        NULL,
-    [analysis_id] INT        NULL,
-    [value]       FLOAT (53) NULL,
-    [analysis]    INT        NOT NULL,
-    CONSTRAINT [PK_cvalidate] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[cfield]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[cfield] (
-    [id]          INT           IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255) NULL,
-    [unit]        VARCHAR (255) NULL,
-    [analysis_id] INT           NULL,
-    [analysis]    INT           NOT NULL,
-    CONSTRAINT [PK_cfield] PRIMARY KEY CLUSTERED ([id] ASC)
-);
+CREATE TYPE [dbo].[StringList] AS TABLE (
+    [id]    BIGINT         NULL,
+    [value] NVARCHAR (MAX) NULL);
 
 
 GO
@@ -683,6 +520,358 @@ CREATE TABLE [dbo].[qualification] (
     [withdraw]      BIT            NULL,
     [method]        INT            NOT NULL,
     CONSTRAINT [PK_method_user] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[request_material]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[request_material] (
+    [id]       INT            IDENTITY (1, 1) NOT NULL,
+    [material] INT            NOT NULL,
+    [amount]   INT            NOT NULL,
+    [comment]  NVARCHAR (MAX) NULL,
+    [request]  INT            NOT NULL,
+    CONSTRAINT [PK_request_material] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[tableflag]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[tableflag] (
+    [id]         INT            IDENTITY (1, 1) NOT NULL,
+    [user_name]  NVARCHAR (255) NOT NULL,
+    [table_name] NVARCHAR (255) NOT NULL,
+    [table_id]   INT            NOT NULL,
+    CONSTRAINT [PK_tableflag] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[request_customfield]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[request_customfield] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [field_name]  NVARCHAR (MAX) NULL,
+    [field_value] NVARCHAR (MAX) NULL,
+    [request]     INT            NOT NULL,
+    CONSTRAINT [PK_request_customfield] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[workplace]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[workplace] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    [department]  INT            NULL,
+    CONSTRAINT [PK_workplace] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[condition]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[condition] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [type]        CHAR (1)       NOT NULL,
+    [attributes]  NVARCHAR (MAX) NULL,
+    [analysis]    INT            NOT NULL,
+    CONSTRAINT [PK_condition] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[component]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[component] (
+    [id]          INT           IDENTITY (1, 1) NOT NULL,
+    [position]    VARCHAR (255) NULL,
+    [material]    INT           NULL,
+    [treatrate]   FLOAT (53)    NULL,
+    [formulation] INT           NULL,
+    CONSTRAINT [PK_component] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[uncertainty]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[uncertainty] (
+    [id]          INT        IDENTITY (1, 1) NOT NULL,
+    [value_min]   FLOAT (53) NOT NULL,
+    [value_max]   FLOAT (53) NOT NULL,
+    [uncertainty] FLOAT (53) NOT NULL,
+    [analysis]    INT        NOT NULL,
+    CONSTRAINT [PK_uncertainty] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[workflow]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[workflow] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_workflow] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[errorlog]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[errorlog] (
+    [id]                INT            IDENTITY (1, 1) NOT NULL,
+    [user_id]           VARCHAR (255)  NULL,
+    [error_id]          VARCHAR (255)  NULL,
+    [error_description] NVARCHAR (MAX) NULL,
+    [created_at]        DATETIME       NULL,
+    CONSTRAINT [PK_errorlog] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[cvalidate]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[cvalidate] (
+    [id]          INT        IDENTITY (1, 1) NOT NULL,
+    [cfield_id]   INT        NULL,
+    [analysis_id] INT        NULL,
+    [value]       FLOAT (53) NULL,
+    [analysis]    INT        NOT NULL,
+    CONSTRAINT [PK_cvalidate] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[cfield]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[cfield] (
+    [id]          INT           IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255) NULL,
+    [unit]        VARCHAR (255) NULL,
+    [analysis_id] INT           NULL,
+    [analysis]    INT           NOT NULL,
+    CONSTRAINT [PK_cfield] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smpcontainer]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smpcontainer] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_container] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[permission]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[permission] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    CONSTRAINT [PK_permission] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Index "[dbo].[permission].[uq_permission]" wird erstellt...';
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [uq_permission]
+    ON [dbo].[permission]([title] ASC);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smpcondition]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smpcondition] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_smpcondition] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[columns]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[columns] (
+    [id]            INT           IDENTITY (1, 1) NOT NULL,
+    [user_id]       VARCHAR (255) NOT NULL,
+    [table_id]      VARCHAR (255) NOT NULL,
+    [column_id]     VARCHAR (255) NOT NULL,
+    [column_width]  INT           NULL,
+    [column_hidden] BIT           NULL,
+    [column_order]  INT           NULL,
+    CONSTRAINT [PK_columns] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[instrument]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[instrument] (
+    [id]                INT             IDENTITY (1, 1) NOT NULL,
+    [title]             VARCHAR (255)   NULL,
+    [description]       NVARCHAR (MAX)  NULL,
+    [asset_number]      VARCHAR (255)   NULL,
+    [type]              INT             NULL,
+    [manufacturer]      INT             NULL,
+    [supplier]          INT             NULL,
+    [model]             VARCHAR (255)   NULL,
+    [serial_number]     VARCHAR (255)   NULL,
+    [photo]             VARBINARY (MAX) NULL,
+    [installation_date] DATETIME        NULL,
+    [deactivate]        BIT             NOT NULL,
+    [workplace]         INT             NULL,
+    CONSTRAINT [PK_instrument] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[billing_customer]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[billing_customer] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [cc_email]    NVARCHAR (MAX) NULL,
+    [requests]    NVARCHAR (MAX) NULL,
+    [projects]    NVARCHAR (MAX) NULL,
+    [customer]    INT            NOT NULL,
+    [revenue]     MONEY          NULL,
+    [discount]    MONEY          NULL,
+    [invoiced]    DATETIME       NULL,
+    [delivered]   VARCHAR (MAX)  NULL,
+    [recipients]  NVARCHAR (MAX) NULL,
+    [subject]     NVARCHAR (MAX) NULL,
+    [body]        NVARCHAR (MAX) NULL,
+    [billing]     INT            NOT NULL,
+    CONSTRAINT [PK_billing_customer] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[project_member]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[project_member] (
+    [id]      INT IDENTITY (1, 1) NOT NULL,
+    [users]   INT NOT NULL,
+    [project] INT NOT NULL,
+    CONSTRAINT [PK_member] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[step]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[step] (
+    [id]      INT IDENTITY (1, 1) NOT NULL,
+    [step]    INT NOT NULL,
+    [applies] BIT NOT NULL,
+    [state]   INT NOT NULL,
+    CONSTRAINT [PK_step] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[handbook]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[handbook] (
+    [id]         INT            IDENTITY (1, 1) NOT NULL,
+    [message]    NVARCHAR (MAX) NULL,
+    [message_by] VARCHAR (255)  NULL,
+    [message_at] DATETIME       NULL,
+    [request]    INT            NOT NULL,
+    CONSTRAINT [PK_handbook] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[method_analysis]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[method_analysis] (
+    [id]       INT IDENTITY (1, 1) NOT NULL,
+    [method]   INT NOT NULL,
+    [analysis] INT NOT NULL,
+    [applies]  BIT NOT NULL,
+    [standard] BIT NOT NULL,
+    CONSTRAINT [PK_method_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[task_workload]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[task_workload] (
+    [id]               INT           IDENTITY (1, 1) NOT NULL,
+    [workday]          DATETIME      NULL,
+    [workload]         FLOAT (53)    NULL,
+    [created_by]       VARCHAR (255) NULL,
+    [created_at]       DATETIME      NULL,
+    [task]             INT           NULL,
+    [billing_customer] INT           NULL,
+    CONSTRAINT [PK_workload] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -893,372 +1082,6 @@ CREATE TABLE [dbo].[measurement_cfield] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[smpcontainer]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smpcontainer] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_container] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[permission]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[permission] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_permission] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Index "[dbo].[permission].[uq_permission]" wird erstellt...';
-
-
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [uq_permission]
-    ON [dbo].[permission]([title] ASC);
-
-
-GO
-PRINT N'Tabelle "[dbo].[smpcondition]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smpcondition] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_smpcondition] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[columns]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[columns] (
-    [id]            INT           IDENTITY (1, 1) NOT NULL,
-    [user_id]       VARCHAR (255) NOT NULL,
-    [table_id]      VARCHAR (255) NOT NULL,
-    [column_id]     VARCHAR (255) NOT NULL,
-    [column_width]  INT           NULL,
-    [column_hidden] BIT           NULL,
-    [column_order]  INT           NULL,
-    CONSTRAINT [PK_columns] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[instrument]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[instrument] (
-    [id]                INT             IDENTITY (1, 1) NOT NULL,
-    [title]             VARCHAR (255)   NULL,
-    [description]       NVARCHAR (MAX)  NULL,
-    [asset_number]      VARCHAR (255)   NULL,
-    [type]              INT             NULL,
-    [manufacturer]      INT             NULL,
-    [supplier]          INT             NULL,
-    [model]             VARCHAR (255)   NULL,
-    [serial_number]     VARCHAR (255)   NULL,
-    [photo]             VARBINARY (MAX) NULL,
-    [installation_date] DATETIME        NULL,
-    [deactivate]        BIT             NOT NULL,
-    [workplace]         INT             NULL,
-    CONSTRAINT [PK_instrument] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[billing_customer]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[billing_customer] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [cc_email]    NVARCHAR (MAX) NULL,
-    [requests]    NVARCHAR (MAX) NULL,
-    [projects]    NVARCHAR (MAX) NULL,
-    [customer]    INT            NOT NULL,
-    [revenue]     MONEY          NULL,
-    [discount]    MONEY          NULL,
-    [invoiced]    DATETIME       NULL,
-    [delivered]   VARCHAR (MAX)  NULL,
-    [recipients]  NVARCHAR (MAX) NULL,
-    [subject]     NVARCHAR (MAX) NULL,
-    [body]        NVARCHAR (MAX) NULL,
-    [billing]     INT            NOT NULL,
-    CONSTRAINT [PK_billing_customer] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[project_member]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[project_member] (
-    [id]      INT IDENTITY (1, 1) NOT NULL,
-    [users]   INT NOT NULL,
-    [project] INT NOT NULL,
-    CONSTRAINT [PK_member] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[step]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[step] (
-    [id]      INT IDENTITY (1, 1) NOT NULL,
-    [step]    INT NOT NULL,
-    [applies] BIT NOT NULL,
-    [state]   INT NOT NULL,
-    CONSTRAINT [PK_step] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[handbook]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[handbook] (
-    [id]         INT            IDENTITY (1, 1) NOT NULL,
-    [message]    NVARCHAR (MAX) NULL,
-    [message_by] VARCHAR (255)  NULL,
-    [message_at] DATETIME       NULL,
-    [request]    INT            NOT NULL,
-    CONSTRAINT [PK_handbook] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[method_analysis]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[method_analysis] (
-    [id]       INT IDENTITY (1, 1) NOT NULL,
-    [method]   INT NOT NULL,
-    [analysis] INT NOT NULL,
-    [applies]  BIT NOT NULL,
-    [standard] BIT NOT NULL,
-    CONSTRAINT [PK_method_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[task_workload]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[task_workload] (
-    [id]               INT           IDENTITY (1, 1) NOT NULL,
-    [workday]          DATETIME      NULL,
-    [workload]         FLOAT (53)    NULL,
-    [created_by]       VARCHAR (255) NULL,
-    [created_at]       DATETIME      NULL,
-    [task]             INT           NULL,
-    [billing_customer] INT           NULL,
-    CONSTRAINT [PK_workload] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[smptype]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smptype] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_smptype] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[template_profile]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[template_profile] (
-    [id]       INT IDENTITY (1, 1) NOT NULL,
-    [template] INT NOT NULL,
-    [profile]  INT NOT NULL,
-    [priority] INT NOT NULL,
-    [workflow] INT NOT NULL,
-    [smppoint] INT NULL,
-    CONSTRAINT [PK_template_profile] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[manufacturer]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[manufacturer] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_manufacturer] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[smppreservation]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smppreservation] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_smppreservation] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[customer]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[customer] (
-    [id]                  INT            IDENTITY (1, 1) NOT NULL,
-    [name]                VARCHAR (255)  NULL,
-    [homepage]            NVARCHAR (MAX) NULL,
-    [postal_country]      VARCHAR (255)  NULL,
-    [postal_state]        VARCHAR (255)  NULL,
-    [postal_district]     VARCHAR (255)  NULL,
-    [postal_city]         VARCHAR (255)  NULL,
-    [postal_postalcode]   VARCHAR (255)  NULL,
-    [postal_street]       VARCHAR (255)  NULL,
-    [postal_housenumber]  VARCHAR (255)  NULL,
-    [billing_country]     VARCHAR (255)  NULL,
-    [billing_state]       VARCHAR (255)  NULL,
-    [billing_district]    VARCHAR (255)  NULL,
-    [billing_city]        VARCHAR (255)  NULL,
-    [billing_postalcode]  VARCHAR (255)  NULL,
-    [billing_street]      VARCHAR (255)  NULL,
-    [billing_housenumber] VARCHAR (255)  NULL,
-    [bank]                VARCHAR (255)  NULL,
-    [iban]                VARCHAR (255)  NULL,
-    [bic]                 VARCHAR (255)  NULL,
-    [vatnr]               VARCHAR (255)  NULL,
-    [discount]            FLOAT (53)     NOT NULL,
-    [deactivate]          BIT            NOT NULL,
-    CONSTRAINT [PK_customer] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[smppoint]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smppoint] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [customer]    INT            NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_smppoint] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[laboratory]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[laboratory] (
-    [id]                  INT             IDENTITY (1, 1) NOT NULL,
-    [title]               VARCHAR (255)   NULL,
-    [manager]             INT             NULL,
-    [vatnr]               VARCHAR (255)   NULL,
-    [fax]                 VARCHAR (255)   NULL,
-    [postal_country]      VARCHAR (255)   NULL,
-    [postal_state]        VARCHAR (255)   NULL,
-    [postal_district]     VARCHAR (255)   NULL,
-    [postal_city]         VARCHAR (255)   NULL,
-    [postal_postalcode]   VARCHAR (255)   NULL,
-    [postal_street]       VARCHAR (255)   NULL,
-    [postal_housenumber]  VARCHAR (255)   NULL,
-    [billing_country]     VARCHAR (255)   NULL,
-    [billing_state]       VARCHAR (255)   NULL,
-    [billing_district]    VARCHAR (255)   NULL,
-    [billing_city]        VARCHAR (255)   NULL,
-    [billing_postalcode]  VARCHAR (255)   NULL,
-    [billing_street]      VARCHAR (255)   NULL,
-    [billing_housenumber] VARCHAR (255)   NULL,
-    [lab_url]             VARCHAR (2048)  NULL,
-    [lab_logo]            VARBINARY (MAX) NULL,
-    [account_type]        VARCHAR (255)   NULL,
-    [account_iban]        VARCHAR (255)   NULL,
-    [account_bic]         VARCHAR (255)   NULL,
-    [account_bank]        VARCHAR (255)   NULL,
-    [account_branch]      VARCHAR (255)   NULL,
-    [accredited]          BIT             NULL,
-    [accreditation]       VARCHAR (255)   NULL,
-    [acc_uid]             VARCHAR (255)   NULL,
-    [acc_body]            VARCHAR (255)   NULL,
-    [acc_url]             VARCHAR (2048)  NULL,
-    [acc_logo]            VARBINARY (MAX) NULL,
-    [acc_letterhead]      NVARCHAR (MAX)  NULL,
-    CONSTRAINT [PK_laboratory] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[smpmatrix]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[smpmatrix] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_smpmatrix] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[instype]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[instype] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_instrument_type] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[batch]" wird erstellt...';
 
 
@@ -1441,6 +1264,303 @@ CREATE TABLE [dbo].[material] (
     [GHS_9]       BIT            NULL,
     [deactivate]  BIT            NULL,
     CONSTRAINT [PK_material] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smptype]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smptype] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_smptype] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[request]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[request] (
+    [id]               INT             IDENTITY (1, 1) NOT NULL,
+    [description]      NVARCHAR (MAX)  NULL,
+    [photo]            VARBINARY (MAX) NULL,
+    [customer]         INT             NOT NULL,
+    [cc_email]         NVARCHAR (MAX)  NULL,
+    [smp_date]         DATETIME        NULL,
+    [smptype]          INT             NULL,
+    [smpmatrix]        INT             NULL,
+    [smpcontainer]     INT             NULL,
+    [smpcondition]     INT             NULL,
+    [smppreservation]  INT             NULL,
+    [smppoint]         INT             NULL,
+    [sampler]          INT             NULL,
+    [smp_composit]     BIT             NOT NULL,
+    [client_sample_id] VARCHAR (255)   NULL,
+    [client_order_id]  VARCHAR (255)   NULL,
+    [priority]         INT             NOT NULL,
+    [internal_use]     BIT             NOT NULL,
+    [profile]          INT             NULL,
+    [project]          INT             NULL,
+    [formulation]      INT             NULL,
+    [workflow]         INT             NOT NULL,
+    [recipients]       NVARCHAR (MAX)  NULL,
+    [subject]          NVARCHAR (MAX)  NULL,
+    [body]             NVARCHAR (MAX)  NULL,
+    [invoice]          BIT             NOT NULL,
+    [billing_customer] INT             NULL,
+    [state]            INT             NULL,
+    [subrequest]       INT             NULL,
+    CONSTRAINT [PK_request] PRIMARY KEY CLUSTERED ([id] DESC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[template_profile]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[template_profile] (
+    [id]       INT IDENTITY (1, 1) NOT NULL,
+    [template] INT NOT NULL,
+    [profile]  INT NOT NULL,
+    [priority] INT NOT NULL,
+    [workflow] INT NOT NULL,
+    [smppoint] INT NULL,
+    CONSTRAINT [PK_template_profile] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[manufacturer]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[manufacturer] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_manufacturer] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smppreservation]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smppreservation] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_smppreservation] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[customer]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[customer] (
+    [id]                  INT            IDENTITY (1, 1) NOT NULL,
+    [name]                VARCHAR (255)  NULL,
+    [homepage]            NVARCHAR (MAX) NULL,
+    [postal_country]      VARCHAR (255)  NULL,
+    [postal_state]        VARCHAR (255)  NULL,
+    [postal_district]     VARCHAR (255)  NULL,
+    [postal_city]         VARCHAR (255)  NULL,
+    [postal_postalcode]   VARCHAR (255)  NULL,
+    [postal_street]       VARCHAR (255)  NULL,
+    [postal_housenumber]  VARCHAR (255)  NULL,
+    [billing_country]     VARCHAR (255)  NULL,
+    [billing_state]       VARCHAR (255)  NULL,
+    [billing_district]    VARCHAR (255)  NULL,
+    [billing_city]        VARCHAR (255)  NULL,
+    [billing_postalcode]  VARCHAR (255)  NULL,
+    [billing_street]      VARCHAR (255)  NULL,
+    [billing_housenumber] VARCHAR (255)  NULL,
+    [bank]                VARCHAR (255)  NULL,
+    [iban]                VARCHAR (255)  NULL,
+    [bic]                 VARCHAR (255)  NULL,
+    [vatnr]               VARCHAR (255)  NULL,
+    [discount]            FLOAT (53)     NOT NULL,
+    [deactivate]          BIT            NOT NULL,
+    CONSTRAINT [PK_customer] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[measurement]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[measurement] (
+    [id]             INT            IDENTITY (1, 1) NOT NULL,
+    [comment]        NVARCHAR (MAX) NULL,
+    [request]        INT            NOT NULL,
+    [sortkey]        INT            NULL,
+    [analysis]       INT            NOT NULL,
+    [method]         INT            NULL,
+    [instrument]     INT            NULL,
+    [value_txt]      NVARCHAR (MAX) NULL,
+    [value_num]      FLOAT (53)     NULL,
+    [unit]           VARCHAR (255)  NULL,
+    [uncertainty]    FLOAT (53)     NULL,
+    [out_of_range]   BIT            NOT NULL,
+    [not_detectable] BIT            NOT NULL,
+    [out_of_spec]    BIT            NOT NULL,
+    [state]          CHAR (2)       NULL,
+    [hide]           BIT            NOT NULL,
+    [acquired_by]    VARCHAR (255)  NULL,
+    [acquired_at]    DATETIME       NULL,
+    [validated_by]   VARCHAR (255)  NULL,
+    [validated_at]   DATETIME       NULL,
+    [accredited]     BIT            NOT NULL,
+    [subcontraction] BIT            NOT NULL,
+    CONSTRAINT [PK_measurement] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smppoint]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smppoint] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [customer]    INT            NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_smppoint] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[laboratory]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[laboratory] (
+    [id]                  INT             IDENTITY (1, 1) NOT NULL,
+    [title]               VARCHAR (255)   NULL,
+    [manager]             INT             NULL,
+    [vatnr]               VARCHAR (255)   NULL,
+    [fax]                 VARCHAR (255)   NULL,
+    [postal_country]      VARCHAR (255)   NULL,
+    [postal_state]        VARCHAR (255)   NULL,
+    [postal_district]     VARCHAR (255)   NULL,
+    [postal_city]         VARCHAR (255)   NULL,
+    [postal_postalcode]   VARCHAR (255)   NULL,
+    [postal_street]       VARCHAR (255)   NULL,
+    [postal_housenumber]  VARCHAR (255)   NULL,
+    [billing_country]     VARCHAR (255)   NULL,
+    [billing_state]       VARCHAR (255)   NULL,
+    [billing_district]    VARCHAR (255)   NULL,
+    [billing_city]        VARCHAR (255)   NULL,
+    [billing_postalcode]  VARCHAR (255)   NULL,
+    [billing_street]      VARCHAR (255)   NULL,
+    [billing_housenumber] VARCHAR (255)   NULL,
+    [lab_url]             VARCHAR (2048)  NULL,
+    [lab_logo]            VARBINARY (MAX) NULL,
+    [account_type]        VARCHAR (255)   NULL,
+    [account_iban]        VARCHAR (255)   NULL,
+    [account_bic]         VARCHAR (255)   NULL,
+    [account_bank]        VARCHAR (255)   NULL,
+    [account_branch]      VARCHAR (255)   NULL,
+    [accredited]          BIT             NULL,
+    [accreditation]       VARCHAR (255)   NULL,
+    [acc_uid]             VARCHAR (255)   NULL,
+    [acc_body]            VARCHAR (255)   NULL,
+    [acc_url]             VARCHAR (2048)  NULL,
+    [acc_logo]            VARBINARY (MAX) NULL,
+    [acc_letterhead]      NVARCHAR (MAX)  NULL,
+    CONSTRAINT [PK_laboratory] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[smpmatrix]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[smpmatrix] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_smpmatrix] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[instype]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[instype] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_instrument_type] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[role]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[role] (
+    [id]             INT            IDENTITY (1, 1) NOT NULL,
+    [title]          VARCHAR (255)  NULL,
+    [description]    NVARCHAR (MAX) NULL,
+    [hourly_rate]    MONEY          NOT NULL,
+    [administrative] BIT            NOT NULL,
+    [deactivate]     BIT            NOT NULL,
+    CONSTRAINT [PK_role] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[priority]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[priority] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NULL,
+    CONSTRAINT [PK_priority] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[profile]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[profile] (
+    [id]                 INT            IDENTITY (1, 1) NOT NULL,
+    [title]              VARCHAR (255)  NULL,
+    [description]        NVARCHAR (MAX) NULL,
+    [use_profile_qc]     BIT            NOT NULL,
+    [reference_material] INT            NULL,
+    [report_template]    VARCHAR (255)  NULL,
+    [customer]           INT            NULL,
+    [price]              MONEY          NOT NULL,
+    [deactivate]         BIT            NOT NULL,
+    CONSTRAINT [PK_profile] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1659,180 +1779,6 @@ CREATE TABLE [dbo].[instrument_method] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[role]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[role] (
-    [id]             INT            IDENTITY (1, 1) NOT NULL,
-    [title]          VARCHAR (255)  NULL,
-    [description]    NVARCHAR (MAX) NULL,
-    [hourly_rate]    MONEY          NOT NULL,
-    [administrative] BIT            NOT NULL,
-    [deactivate]     BIT            NOT NULL,
-    CONSTRAINT [PK_role] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[priority]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[priority] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NULL,
-    CONSTRAINT [PK_priority] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[profile]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[profile] (
-    [id]                 INT            IDENTITY (1, 1) NOT NULL,
-    [title]              VARCHAR (255)  NULL,
-    [description]        NVARCHAR (MAX) NULL,
-    [use_profile_qc]     BIT            NOT NULL,
-    [reference_material] INT            NULL,
-    [report_template]    VARCHAR (255)  NULL,
-    [customer]           INT            NULL,
-    [price]              MONEY          NOT NULL,
-    [deactivate]         BIT            NOT NULL,
-    CONSTRAINT [PK_profile] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[request]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[request] (
-    [id]               INT             IDENTITY (1, 1) NOT NULL,
-    [description]      NVARCHAR (MAX)  NULL,
-    [photo]            VARBINARY (MAX) NULL,
-    [customer]         INT             NOT NULL,
-    [cc_email]         NVARCHAR (MAX)  NULL,
-    [smp_date]         DATETIME        NULL,
-    [smptype]          INT             NULL,
-    [smpmatrix]        INT             NULL,
-    [smpcontainer]     INT             NULL,
-    [smpcondition]     INT             NULL,
-    [smppreservation]  INT             NULL,
-    [smppoint]         INT             NULL,
-    [sampler]          INT             NULL,
-    [smp_composit]     BIT             NOT NULL,
-    [client_sample_id] VARCHAR (255)   NULL,
-    [client_order_id]  VARCHAR (255)   NULL,
-    [priority]         INT             NOT NULL,
-    [internal_use]     BIT             NOT NULL,
-    [profile]          INT             NULL,
-    [project]          INT             NULL,
-    [formulation]      INT             NULL,
-    [workflow]         INT             NOT NULL,
-    [recipients]       NVARCHAR (MAX)  NULL,
-    [subject]          NVARCHAR (MAX)  NULL,
-    [body]             NVARCHAR (MAX)  NULL,
-    [invoice]          BIT             NOT NULL,
-    [billing_customer] INT             NULL,
-    [state]            INT             NULL,
-    [subrequest]       INT             NULL,
-    CONSTRAINT [PK_request] PRIMARY KEY CLUSTERED ([id] DESC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[measurement]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[measurement] (
-    [id]             INT            IDENTITY (1, 1) NOT NULL,
-    [comment]        NVARCHAR (MAX) NULL,
-    [request]        INT            NOT NULL,
-    [sortkey]        INT            NULL,
-    [analysis]       INT            NOT NULL,
-    [method]         INT            NULL,
-    [instrument]     INT            NULL,
-    [value_txt]      NVARCHAR (MAX) NULL,
-    [value_num]      FLOAT (53)     NULL,
-    [unit]           VARCHAR (255)  NULL,
-    [uncertainty]    FLOAT (53)     NULL,
-    [out_of_range]   BIT            NOT NULL,
-    [not_detectable] BIT            NOT NULL,
-    [out_of_spec]    BIT            NOT NULL,
-    [state]          CHAR (2)       NULL,
-    [hide]           BIT            NOT NULL,
-    [acquired_by]    VARCHAR (255)  NULL,
-    [acquired_at]    DATETIME       NULL,
-    [validated_by]   VARCHAR (255)  NULL,
-    [validated_at]   DATETIME       NULL,
-    [accredited]     BIT            NOT NULL,
-    [subcontraction] BIT            NOT NULL,
-    CONSTRAINT [PK_measurement] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_material_amount]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request_material]
-    ADD CONSTRAINT [DF_request_material_amount] DEFAULT ((0)) FOR [amount];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workplace_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[workplace]
-    ADD CONSTRAINT [DF_workplace_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_condition_type]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[condition]
-    ADD CONSTRAINT [DF_condition_type] DEFAULT ('N') FOR [type];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workflow_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[workflow]
-    ADD CONSTRAINT [DF_workflow_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_errorlog_user_id]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[errorlog]
-    ADD CONSTRAINT [DF_errorlog_user_id] DEFAULT (suser_name()) FOR [user_id];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_errorlog_created_at]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[errorlog]
-    ADD CONSTRAINT [DF_errorlog_created_at] DEFAULT (getdate()) FOR [created_at];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_uid]" wird erstellt...';
 
 
@@ -1983,6 +1929,150 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_qualification_withdraw]" wird e
 GO
 ALTER TABLE [dbo].[qualification]
     ADD CONSTRAINT [DF_method_qualification_withdraw] DEFAULT ((0)) FOR [withdraw];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_material_amount]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request_material]
+    ADD CONSTRAINT [DF_request_material_amount] DEFAULT ((0)) FOR [amount];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workplace_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[workplace]
+    ADD CONSTRAINT [DF_workplace_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_condition_type]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[condition]
+    ADD CONSTRAINT [DF_condition_type] DEFAULT ('N') FOR [type];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workflow_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[workflow]
+    ADD CONSTRAINT [DF_workflow_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_errorlog_user_id]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[errorlog]
+    ADD CONSTRAINT [DF_errorlog_user_id] DEFAULT (suser_name()) FOR [user_id];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_errorlog_created_at]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[errorlog]
+    ADD CONSTRAINT [DF_errorlog_created_at] DEFAULT (getdate()) FOR [created_at];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpcontainer_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smpcontainer]
+    ADD CONSTRAINT [DF_smpcontainer_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpcondition_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smpcondition]
+    ADD CONSTRAINT [DF_smpcondition_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_columns_column_hidden]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[columns]
+    ADD CONSTRAINT [DF_columns_column_hidden] DEFAULT ((0)) FOR [column_hidden];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instrument]
+    ADD CONSTRAINT [DF_instrument_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_step_applies]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[step]
+    ADD CONSTRAINT [DF_step_applies] DEFAULT ((0)) FOR [applies];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_handbook_message_by]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[handbook]
+    ADD CONSTRAINT [DF_handbook_message_by] DEFAULT (suser_name()) FOR [message_by];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_handbook_message_at]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[handbook]
+    ADD CONSTRAINT [DF_handbook_message_at] DEFAULT (getdate()) FOR [message_at];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_analysis_applies]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[method_analysis]
+    ADD CONSTRAINT [DF_method_analysis_applies] DEFAULT ((0)) FOR [applies];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_analysis_standard]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[method_analysis]
+    ADD CONSTRAINT [DF_method_analysis_standard] DEFAULT ((0)) FOR [standard];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workload_created_by]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [DF_workload_created_by] DEFAULT (suser_name()) FOR [created_by];
 
 
 GO
@@ -2166,177 +2256,6 @@ ALTER TABLE [dbo].[attachment]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpcontainer_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smpcontainer]
-    ADD CONSTRAINT [DF_smpcontainer_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpcondition_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smpcondition]
-    ADD CONSTRAINT [DF_smpcondition_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_columns_column_hidden]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[columns]
-    ADD CONSTRAINT [DF_columns_column_hidden] DEFAULT ((0)) FOR [column_hidden];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[instrument]
-    ADD CONSTRAINT [DF_instrument_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_step_applies]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[step]
-    ADD CONSTRAINT [DF_step_applies] DEFAULT ((0)) FOR [applies];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_handbook_message_by]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[handbook]
-    ADD CONSTRAINT [DF_handbook_message_by] DEFAULT (suser_name()) FOR [message_by];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_handbook_message_at]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[handbook]
-    ADD CONSTRAINT [DF_handbook_message_at] DEFAULT (getdate()) FOR [message_at];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_analysis_applies]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[method_analysis]
-    ADD CONSTRAINT [DF_method_analysis_applies] DEFAULT ((0)) FOR [applies];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_analysis_standard]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[method_analysis]
-    ADD CONSTRAINT [DF_method_analysis_standard] DEFAULT ((0)) FOR [standard];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workload_created_by]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [DF_workload_created_by] DEFAULT (suser_name()) FOR [created_by];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smptype_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smptype]
-    ADD CONSTRAINT [DF_smptype_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_manufacturer_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[manufacturer]
-    ADD CONSTRAINT [DF_manufacturer_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smppreservation_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smppreservation]
-    ADD CONSTRAINT [DF_smppreservation_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_customer_discount]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[customer]
-    ADD CONSTRAINT [DF_customer_discount] DEFAULT ((0)) FOR [discount];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_customer_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[customer]
-    ADD CONSTRAINT [DF_customer_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smppoint_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smppoint]
-    ADD CONSTRAINT [DF_smppoint_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_laboratory_accredited]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[laboratory]
-    ADD CONSTRAINT [DF_laboratory_accredited] DEFAULT ((0)) FOR [accredited];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpmatrix_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[smpmatrix]
-    ADD CONSTRAINT [DF_smpmatrix_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_type_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[instype]
-    ADD CONSTRAINT [DF_instrument_type_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_audit_changed_at]" wird erstellt...';
 
 
@@ -2481,6 +2400,231 @@ ALTER TABLE [dbo].[material]
 
 
 GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smptype_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smptype]
+    ADD CONSTRAINT [DF_smptype_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_composit]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_Table_1_composit] DEFAULT ((0)) FOR [smp_composit];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_internal_user]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_Table_1_internal_user] DEFAULT ((0)) FOR [internal_use];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_exec_invoice]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [DF_request_exec_invoice] DEFAULT ((0)) FOR [invoice];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_manufacturer_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[manufacturer]
+    ADD CONSTRAINT [DF_manufacturer_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smppreservation_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smppreservation]
+    ADD CONSTRAINT [DF_smppreservation_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_customer_discount]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[customer]
+    ADD CONSTRAINT [DF_customer_discount] DEFAULT ((0)) FOR [discount];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_customer_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[customer]
+    ADD CONSTRAINT [DF_customer_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_range]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_out_of_range] DEFAULT ((0)) FOR [out_of_range];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_not_detectable]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_not_detectable] DEFAULT ((0)) FOR [not_detectable];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_spec]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_out_of_spec] DEFAULT ((0)) FOR [out_of_spec];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_hide]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_hide] DEFAULT ((0)) FOR [hide];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_accredited]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_accredited] DEFAULT ((0)) FOR [accredited];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_subcontracted]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [DF_measurement_subcontracted] DEFAULT ((0)) FOR [subcontraction];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smppoint_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smppoint]
+    ADD CONSTRAINT [DF_smppoint_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_laboratory_accredited]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[laboratory]
+    ADD CONSTRAINT [DF_laboratory_accredited] DEFAULT ((0)) FOR [accredited];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_smpmatrix_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[smpmatrix]
+    ADD CONSTRAINT [DF_smpmatrix_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_type_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instype]
+    ADD CONSTRAINT [DF_instrument_type_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_hourly_rate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_hourly_rate] DEFAULT ((0)) FOR [hourly_rate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_adminrole]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_adminrole] DEFAULT ((0)) FOR [administrative];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[role]
+    ADD CONSTRAINT [DF_role_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_priority_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[priority]
+    ADD CONSTRAINT [DF_priority_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_use_profile_qc]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[profile]
+    ADD CONSTRAINT [DF_profile_use_profile_qc] DEFAULT ((0)) FOR [use_profile_qc];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_price]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[profile]
+    ADD CONSTRAINT [DF_profile_price] DEFAULT ((0)) FOR [price];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[profile]
+    ADD CONSTRAINT [DF_profile_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_method_smptype_applies]" wird erstellt...';
 
 
@@ -2595,231 +2739,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_method_applies]" wird erste
 GO
 ALTER TABLE [dbo].[instrument_method]
     ADD CONSTRAINT [DF_instrument_method_applies] DEFAULT ((0)) FOR [applies];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_hourly_rate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_hourly_rate] DEFAULT ((0)) FOR [hourly_rate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_adminrole]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_adminrole] DEFAULT ((0)) FOR [administrative];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_role_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[role]
-    ADD CONSTRAINT [DF_role_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_priority_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[priority]
-    ADD CONSTRAINT [DF_priority_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_use_profile_qc]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[profile]
-    ADD CONSTRAINT [DF_profile_use_profile_qc] DEFAULT ((0)) FOR [use_profile_qc];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_price]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[profile]
-    ADD CONSTRAINT [DF_profile_price] DEFAULT ((0)) FOR [price];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_profile_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[profile]
-    ADD CONSTRAINT [DF_profile_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_composit]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_Table_1_composit] DEFAULT ((0)) FOR [smp_composit];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_internal_user]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_Table_1_internal_user] DEFAULT ((0)) FOR [internal_use];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_request_exec_invoice]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [DF_request_exec_invoice] DEFAULT ((0)) FOR [invoice];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_range]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_out_of_range] DEFAULT ((0)) FOR [out_of_range];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_not_detectable]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_not_detectable] DEFAULT ((0)) FOR [not_detectable];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_out_of_spec]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_out_of_spec] DEFAULT ((0)) FOR [out_of_spec];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_hide]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_hide] DEFAULT ((0)) FOR [hide];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_accredited]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_accredited] DEFAULT ((0)) FOR [accredited];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_measurement_subcontracted]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [DF_measurement_subcontracted] DEFAULT ((0)) FOR [subcontraction];
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_material_material]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request_material]
-    ADD CONSTRAINT [FK_request_material_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_material_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request_material]
-    ADD CONSTRAINT [FK_request_material_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_customfield_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request_customfield]
-    ADD CONSTRAINT [FK_request_customfield_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_workplace_department]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[workplace]
-    ADD CONSTRAINT [FK_workplace_department] FOREIGN KEY ([department]) REFERENCES [dbo].[department] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_condition_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[condition]
-    ADD CONSTRAINT [FK_condition_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_component_formulation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[component]
-    ADD CONSTRAINT [FK_component_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_uncertainty_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[uncertainty]
-    ADD CONSTRAINT [FK_uncertainty_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_cvalidate_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[cvalidate]
-    ADD CONSTRAINT [FK_cvalidate_analysis] FOREIGN KEY ([analysis_id]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_cfield_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[cfield]
-    ADD CONSTRAINT [FK_cfield_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
 
 
 GO
@@ -3000,6 +2919,204 @@ PRINT N'Fremdschlüssel "[dbo].[FK_qualification_contact]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[qualification]
     ADD CONSTRAINT [FK_qualification_contact] FOREIGN KEY ([performed_by]) REFERENCES [dbo].[contact] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_material_material]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request_material]
+    ADD CONSTRAINT [FK_request_material_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_material_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request_material]
+    ADD CONSTRAINT [FK_request_material_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_customfield_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request_customfield]
+    ADD CONSTRAINT [FK_request_customfield_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_workplace_department]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[workplace]
+    ADD CONSTRAINT [FK_workplace_department] FOREIGN KEY ([department]) REFERENCES [dbo].[department] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_condition_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[condition]
+    ADD CONSTRAINT [FK_condition_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_component_formulation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[component]
+    ADD CONSTRAINT [FK_component_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_uncertainty_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[uncertainty]
+    ADD CONSTRAINT [FK_uncertainty_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_cvalidate_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[cvalidate]
+    ADD CONSTRAINT [FK_cvalidate_analysis] FOREIGN KEY ([analysis_id]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_cfield_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[cfield]
+    ADD CONSTRAINT [FK_cfield_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_instrument_instrument_type]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instrument]
+    ADD CONSTRAINT [FK_instrument_instrument_type] FOREIGN KEY ([type]) REFERENCES [dbo].[instype] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_instrument_manufacturer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instrument]
+    ADD CONSTRAINT [FK_instrument_manufacturer] FOREIGN KEY ([manufacturer]) REFERENCES [dbo].[manufacturer] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_instrument_supplier]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instrument]
+    ADD CONSTRAINT [FK_instrument_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_instrument_workplace]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[instrument]
+    ADD CONSTRAINT [FK_instrument_workplace] FOREIGN KEY ([workplace]) REFERENCES [dbo].[workplace] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_billing_customer_billing]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[billing_customer]
+    ADD CONSTRAINT [FK_billing_customer_billing] FOREIGN KEY ([billing]) REFERENCES [dbo].[billing] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_member_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project_member]
+    ADD CONSTRAINT [FK_project_member_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_member_users]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project_member]
+    ADD CONSTRAINT [FK_project_member_users] FOREIGN KEY ([users]) REFERENCES [dbo].[users] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_step_state]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[step]
+    ADD CONSTRAINT [FK_step_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_handbook_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[handbook]
+    ADD CONSTRAINT [FK_handbook_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_method_analysis_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[method_analysis]
+    ADD CONSTRAINT [FK_method_analysis_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_method_analysis_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[method_analysis]
+    ADD CONSTRAINT [FK_method_analysis_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_task_workload_billing_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [FK_task_workload_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_workload_task]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task_workload]
+    ADD CONSTRAINT [FK_workload_task] FOREIGN KEY ([task]) REFERENCES [dbo].[task] ([id]) ON DELETE CASCADE;
 
 
 GO
@@ -3237,120 +3354,165 @@ ALTER TABLE [dbo].[measurement_cfield]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_instrument_instrument_type]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_analysis-attribute_analysis]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[instrument]
-    ADD CONSTRAINT [FK_instrument_instrument_type] FOREIGN KEY ([type]) REFERENCES [dbo].[instype] ([id]);
+ALTER TABLE [dbo].[attribute]
+    ADD CONSTRAINT [FK_analysis-attribute_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_instrument_manufacturer]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_state_workflow]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[instrument]
-    ADD CONSTRAINT [FK_instrument_manufacturer] FOREIGN KEY ([manufacturer]) REFERENCES [dbo].[manufacturer] ([id]);
+ALTER TABLE [dbo].[state]
+    ADD CONSTRAINT [FK_state_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]) ON DELETE CASCADE;
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_instrument_supplier]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_material_supplier]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[instrument]
-    ADD CONSTRAINT [FK_instrument_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]);
+ALTER TABLE [dbo].[material]
+    ADD CONSTRAINT [FK_material_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_instrument_workplace]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_billing_customer]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[instrument]
-    ADD CONSTRAINT [FK_instrument_workplace] FOREIGN KEY ([workplace]) REFERENCES [dbo].[workplace] ([id]);
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_billing_customer_billing]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_contact]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[billing_customer]
-    ADD CONSTRAINT [FK_billing_customer_billing] FOREIGN KEY ([billing]) REFERENCES [dbo].[billing] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_contact] FOREIGN KEY ([sampler]) REFERENCES [dbo].[contact] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_member_project]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_customer]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project_member]
-    ADD CONSTRAINT [FK_project_member_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_member_users]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_formulation]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project_member]
-    ADD CONSTRAINT [FK_project_member_users] FOREIGN KEY ([users]) REFERENCES [dbo].[users] ([id]);
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_step_state]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_priority]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[step]
-    ADD CONSTRAINT [FK_step_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_priority] FOREIGN KEY ([priority]) REFERENCES [dbo].[priority] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_handbook_request]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_profile]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[handbook]
-    ADD CONSTRAINT [FK_handbook_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_method_analysis_analysis]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_project]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[method_analysis]
-    ADD CONSTRAINT [FK_method_analysis_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_method_analysis_method]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcondition]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[method_analysis]
-    ADD CONSTRAINT [FK_method_analysis_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpcondition] FOREIGN KEY ([smpcondition]) REFERENCES [dbo].[smpcondition] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_task_workload_billing_customer]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcontainer]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [FK_task_workload_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpcontainer] FOREIGN KEY ([smpcontainer]) REFERENCES [dbo].[smpcontainer] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_workload_task]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smpmatrix]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task_workload]
-    ADD CONSTRAINT [FK_workload_task] FOREIGN KEY ([task]) REFERENCES [dbo].[task] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smpmatrix] FOREIGN KEY ([smpmatrix]) REFERENCES [dbo].[smpmatrix] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smppoint]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smppoint] FOREIGN KEY ([smppoint]) REFERENCES [dbo].[smppoint] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smppreservation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smppreservation] FOREIGN KEY ([smppreservation]) REFERENCES [dbo].[smppreservation] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_smptype]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_smptype] FOREIGN KEY ([smptype]) REFERENCES [dbo].[smptype] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_state]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_request_workflow]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[request]
+    ADD CONSTRAINT [FK_request_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
 
 
 GO
@@ -3399,6 +3561,42 @@ ALTER TABLE [dbo].[template_profile]
 
 
 GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_analysis]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_instrument]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_measurement_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[measurement]
+    ADD CONSTRAINT [FK_measurement_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
 PRINT N'Fremdschlüssel "[dbo].[FK_smppoint_customer]" wird erstellt...';
 
 
@@ -3417,30 +3615,21 @@ ALTER TABLE [dbo].[laboratory]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_analysis-attribute_analysis]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_profile_customer]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[attribute]
-    ADD CONSTRAINT [FK_analysis-attribute_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]) ON DELETE CASCADE;
+ALTER TABLE [dbo].[profile]
+    ADD CONSTRAINT [FK_profile_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_state_workflow]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_profile_strposition]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[state]
-    ADD CONSTRAINT [FK_state_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_material_supplier]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[material]
-    ADD CONSTRAINT [FK_material_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]);
+ALTER TABLE [dbo].[profile]
+    ADD CONSTRAINT [FK_profile_strposition] FOREIGN KEY ([reference_material]) REFERENCES [dbo].[strposition] ([id]);
 
 
 GO
@@ -3660,201 +3849,21 @@ ALTER TABLE [dbo].[instrument_method]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_profile_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[profile]
-    ADD CONSTRAINT [FK_profile_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_profile_strposition]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[profile]
-    ADD CONSTRAINT [FK_profile_strposition] FOREIGN KEY ([reference_material]) REFERENCES [dbo].[strposition] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_billing_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE SET NULL;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_contact]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_contact] FOREIGN KEY ([sampler]) REFERENCES [dbo].[contact] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_formulation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_formulation] FOREIGN KEY ([formulation]) REFERENCES [dbo].[formulation] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_priority]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_priority] FOREIGN KEY ([priority]) REFERENCES [dbo].[priority] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_profile]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_project]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcondition]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpcondition] FOREIGN KEY ([smpcondition]) REFERENCES [dbo].[smpcondition] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpcontainer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpcontainer] FOREIGN KEY ([smpcontainer]) REFERENCES [dbo].[smpcontainer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smpmatrix]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smpmatrix] FOREIGN KEY ([smpmatrix]) REFERENCES [dbo].[smpmatrix] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smppoint]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smppoint] FOREIGN KEY ([smppoint]) REFERENCES [dbo].[smppoint] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smppreservation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smppreservation] FOREIGN KEY ([smppreservation]) REFERENCES [dbo].[smppreservation] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_smptype]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_smptype] FOREIGN KEY ([smptype]) REFERENCES [dbo].[smptype] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_state]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_state] FOREIGN KEY ([state]) REFERENCES [dbo].[state] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_request_workflow]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[request]
-    ADD CONSTRAINT [FK_request_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_analysis]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_analysis] FOREIGN KEY ([analysis]) REFERENCES [dbo].[analysis] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_instrument]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_method]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_measurement_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[measurement]
-    ADD CONSTRAINT [FK_measurement_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
-
-
-GO
 PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
 
 
 GO
 ALTER TABLE [dbo].[setup]
     ADD CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100));
+
+
+GO
+PRINT N'CHECK-Einschränkung "[dbo].[CK_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[method]
+    ADD CONSTRAINT [CK_method] CHECK ([price]>=(0));
 
 
 GO
@@ -3867,14 +3876,611 @@ ALTER TABLE [dbo].[customer]
 
 
 GO
-PRINT N'CHECK-Einschränkung "[dbo].[CK_method]" wird erstellt...';
+PRINT N'Trigger "[dbo].[users_audit]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[method]
-    ADD CONSTRAINT [CK_method] CHECK ([price]>=(0));
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER users_audit 
+   ON  users
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[task_attachment]" wird erstellt...';
 
 
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 June
+-- Description:	Delete attachments
+-- =============================================
+CREATE TRIGGER task_attachment
+   ON  dbo.task
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DELETE FROM attachment WHERE task = (SELECT id FROM deleted)
+END
+GO
+PRINT N'Trigger "[dbo].[task_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER task_audit
+   ON  dbo.task
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[request_service_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER request_service_audit 
+   ON  request_service
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[task_service_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER task_service_audit
+   ON  task_service
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[task_material_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER task_material_audit
+   ON  task_material 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[service_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2023 October
+-- Description:	-
+-- =============================================
+CREATE TRIGGER service_audit
+   ON  service
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[template_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2025 May
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[template_audit] 
+   ON  dbo.template 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2023 June
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_insert]
+   ON  [dbo].[project]
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+
+	-- Insert custom fields
+	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
+
+END
+GO
+PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_audit]
+   ON  dbo.project
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER translation_audit 
+   ON  translation
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[qualification_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[qualification_insert_update]
+   ON  dbo.qualification 
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT valid_from FROM inserted) > (SELECT valid_till FROM inserted)
+		THROW 51000, 'Wrong qualification dates.', 1
+END
+GO
+PRINT N'Trigger "[dbo].[quaification_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[quaification_audit]
+   ON  [dbo].[qualification] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
 GO
 PRINT N'Trigger "[dbo].[request_material_audit]" wird erstellt...';
 
@@ -4489,83 +5095,7 @@ BEGIN
 	END
 END
 GO
-PRINT N'Trigger "[dbo].[users_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER users_audit 
-   ON  users
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[task_attachment]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 June
--- Description:	Delete attachments
--- =============================================
-CREATE TRIGGER task_attachment
-   ON  dbo.task
-   AFTER DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DELETE FROM attachment WHERE task = (SELECT id FROM deleted)
-END
-GO
-PRINT N'Trigger "[dbo].[task_audit]" wird erstellt...';
+PRINT N'Trigger "[dbo].[smpcontainer_audit]" wird erstellt...';
 
 
 GO
@@ -4574,220 +5104,8 @@ GO
 -- Create date: 2022 January
 -- Description:	-
 -- =============================================
-CREATE TRIGGER task_audit
-   ON  dbo.task
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[request_service_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER request_service_audit 
-   ON  request_service
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[task_service_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER task_service_audit
-   ON  task_service
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[task_material_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER task_material_audit
-   ON  task_material 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[service_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2023 October
--- Description:	-
--- =============================================
-CREATE TRIGGER service_audit
-   ON  service
+CREATE TRIGGER [dbo].[smpcontainer_audit] 
+   ON  [dbo].[smpcontainer]
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -4831,86 +5149,7 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[template_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2025 May
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[template_audit] 
-   ON  dbo.template 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2023 June
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[project_insert]
-   ON  [dbo].[project]
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-
-	-- Insert custom fields
-	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
-
-END
-GO
-PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
+PRINT N'Trigger "[dbo].[permission_insert_update]" wird erstellt...';
 
 
 GO
@@ -4919,116 +5158,8 @@ GO
 -- Create date: 2022 January
 -- Description:	-
 -- =============================================
-CREATE TRIGGER [dbo].[project_audit]
-   ON  dbo.project
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER translation_audit 
-   ON  translation
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[qualification_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[qualification_insert_update]
-   ON  dbo.qualification 
+CREATE TRIGGER [dbo].[permission_insert_update]
+   ON  dbo.permission
    AFTER INSERT, UPDATE
 AS 
 BEGIN
@@ -5037,11 +5168,13 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	IF (SELECT valid_from FROM inserted) > (SELECT valid_till FROM inserted)
-		THROW 51000, 'Wrong qualification dates.', 1
+	DECLARE @permission INT
+	SET @permission = (SELECT id FROM inserted)
+	INSERT INTO role_permission (role, permission)
+	SELECT id, @permission FROM role WHERE id NOT IN (SELECT DISTINCT(role_permission.role) FROM role_permission WHERE permission = @permission)
 END
 GO
-PRINT N'Trigger "[dbo].[quaification_audit]" wird erstellt...';
+PRINT N'Trigger "[dbo].[permission_delete]" wird erstellt...';
 
 
 GO
@@ -5050,8 +5183,486 @@ GO
 -- Create date: 2022 January
 -- Description:	-
 -- =============================================
-CREATE TRIGGER [dbo].[quaification_audit]
-   ON  [dbo].[qualification] 
+CREATE TRIGGER [dbo].[permission_delete] 
+   ON  dbo.permission 
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DELETE FROM role_permission WHERE permission = (SELECT id FROM inserted)
+END
+GO
+PRINT N'Trigger "[dbo].[permission_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[permission_audit]
+   ON  [dbo].[permission]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[smpcondition_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[smpcondition_audit]
+   ON [dbo].[smpcondition]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[columns_insert_udpate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 OCtober
+-- Description:	Delete rows with user set to ''
+-- =============================================
+CREATE TRIGGER [dbo].[columns_insert_udpate]
+   ON  [dbo].[columns]
+   INSTEAD OF INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+
+	IF (SELECT USER_ID FROM inserted) <> ''
+		INSERT INTO columns (user_id, table_id, column_id, column_width, column_hidden, column_order) SELECT user_id, table_id, column_id, column_width, column_hidden, column_order FROM inserted
+
+END
+GO
+PRINT N'Trigger "[dbo].[instrument_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[instrument_audit]
+   ON  [dbo].[instrument] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[instrument_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[instrument_insert_update] 
+   ON  dbo.instrument 
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM instrument_method WHERE applies = 1 AND instrument = (SELECT (id) FROM inserted)) > 0
+		THROW 51000, 'Deactivation failed. Instrument is still in use.', 1
+	
+	-- Update instrument_method cross table
+	IF NOT EXISTS (SELECT id FROM deleted)
+		INSERT INTO instrument_method (instrument, method) SELECT (SELECT id FROM inserted), id FROM method WHERE id NOT IN (SELECT method FROM instrument_method WHERE instrument = (SELECT id FROM inserted)) AND deactivate = 0
+END
+GO
+PRINT N'Trigger "[dbo].[billing_customer_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER billing_customer_audit
+   ON  dbo.billing_customer
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[project_member_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_member_audit]
+   ON  [dbo].[project_member]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[step_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[step_audit]
+   ON  [dbo].[step]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[method_analysis_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[method_analysis_insert_update]
+   ON  [dbo].[method_analysis]
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+	BEGIN
+		IF (SELECT COUNT(*) FROM method_analysis WHERE analysis = (SELECT analysis FROM inserted) AND standard = 1) > 1
+			THROW 51000, 'One standard method allowed only.', 1
+	END
+END
+GO
+PRINT N'Trigger "[dbo].[method_analysis_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[method_analysis_audit]
+   ON  [dbo].[method_analysis]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[workload_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER workload_audit 
+   ON  [dbo].[task_workload]
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -5829,1151 +6440,6 @@ BEGIN
 	END
 END
 GO
-PRINT N'Trigger "[dbo].[smpcontainer_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smpcontainer_audit] 
-   ON  [dbo].[smpcontainer]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[permission_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[permission_insert_update]
-   ON  dbo.permission
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @permission INT
-	SET @permission = (SELECT id FROM inserted)
-	INSERT INTO role_permission (role, permission)
-	SELECT id, @permission FROM role WHERE id NOT IN (SELECT DISTINCT(role_permission.role) FROM role_permission WHERE permission = @permission)
-END
-GO
-PRINT N'Trigger "[dbo].[permission_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[permission_delete] 
-   ON  dbo.permission 
-   AFTER DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DELETE FROM role_permission WHERE permission = (SELECT id FROM inserted)
-END
-GO
-PRINT N'Trigger "[dbo].[permission_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[permission_audit]
-   ON  [dbo].[permission]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[smpcondition_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smpcondition_audit]
-   ON [dbo].[smpcondition]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[columns_insert_udpate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 OCtober
--- Description:	Delete rows with user set to ''
--- =============================================
-CREATE TRIGGER [dbo].[columns_insert_udpate]
-   ON  [dbo].[columns]
-   INSTEAD OF INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-
-	IF (SELECT USER_ID FROM inserted) <> ''
-		INSERT INTO columns (user_id, table_id, column_id, column_width, column_hidden, column_order) SELECT user_id, table_id, column_id, column_width, column_hidden, column_order FROM inserted
-
-END
-GO
-PRINT N'Trigger "[dbo].[instrument_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[instrument_audit]
-   ON  [dbo].[instrument] 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[instrument_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[instrument_insert_update] 
-   ON  dbo.instrument 
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM instrument_method WHERE applies = 1 AND instrument = (SELECT (id) FROM inserted)) > 0
-		THROW 51000, 'Deactivation failed. Instrument is still in use.', 1
-	
-	-- Update instrument_method cross table
-	IF NOT EXISTS (SELECT id FROM deleted)
-		INSERT INTO instrument_method (instrument, method) SELECT (SELECT id FROM inserted), id FROM method WHERE id NOT IN (SELECT method FROM instrument_method WHERE instrument = (SELECT id FROM inserted)) AND deactivate = 0
-END
-GO
-PRINT N'Trigger "[dbo].[billing_customer_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER billing_customer_audit
-   ON  dbo.billing_customer
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[project_member_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[project_member_audit]
-   ON  [dbo].[project_member]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[step_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[step_audit]
-   ON  [dbo].[step]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[method_analysis_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[method_analysis_insert_update]
-   ON  [dbo].[method_analysis]
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF ( (SELECT trigger_nestlevel() ) < 2 )
-	BEGIN
-		IF (SELECT COUNT(*) FROM method_analysis WHERE analysis = (SELECT analysis FROM inserted) AND standard = 1) > 1
-			THROW 51000, 'One standard method allowed only.', 1
-	END
-END
-GO
-PRINT N'Trigger "[dbo].[method_analysis_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[method_analysis_audit]
-   ON  [dbo].[method_analysis]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[workload_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER workload_audit 
-   ON  [dbo].[task_workload]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[smptype_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 November
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[smptype_insert]
-   ON  [dbo].[smptype]
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-	DECLARE @id INT
-	SET @id = (SELECT id FROM inserted)
-
-	-- Update method_smptype cross table
-	INSERT INTO method_smptype (method, smptype) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_smptype WHERE smptype = @id) AND deactivate = 0
-END
-GO
-PRINT N'Trigger "[dbo].[smptype_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smptype_audit]
-   ON  [dbo].[smptype]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[template_profile_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2025 May
--- Description:	-
--- =============================================
-CREATE TRIGGER template_profile_audit 
-   ON  template_profile
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[manufacturer_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[manufacturer_audit]
-   ON  [dbo].[manufacturer] 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[smppreservation_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smppreservation_audit]
-   ON  [dbo].[smppreservation] 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[customer_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[customer_audit]
-   ON  dbo.customer
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[smppoint_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smppoint_audit]
-   ON  [dbo].[smppoint]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[laboratory_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[laboratory_insert] 
-   ON  dbo.laboratory
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT COUNT(id) FROM laboratory) > 1
-		THROW 51000, 'Only one row laboratory is allowed.', 1
-END
-GO
-PRINT N'Trigger "[dbo].[laboratory_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[laboratory_audit]
-   ON  [dbo].[laboratory]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[smpmatrix_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[smpmatrix_audit]
-   ON  [dbo].[smpmatrix]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[instype_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[instype_audit]
-   ON  [dbo].[instype]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
 PRINT N'Trigger "[dbo].[batch_audit]" wird erstellt...';
 
 
@@ -7026,212 +6492,6 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[billing_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER [dbo].[billing_insert]
-   ON  [dbo].[billing] 
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-	DECLARE @i AS int
-	DECLARE @s AS nvarchar(max)
-	DECLARE @t TABLE(id INT)
-	DECLARE @u TABLE(project INT, customer INT)
-	
-    -- Insert statements for trigger here
-
-	-- Check dates
-	IF (SELECT billing.billing_from FROM billing WHERE id = (SELECT ID FROM inserted)) > (SELECT billing.billing_till FROM billing WHERE id = (SELECT ID FROM inserted))
-		THROW 51000, 'From date later then till date.', 1
-
-	-- Insert all customers to be billed into table customer_billing
-	INSERT INTO @t SELECT request.customer FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL
-	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_workload.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t) 
-	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t)
-	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t)
-
-	-- Insert all projects and customers into @u
-	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
-	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
-	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
-	INSERT INTO @t SELECT customer FROM @u WHERE customer NOT IN (SELECT id FROM @t)
-	INSERT INTO billing_customer (billing, customer) SELECT (SELECT id FROM inserted), id FROM @t GROUP BY id
-
-	-- For each customer add the requests to be billed
-	DECLARE c_customer CURSOR FOR SELECT id FROM billing_customer WHERE billing = (SELECT id FROM inserted)
-
-	OPEN c_customer
-	FETCH NEXT FROM c_customer INTO @i
-	
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		-- Update requests for table billing_customer
-		SET @s = (SELECT CAST(request.id AS varchar(255)) + ',' FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id FOR xml path(''))
-		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
-		UPDATE billing_customer SET requests = @s WHERE billing_customer.id = @i
-
-		-- Update projects for table billing_customer
-		SET @s = (SELECT CAST(project AS varchar(255)) + ',' FROM @u WHERE customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY project FOR xml path(''))
-		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
-		UPDATE billing_customer SET projects = @s WHERE billing_customer.id = @i
-
-		-- Update date delivered for table billing_customer
-		SET @s = (SELECT CAST(FORMAT(audit.changed_at, 'd', 'de-de' ) AS varchar(255)) + ',' FROM request LEFT JOIN audit ON request.id = audit.table_id WHERE audit.table_name = 'request' AND audit.action_type = 'I' AND request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) FOR xml path(''))
-		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
-		UPDATE billing_customer SET delivered = @s WHERE billing_customer.id = @i
-
-		-- Insert profile based service
-		;WITH t (request)
-		AS (
-		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i)  GROUP BY request.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, profile,category)
-		SELECT 
-		(SELECT id from billing_customer WHERE id = @i), 
-		COUNT(*), 
-		(SELECT price FROM profile WHERE id = profile), 
-		profile,
-		1
-		FROM request WHERE id IN (SELECT request FROM t) AND profile IS NOT NULL GROUP BY profile
-
-		-- Insert provided methods
-		;WITH t (request)
-		AS (
-		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, method, category) 
-		SELECT 
-			(SELECT id from billing_customer WHERE id = @i), 
-			COUNT(*), 
-			(SELECT price FROM method WHERE id = (SELECT method FROM inserted)), 
-			method,
-			2
-		FROM measurement WHERE request IN (SELECT request FROM t) AND method IS NOT NULL AND state = 'VD' AND method NOT IN (SELECT method FROM profile_analysis WHERE profile = (SELECT profile FROM request WHERE request.id = measurement.request AND applies = 1) AND method IS NOT NULL) GROUP BY method
-
-		-- Insert analysis services
-		;WITH t (request)
-		AS (
-		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, analysis, category) 
-		SELECT 
-			(SELECT id from billing_customer WHERE id = @i), 
-			COUNT(*), 
-			(SELECT price FROM analysis WHERE id = (SELECT analysis FROM inserted)), 
-			analysis,
-			3
-		FROM measurement WHERE request IN (SELECT request FROM t) AND method IS NULL AND state = 'VD' AND analysis NOT IN (SELECT analysis FROM profile_analysis WHERE profile = (SELECT profile FROM request WHERE request.id = measurement.request AND applies = 1) AND method IS NOT NULL) GROUP BY analysis
-
-		-- Insert provided extra services
-		;WITH t (request)
-		AS (
-		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, service, category)
-		SELECT 
-		(SELECT id from billing_customer WHERE id = @i), 
-		Sum(amount),
-		(SELECT price FROM service WHERE id = service), 
-		service,
-		4
-		FROM request_service WHERE request IN (SELECT request FROM t) GROUP BY service
-
-		-- Insert sold materials
-		;WITH t (request)
-		AS (
-		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, material, category)
-		SELECT 
-		(SELECT id from billing_customer WHERE id = @i), 
-		Sum(amount),
-		(SELECT price FROM material WHERE id = material), 
-		material,
-		5
-		FROM request_material WHERE request IN (SELECT request FROM t) GROUP BY material
-
-		-- Insert project workloads
-		;WITH t (project)
-		AS (
-		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND task_workload.billing_customer IS NULL AND audit.action_type = 'I' AND project.invoice = 1 GROUP BY project.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, other, category)
-		SELECT
-		(SELECT id from billing_customer WHERE id = @i),
-		workload,
-		(SELECT hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE users.name = task_workload.created_by),
-		CONCAT('(P-', project.id, ') ', task_workload.created_at, ', ', task_workload.created_by),
-		6
-		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_workload.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t)
-
-		-- Insert project materials
-		;WITH t (project)
-		AS (
-		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.invoice = 1 GROUP BY project.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, other, material, category)
-		SELECT
-		(SELECT id from billing_customer WHERE id = @i),
-		Sum(amount),
-		(SELECT material.price FROM material WHERE material.id = task_material.material),
-		'(P) ',
-		task_material.material,
-		7
-		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task INNER JOIN material ON material.id = task_material.material LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t) GROUP BY task_material.material
-
-		-- Insert project services
-		;WITH t (project)
-		AS (
-		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.invoice = 1 GROUP BY project.id
-		)
-		INSERT INTO billing_position (billing_customer, amount, price, other, service, category)
-		SELECT
-		(SELECT id from billing_customer WHERE id = @i),
-		Sum(amount),
-		(SELECT service.price FROM service WHERE service.id = task_service.service),
-		'(P) ',
-		task_service.service,
-		8
-		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task INNER JOIN material ON material.id = task_service.service LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t) GROUP BY task_service.service
-
-		-- Insert sum and vat for invoice
-		UPDATE billing_customer SET revenue = (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
-
-		-- Insert discount for invoice
-		UPDATE billing_customer SET discount = (SELECT discount FROM customer WHERE customer.id = (SELECT customer from billing_customer WHERE id = @i)) / 100 * (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
-
-		-- Insert billing_customer id in table request
-		UPDATE request SET billing_customer = @i WHERE request.id IN (SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id)
-
-		-- Insert billing_customer id in table workload
-		UPDATE task_workload SET billing_customer = @i WHERE task_workload.id IN (SELECT task_workload.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1) 
-
-		-- Insert billing_customer id in table material
-		UPDATE task_material SET billing_customer = @i WHERE task_material.id IN (SELECT task_material.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task INNER JOIN material ON material.id = task_material.material LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1)
-
-		-- Insert billing_customer id in table service
-		UPDATE task_service SET billing_customer = @i WHERE task_service.id IN (SELECT task_service.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task INNER JOIN material ON material.id = task_service.service LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1)
-
-		FETCH NEXT FROM c_customer INTO @i
-	END
-	CLOSE c_customer
-	DEALLOCATE c_customer
-
-	UPDATE billing SET revenue = (SELECT SUM(revenue) FROM billing_customer WHERE billing = (SELECT id FROM inserted)) WHERE id = (SELECT id FROM inserted)
-	UPDATE billing SET discount = (SELECT SUM(discount) FROM billing_customer WHERE billing = (SELECT id FROM inserted)) WHERE id = (SELECT id FROM inserted)
 END
 GO
 PRINT N'Trigger "[dbo].[billing_audit]" wird erstellt...';
@@ -7309,46 +6569,6 @@ BEGIN
     -- Insert statements for trigger here
 	UPDATE billing SET title = (SELECT title from inserted) WHERE id = (SELECT id FROM inserted)
 	UPDATE billing SET description = (SELECT description from inserted) WHERE id = (SELECT id FROM inserted)
-END
-GO
-PRINT N'Trigger "[dbo].[billing_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER [dbo].[billing_delete] 
-   ON  [dbo].[billing] 
-   INSTEAD OF DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-	DECLARE @i AS int
-
-    -- Insert statements for trigger here
-	DECLARE c_customer CURSOR FOR SELECT id FROM billing_customer WHERE billing = (SELECT id FROM deleted)
-
-	OPEN c_customer
-	FETCH NEXT FROM c_customer INTO @i
-
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		UPDATE request SET billing_customer = NULL WHERE billing_customer = @i
-		UPDATE task_workload SET billing_customer = NULL WHERE billing_customer = @i
-		UPDATE task_material SET billing_customer = NULL WHERE billing_customer = @i
-		UPDATE task_service SET billing_customer = NULL WHERE billing_customer = @i
-		FETCH NEXT FROM c_customer INTO @i
-	END
-	CLOSE c_customer
-	DEALLOCATE c_customer
-
-	DELETE billing WHERE id = (SELECT id FROM deleted)
 END
 GO
 PRINT N'Trigger "[dbo].[attribute_insert_update]" wird erstellt...';
@@ -7864,6 +7084,888 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[smptype_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 November
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[smptype_insert]
+   ON  [dbo].[smptype]
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	DECLARE @id INT
+	SET @id = (SELECT id FROM inserted)
+
+	-- Update method_smptype cross table
+	INSERT INTO method_smptype (method, smptype) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_smptype WHERE smptype = @id) AND deactivate = 0
+END
+GO
+PRINT N'Trigger "[dbo].[smptype_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[smptype_audit]
+   ON  [dbo].[smptype]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[request_delete]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	Delete sub requests
+-- =============================================
+CREATE TRIGGER request_delete
+   ON  dbo.request 
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DELETE FROM request WHERE subrequest = (SELECT id FROM deleted)
+END
+GO
+PRINT N'Trigger "[dbo].[request_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Audit Log
+-- =============================================
+CREATE TRIGGER [dbo].[request_audit]
+   ON  dbo.request
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[template_profile_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2025 May
+-- Description:	-
+-- =============================================
+CREATE TRIGGER template_profile_audit 
+   ON  template_profile
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[manufacturer_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[manufacturer_audit]
+   ON  [dbo].[manufacturer] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[smppreservation_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[smppreservation_audit]
+   ON  [dbo].[smppreservation] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[customer_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[customer_audit]
+   ON  dbo.customer
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[measurement_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[measurement_audit]
+   ON  dbo.measurement 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[smppoint_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[smppoint_audit]
+   ON  [dbo].[smppoint]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[laboratory_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[laboratory_insert] 
+   ON  dbo.laboratory
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT COUNT(id) FROM laboratory) > 1
+		THROW 51000, 'Only one row laboratory is allowed.', 1
+END
+GO
+PRINT N'Trigger "[dbo].[laboratory_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[laboratory_audit]
+   ON  [dbo].[laboratory]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[smpmatrix_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[smpmatrix_audit]
+   ON  [dbo].[smpmatrix]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[instype_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[instype_audit]
+   ON  [dbo].[instype]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[role_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[role_insert_update]
+   ON  dbo.role 
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	IF (SELECT COUNT(*) FROM role WHERE administrative = 1) > 1
+		THROW 51000, 'Only one administrative role allowed.', 1
+
+    -- Insert statements for trigger here
+	DECLARE @role INT
+	SET @role = (SELECT id FROM inserted)
+	INSERT INTO role_permission (role, permission)
+	SELECT @role, id FROM permission WHERE id NOT IN (SELECT DISTINCT(role_permission.permission) FROM role_permission WHERE role = @role)
+END
+GO
+PRINT N'Trigger "[dbo].[role_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[role_audit]
+   ON  dbo.role
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[priority_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[priority_audit] 
+   ON  [dbo].[priority]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[profile_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[profile_audit]
+   ON  dbo.profile
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[profile_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[profile_insert_update]
+   ON  [dbo].[profile]
+   AFTER INSERT,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @id INT
+	SET @id = (SELECT id FROM inserted)
+	-- SELECT Count(*) AS cnt FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = " & Me.ID
+	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(template.id) FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = (SELECT (id) FROM inserted)) > 0
+	THROW 51000, 'Deactivation failed. Profile is still in use.', 1
+
+	INSERT INTO profile_analysis (profile, analysis) SELECT @id, id FROM analysis WHERE id NOT IN (SELECT analysis FROM profile_analysis WHERE profile = @id) AND deactivate = 0
 END
 GO
 PRINT N'Trigger "[dbo].[request_analysis_audit]" wird erstellt...';
@@ -8452,368 +8554,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[role_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[role_insert_update]
-   ON  dbo.role 
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-	IF (SELECT COUNT(*) FROM role WHERE administrative = 1) > 1
-		THROW 51000, 'Only one administrative role allowed.', 1
-
-    -- Insert statements for trigger here
-	DECLARE @role INT
-	SET @role = (SELECT id FROM inserted)
-	INSERT INTO role_permission (role, permission)
-	SELECT @role, id FROM permission WHERE id NOT IN (SELECT DISTINCT(role_permission.permission) FROM role_permission WHERE role = @role)
-END
-GO
-PRINT N'Trigger "[dbo].[role_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[role_audit]
-   ON  dbo.role
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[priority_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[priority_audit] 
-   ON  [dbo].[priority]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[profile_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[profile_audit]
-   ON  dbo.profile
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[profile_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[profile_insert_update]
-   ON  [dbo].[profile]
-   AFTER INSERT,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @id INT
-	SET @id = (SELECT id FROM inserted)
-	-- SELECT Count(*) AS cnt FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = " & Me.ID
-	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(template.id) FROM template INNER JOIN template_profile ON (template_profile.template = template.id) WHERE template.deactivate = 0 AND template_profile.profile = (SELECT (id) FROM inserted)) > 0
-	THROW 51000, 'Deactivation failed. Profile is still in use.', 1
-
-	INSERT INTO profile_analysis (profile, analysis) SELECT @id, id FROM analysis WHERE id NOT IN (SELECT analysis FROM profile_analysis WHERE profile = @id) AND deactivate = 0
-END
-GO
-PRINT N'Trigger "[dbo].[request_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	Delete sub requests
--- =============================================
-CREATE TRIGGER request_delete
-   ON  dbo.request 
-   AFTER DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DELETE FROM request WHERE subrequest = (SELECT id FROM deleted)
-END
-GO
-PRINT N'Trigger "[dbo].[request_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Audit Log
--- =============================================
-CREATE TRIGGER [dbo].[request_audit]
-   ON  dbo.request
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[measurement_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[measurement_audit]
-   ON  dbo.measurement 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Sicht "[dbo].[view_request_owner]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_request_owner
-AS
-SELECT        dbo.request.id, dbo.request.description, dbo.request.photo, dbo.request.customer, dbo.request.cc_email, dbo.request.smp_date, dbo.request.smptype, dbo.request.smpmatrix, dbo.request.smpcontainer, 
-                         dbo.request.smpcondition, dbo.request.smppreservation, dbo.request.smppoint, dbo.request.sampler, dbo.request.smp_composit, dbo.request.client_sample_id, dbo.request.client_order_id, dbo.request.priority, 
-                         dbo.request.internal_use, dbo.request.profile, dbo.request.project, dbo.request.formulation, dbo.request.workflow, dbo.request.state, dbo.request.subrequest, dbo.audit.changed_by, dbo.request.recipients, dbo.request.subject, 
-                         dbo.request.body
-FROM            dbo.request INNER JOIN
-                         dbo.audit ON dbo.request.id = dbo.audit.table_id
-WHERE        (dbo.audit.table_name = 'request') AND (dbo.audit.action_type = 'I') AND (dbo.audit.changed_by = SUSER_SNAME())
-GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
 
@@ -8889,6 +8629,20 @@ FROM            dbo.measurement INNER JOIN
                                WHERE        (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
 WHERE        (dbo.measurement.state = 'CP')
 ORDER BY sortkey_measurement, sortkey_technique, sortkey_analysis
+GO
+PRINT N'Sicht "[dbo].[view_request_owner]" wird erstellt...';
+
+
+GO
+CREATE VIEW dbo.view_request_owner
+AS
+SELECT        dbo.request.id, dbo.request.description, dbo.request.photo, dbo.request.customer, dbo.request.cc_email, dbo.request.smp_date, dbo.request.smptype, dbo.request.smpmatrix, dbo.request.smpcontainer, 
+                         dbo.request.smpcondition, dbo.request.smppreservation, dbo.request.smppoint, dbo.request.sampler, dbo.request.smp_composit, dbo.request.client_sample_id, dbo.request.client_order_id, dbo.request.priority, 
+                         dbo.request.internal_use, dbo.request.profile, dbo.request.project, dbo.request.formulation, dbo.request.workflow, dbo.request.state, dbo.request.subrequest, dbo.audit.changed_by, dbo.request.recipients, dbo.request.subject, 
+                         dbo.request.body
+FROM            dbo.request INNER JOIN
+                         dbo.audit ON dbo.request.id = dbo.audit.table_id
+WHERE        (dbo.audit.table_name = 'request') AND (dbo.audit.action_type = 'I') AND (dbo.audit.changed_by = SUSER_SNAME())
 GO
 PRINT N'Funktion "[dbo].[audit_get_first]" wird erstellt...';
 
@@ -9044,24 +8798,6 @@ BEGIN
 
 END
 GO
-PRINT N'Sicht "[dbo].[view_measurement]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_measurement
-AS
-SELECT dbo.measurement.id, dbo.measurement.request, dbo.customer.name AS customer, dbo.analysis.title AS analysis, dbo.method.title AS method, dbo.instrument.title AS instrument, dbo.measurement.value_txt AS value, dbo.audit_get_value('analysis', dbo.analysis.id, 'unit', dbo.measurement.acquired_at) AS unit, dbo.measurement.out_of_spec, dbo.measurement.state, 
-         dbo.request.profile, dbo.measurement.subcontraction
-FROM  dbo.state INNER JOIN
-         dbo.request ON dbo.state.id = dbo.request.state INNER JOIN
-         dbo.customer ON dbo.request.customer = dbo.customer.id INNER JOIN
-         dbo.measurement ON dbo.request.id = dbo.measurement.request LEFT OUTER JOIN
-         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
-         dbo.instrument ON dbo.measurement.instrument = dbo.instrument.id LEFT OUTER JOIN
-         dbo.method ON dbo.measurement.method = dbo.method.id
-WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
-         (dbo.measurement.state = 'AQ')
-GO
 PRINT N'Sicht "[dbo].[view_request_measurement]" wird erstellt...';
 
 
@@ -9106,6 +8842,24 @@ FROM            dbo.project LEFT OUTER JOIN
                                WHERE        (users = dbo.users_get_id(SUSER_NAME()))) AS a ON dbo.project.id = a.project
 WHERE        (dbo.project.owner = SUSER_NAME()) OR
                          (a.project = dbo.project.id)
+GO
+PRINT N'Sicht "[dbo].[view_measurement]" wird erstellt...';
+
+
+GO
+CREATE VIEW dbo.view_measurement
+AS
+SELECT dbo.measurement.id, dbo.measurement.request, dbo.customer.name AS customer, dbo.analysis.title AS analysis, dbo.method.title AS method, dbo.instrument.title AS instrument, dbo.measurement.value_txt AS value, dbo.audit_get_value('analysis', dbo.analysis.id, 'unit', dbo.measurement.acquired_at) AS unit, dbo.measurement.out_of_spec, dbo.measurement.state, 
+         dbo.request.profile, dbo.measurement.subcontraction
+FROM  dbo.state INNER JOIN
+         dbo.request ON dbo.state.id = dbo.request.state INNER JOIN
+         dbo.customer ON dbo.request.customer = dbo.customer.id INNER JOIN
+         dbo.measurement ON dbo.request.id = dbo.measurement.request LEFT OUTER JOIN
+         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
+         dbo.instrument ON dbo.measurement.instrument = dbo.instrument.id LEFT OUTER JOIN
+         dbo.method ON dbo.measurement.method = dbo.method.id
+WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
+         (dbo.measurement.state = 'AQ')
 GO
 PRINT N'Funktion "[dbo].[xml_diff]" wird erstellt...';
 
@@ -9158,6 +8912,100 @@ RETURN
 	WHERE
 		A.elem_text <> B.elem_text
 )
+GO
+PRINT N'Prozedur "[dbo].[users_get_name]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE PROCEDURE [dbo].[users_get_name]
+	-- Add the parameters for the stored procedure here
+	@response_message NVARCHAR(256) OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+
+	BEGIN TRY
+		SET @response_message = SUSER_NAME()
+	END TRY
+
+	BEGIN CATCH
+		SET @response_message = NULL
+	END CATCH
+END
+GO
+PRINT N'Prozedur "[dbo].[audit_xml_diff]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Create audit trail from record
+-- =============================================
+CREATE PROCEDURE [dbo].[audit_xml_diff]
+	-- Add the parameters for the stored procedure here
+	@table_name nvarchar(128),
+	@id int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @x XML, @y XML
+	DECLARE @l xml_diff_list
+	DECLARE audit_xml_diff CURSOR FOR SELECT id FROM audit WHERE table_name = @table_name AND table_id = @id
+
+	OPEN audit_xml_diff
+	FETCH NEXT FROM audit_xml_diff INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SET @x = (SELECT value_old FROM audit WHERE id = @i)
+		SET @y = (SELECT value_new FROM audit WHERE id = @i)
+
+		IF @x IS NOT NULL AND @y IS NOT NULL
+			INSERT INTO @l SELECT * FROM xml_diff(@i, @x, @y)
+
+		IF @x IS NULL
+		BEGIN
+			WITH A AS (
+			SELECT
+				N.x.value('local-name(.)', 'nvarchar(128)') AS elem_name,
+				N.x.value('text()[1]', 'nvarchar(max)') AS elem_text
+			FROM
+				@y.nodes('row/*') AS N(x)
+			) INSERT INTO @l SELECT @i, elem_name, NULL, elem_text FROM A
+		END
+
+		IF @y IS NULL
+			BEGIN
+			WITH A AS (
+			SELECT
+				N.x.value('local-name(.)', 'nvarchar(128)') AS elem_name,
+				N.x.value('text()[1]', 'nvarchar(max)') AS elem_text
+			FROM
+				@x.nodes('row/*') AS N(x)
+			) INSERT INTO @l SELECT @i, elem_name, NULL, elem_text FROM A
+		END
+
+		FETCH NEXT FROM audit_xml_diff INTO @i
+	END
+	CLOSE audit_xml_diff
+	DEALLOCATE audit_xml_diff
+
+	SELECT l.elem_name, l.value_old, l.value_new, a.changed_by, a.changed_at FROM @l AS l INNER JOIN audit AS a ON l.pk = a.id ORDER BY a.id ASC
+END
 GO
 PRINT N'Prozedur "[dbo].[row_duplicate]" wird erstellt...';
 
@@ -9473,6 +9321,50 @@ OutputDataSet = pd.DataFrame(esd_test(InputDataSet["value"], ' + CAST(@max_outli
 	EXECUTE sp_execute_external_script @language = N'Python', @script = @s, @input_data_1 = @inquery
 END
 GO
+PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Create audit trail from record
+-- =============================================
+CREATE PROCEDURE [dbo].[template_run]
+	-- Add the parameters for the stored procedure here
+	@template INT,
+	@priority INT,
+	@workflow INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @id INT = NULL
+	DECLARE @i INT
+
+	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
+
+	SET @id = SCOPE_IDENTITY()
+
+	BEGIN
+		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
+
+		OPEN tmpl
+		FETCH NEXT FROM tmpl INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
+			FETCH NEXT FROM tmpl INTO @i
+		END
+		CLOSE tmpl
+		DEALLOCATE tmpl
+	END
+END
+GO
 PRINT N'Prozedur "[dbo].[lims_initialize]" wird erstellt...';
 
 
@@ -9495,6 +9387,142 @@ BEGIN
 	EXEC sp_configure 'xp_cmdshell', 1;
 	EXEC sp_configure 'Ole Automation Procedures', 1;
 	RECONFIGURE WITH OVERRIDE;
+END
+GO
+PRINT N'Prozedur "[dbo].[message_extract_sql]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Extract keywords in message
+-- =============================================
+CREATE PROCEDURE [dbo].[message_extract_sql] 
+	-- Add the parameters for the stored procedure here
+	@p_message NVARCHAR(MAX)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @key_open BigIntList, @key_close BigIntList, @keys StringList, @pos INT, @i INT
+
+	-- Store the position of opening brackets
+	SET @i = 0
+	SET @pos = 1
+	WHILE CHARINDEX('[', @p_message, @pos) > 0
+	BEGIN
+		INSERT INTO @key_open VALUES(@i, CHARINDEX('[', @p_message, @pos))
+		SET @pos = (SELECT value FROM @key_open WHERE id = @i) + 1
+		SET @i = @i + 1
+	END
+
+	-- Store the position of closing brackets
+	SET @i = 0
+	SET @pos = 1
+	WHILE CHARINDEX(']', @p_message, @pos) > 0
+	BEGIN
+		INSERT INTO @key_close VALUES(@i, CHARINDEX(']', @p_message, @pos))
+		SET @pos = (SELECT value FROM @key_close WHERE id = @i) + 1
+		SET @i = @i + 1
+	END
+
+	-- Store the fields named in brackets
+	SET @i = 0
+	WHILE @i < (SELECT COUNT(*) FROM @key_Open)
+	BEGIN
+		INSERT INTO @keys VALUES(@i, SUBSTRING(@p_message, (SELECT value FROM @key_open WHERE id = @i), (SELECT value FROM @key_close WHERE id = @i) - (SELECT value FROM @key_open WHERE id = @i) + 1))
+		SET @i = @i + 1
+	END
+
+	-- Delete field duplicates
+	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
+
+	SELECT * FROM @keys
+END
+GO
+PRINT N'Prozedur "[dbo].[role_duplicate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Duplicate role
+-- =============================================
+CREATE PROCEDURE [dbo].[role_duplicate]
+	-- Add the parameters for the stored procedure here
+	@pRole As INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE role_cur CURSOR FOR SELECT id FROM role_permission WHERE role = @pRole
+	DECLARE @id_keys table([id] INT)
+	DECLARE @id INT
+	DECLARE @i INT
+	DECLARE @permission INT
+
+	INSERT INTO role (title, description) OUTPUT inserted.id INTO @id_keys VALUES((SELECT title FROM role WHERE id = @pRole) + '_duplicate', (SELECT description FROM role WHERE id = @pRole))
+
+	SET @id = (SELECT TOP 1 id FROM @id_keys)
+
+	OPEN role_cur
+	FETCH NEXT FROM role_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SET @permission = (SELECT permission FROM role_permission WHERE id = @i)
+		UPDATE role_permission
+		SET
+		can_create = (SELECT can_create FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_read = (SELECT can_read FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_update = (SELECT can_update FROM role_permission WHERE role = @pRole and permission = @permission),
+		can_delete = (SELECT can_delete FROM role_permission WHERE role = @pRole and permission = @permission) WHERE role = @id AND permission = @permission
+		FETCH NEXT FROM role_cur INTO @i
+	END
+	CLOSE role_cur
+	DEALLOCATE role_cur
+END
+GO
+PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[folder_create]
+	-- Add the parameters for the stored procedure here
+	@strFolder NVARCHAR(200) -- Folder to be created
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
+	DECLARE @s NVARCHAR(200)
+	DECLARE @tmpFolder NVARCHAR(MAX)
+
+	-- Create table with subfolder names
+	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
+
+	-- Check if folder already exists
+	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
+	BEGIN
+		-- Create folder
+		SET @s = 'MD ' + 'c:\' + @strFolder
+		exec master.dbo.xp_cmdshell @s
+	END
 END
 GO
 PRINT N'Prozedur "[dbo].[calculation_substitute_keyword]" wird erstellt...';
@@ -9768,45 +9796,16 @@ BEGIN
 	END
 END
 GO
-PRINT N'Prozedur "[dbo].[users_get_name]" wird erstellt...';
+PRINT N'Prozedur "[dbo].[report_horizontal]" wird erstellt...';
 
 
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE PROCEDURE [dbo].[users_get_name]
-	-- Add the parameters for the stored procedure here
-	@response_message NVARCHAR(256) OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-
-	BEGIN TRY
-		SET @response_message = SUSER_NAME()
-	END TRY
-
-	BEGIN CATCH
-		SET @response_message = NULL
-	END CATCH
-END
-GO
-PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
-
-
-GO
+-- Create date: 2024 September
+-- Description:	
 -- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[calculation_iterate]
+CREATE PROCEDURE [dbo].[report_horizontal]
 	-- Add the parameters for the stored procedure here
 	@request INT
 AS
@@ -9816,375 +9815,154 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
+	DECLARE analysis_cur CURSOR FOR SELECT analysis.id FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id IN (SELECT measurement.analysis FROM request INNER JOIN measurement ON (measurement.request = request.id) WHERE request = @request OR subrequest = @request) ORDER BY analysis.sortkey
+	DECLARE request_cur CURSOR FOR SELECT request.id FROM request WHERE request.subrequest = @request
+	DECLARE @q1 NVARCHAR(MAX)
+	DECLARE @q2 NVARCHAR(MAX)
+	DECLARE @q3 NVARCHAR(MAX)
+	DECLARE @q4 NVARCHAR(MAX)
+	DECLARE @q5 NVARCHAR(MAX)
 	DECLARE @i INT
-	DECLARE @f FLOAT
-	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
+	DECLARE @j INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @p NVARCHAR(MAX)
+	DECLARE @language VARCHAR(32)
 
-	OPEN c_cur
-	FETCH NEXT FROM c_cur INTO @i
+	-- Get the language setting for acutal user
+	SET @language = (SELECT language FROM users WHERE name = ORIGINAL_LOGIN())
+
+	-- Create horizontal table for measurement values
+	SET @q1 = 'CREATE TABLE ##t (# NVARCHAR(MAX),'
+	
+	-- Build the query to create the table
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
 	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		EXEC calculation_perform @i, @f OUTPUT
-		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
-		FETCH NEXT FROM c_cur INTO @i
-	END
-	CLOSE c_cur
-	DEALLOCATE c_cur
-END
-GO
-PRINT N'Prozedur "[dbo].[request_create_subrequest]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[request_create_subrequest] 
-	-- Add the parameters for the stored procedure here
-	@p_id INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @pk INT
-	DECLARE @ignore ColumnList
-
-	INSERT INTO @ignore VALUES('profile')
-
-	-- Duplicate record of choice
-	EXEC row_duplicate 'request', @ignore, @p_id, @pk OUTPUT
-
-	-- Attach newly created request to parent
-	UPDATE request SET subrequest = @p_id WHERE id = @p_id
-	UPDATE request SET subrequest = @p_id WHERE id = @pk
-END
-GO
-PRINT N'Prozedur "[dbo].[audit_xml_diff]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Create audit trail from record
--- =============================================
-CREATE PROCEDURE [dbo].[audit_xml_diff]
-	-- Add the parameters for the stored procedure here
-	@table_name nvarchar(128),
-	@id int
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT
-	DECLARE @x XML, @y XML
-	DECLARE @l xml_diff_list
-	DECLARE audit_xml_diff CURSOR FOR SELECT id FROM audit WHERE table_name = @table_name AND table_id = @id
-
-	OPEN audit_xml_diff
-	FETCH NEXT FROM audit_xml_diff INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @x = (SELECT value_old FROM audit WHERE id = @i)
-		SET @y = (SELECT value_new FROM audit WHERE id = @i)
-
-		IF @x IS NOT NULL AND @y IS NOT NULL
-			INSERT INTO @l SELECT * FROM xml_diff(@i, @x, @y)
-
-		IF @x IS NULL
 		BEGIN
-			WITH A AS (
-			SELECT
-				N.x.value('local-name(.)', 'nvarchar(128)') AS elem_name,
-				N.x.value('text()[1]', 'nvarchar(max)') AS elem_text
-			FROM
-				@y.nodes('row/*') AS N(x)
-			) INSERT INTO @l SELECT @i, elem_name, NULL, elem_text FROM A
+			SET @q1 = @q1 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ' NVARCHAR(MAX),'
+			FETCH NEXT FROM analysis_cur INTO @i
 		END
+	SET @q1 = LEFT(@q1, LEN(@q1)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Create table by executing query
+	EXEC (@q1)
 
-		IF @y IS NULL
-			BEGIN
-			WITH A AS (
-			SELECT
-				N.x.value('local-name(.)', 'nvarchar(128)') AS elem_name,
-				N.x.value('text()[1]', 'nvarchar(max)') AS elem_text
-			FROM
-				@x.nodes('row/*') AS N(x)
-			) INSERT INTO @l SELECT @i, elem_name, NULL, elem_text FROM A
-		END
+	-- Build the query to insert the analysis services
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'caption_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
 
-		FETCH NEXT FROM audit_xml_diff INTO @i
-	END
-	CLOSE audit_xml_diff
-	DEALLOCATE audit_xml_diff
-
-	SELECT l.elem_name, l.value_old, l.value_new, a.changed_by, a.changed_at FROM @l AS l INNER JOIN audit AS a ON l.pk = a.id ORDER BY a.id ASC
-END
-GO
-PRINT N'Prozedur "[dbo].[message_extract_sql]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Extract keywords in message
--- =============================================
-CREATE PROCEDURE [dbo].[message_extract_sql] 
-	-- Add the parameters for the stored procedure here
-	@p_message NVARCHAR(MAX)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @key_open BigIntList, @key_close BigIntList, @keys StringList, @pos INT, @i INT
-
-	-- Store the position of opening brackets
-	SET @i = 0
-	SET @pos = 1
-	WHILE CHARINDEX('[', @p_message, @pos) > 0
-	BEGIN
-		INSERT INTO @key_open VALUES(@i, CHARINDEX('[', @p_message, @pos))
-		SET @pos = (SELECT value FROM @key_open WHERE id = @i) + 1
-		SET @i = @i + 1
-	END
-
-	-- Store the position of closing brackets
-	SET @i = 0
-	SET @pos = 1
-	WHILE CHARINDEX(']', @p_message, @pos) > 0
-	BEGIN
-		INSERT INTO @key_close VALUES(@i, CHARINDEX(']', @p_message, @pos))
-		SET @pos = (SELECT value FROM @key_close WHERE id = @i) + 1
-		SET @i = @i + 1
-	END
-
-	-- Store the fields named in brackets
-	SET @i = 0
-	WHILE @i < (SELECT COUNT(*) FROM @key_Open)
-	BEGIN
-		INSERT INTO @keys VALUES(@i, SUBSTRING(@p_message, (SELECT value FROM @key_open WHERE id = @i), (SELECT value FROM @key_close WHERE id = @i) - (SELECT value FROM @key_open WHERE id = @i) + 1))
-		SET @i = @i + 1
-	END
-
-	-- Delete field duplicates
-	DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY value ORDER BY (SELECT NULL)) FROM @keys) AS T WHERE DupRank > 1 
-
-	SELECT * FROM @keys
-END
-GO
-PRINT N'Prozedur "[dbo].[role_duplicate]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Duplicate role
--- =============================================
-CREATE PROCEDURE [dbo].[role_duplicate]
-	-- Add the parameters for the stored procedure here
-	@pRole As INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE role_cur CURSOR FOR SELECT id FROM role_permission WHERE role = @pRole
-	DECLARE @id_keys table([id] INT)
-	DECLARE @id INT
-	DECLARE @i INT
-	DECLARE @permission INT
-
-	INSERT INTO role (title, description) OUTPUT inserted.id INTO @id_keys VALUES((SELECT title FROM role WHERE id = @pRole) + '_duplicate', (SELECT description FROM role WHERE id = @pRole))
-
-	SET @id = (SELECT TOP 1 id FROM @id_keys)
-
-	OPEN role_cur
-	FETCH NEXT FROM role_cur INTO @i
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
 	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @permission = (SELECT permission FROM role_permission WHERE id = @i)
-		UPDATE role_permission
-		SET
-		can_create = (SELECT can_create FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_read = (SELECT can_read FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_update = (SELECT can_update FROM role_permission WHERE role = @pRole and permission = @permission),
-		can_delete = (SELECT can_delete FROM role_permission WHERE role = @pRole and permission = @permission) WHERE role = @id AND permission = @permission
-		FETCH NEXT FROM role_cur INTO @i
-	END
-	CLOSE role_cur
-	DEALLOCATE role_cur
-END
-GO
-PRINT N'Prozedur "[dbo].[folder_create]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[folder_create]
-	-- Add the parameters for the stored procedure here
-	@strFolder NVARCHAR(200) -- Folder to be created
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @ResultSet TABLE(Directory NVARCHAR(200))
-	DECLARE @s NVARCHAR(200)
-	DECLARE @tmpFolder NVARCHAR(MAX)
-
-	-- Create table with subfolder names
-	INSERT INTO @ResultSet EXEC master.dbo.xp_subdirs 'c:\'
-
-	-- Check if folder already exists
-	IF (SELECT COUNT(*) FROM @ResultSet where Directory = @strFolder) = 0
-	BEGIN
-		-- Create folder
-		SET @s = 'MD ' + 'c:\' + @strFolder
-		exec master.dbo.xp_cmdshell @s
-	END
-END
-GO
-PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	-
--- =============================================
-CREATE PROCEDURE [dbo].[import_perform] 
-	-- Add the parameters for the stored procedure here
-	@strFolder nvarchar(max)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @i INT, @j INT
-	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
-	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
-	DECLARE @strCmd VARCHAR(1024)
-	DECLARE @strFile nvarchar(max)
-	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
-
-	BEGIN TRY
-		TRUNCATE TABLE import
-
-		-- Concatenate command string
-		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
-
-		-- Create file list
-		INSERT INTO @files execute xp_cmdshell @strCmd
-		DELETE FROM @files WHERE FileName IS NULL
-
-		-- Import measurement values from import file
-		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
-		OPEN import_cur
-		FETCH NEXT FROM import_cur INTO @i
-		WHILE @@FETCH_STATUS = 0
 		BEGIN
-			-- Perform import of measurement data
-			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
-			EXEC import_csv @strFile, @imported OUT
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
 
-			-- Delete imported file
-			IF @imported = 1
-			BEGIN
-				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
-				EXEC (@cmd)
-			END
+	-- Execute query to insert the analysis services
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for units
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'unit_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Insert values
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for measurement values
+	SET @s = ''
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + @s + '''' + ','
+
+	OPEN request_cur
+	FETCH NEXT FROM request_cur INTO @j
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
 			
-			FETCH NEXT FROM import_cur INTO @i
-		END
-		CLOSE import_cur
-		DEALLOCATE import_cur
+			-- Create an insert query for inserting values
+			SET @p = (SELECT smppoint.title FROM request INNER JOIN smppoint ON (smppoint.id = request.smppoint) WHERE request.id = @j)
+			SET @q4 = 'INSERT INTO ##t (#,'
+			SET @q5 = '(' + '''' + @p + '''' + ','
 
-		-- Update measurements
-		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
-		OPEN consume_cur
-		FETCH NEXT FROM consume_cur INTO @j
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			-- Consume imported values as measurement data
-			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
-			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
-			SET @request = (SELECT request FROM import WHERE id = @j)
-			SET @method = (SELECT method FROM import WHERE id = @j)
-			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
+			OPEN analysis_cur
+			FETCH NEXT FROM analysis_cur INTO @i
+			WHILE @@FETCH_STATUS = 0
+				BEGIN
+					SET @p = (
+					SELECT dbo.measurement.value_txt + IIF(dbo.measurement.out_of_spec = '', '', ' *') 
+					FROM dbo.measurement INNER JOIN
+                         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
+                         dbo.instrument ON dbo.measurement.instrument = dbo.instrument.id LEFT OUTER JOIN
+                         dbo.technique ON dbo.analysis.technique = dbo.technique.id LEFT OUTER JOIN
+                         dbo.method ON dbo.measurement.method = dbo.method.id LEFT OUTER JOIN
+                             (SELECT        dbo.request.id, dbo.profile_analysis.analysis, dbo.profile_analysis.tsl, CONVERT(float, dbo.audit_get_value('profile_analysis', dbo.profile_analysis.id, 'lsl', dbo.audit_get_first('request', dbo.request.id))) AS lsl, 
+                                                         CONVERT(float, dbo.audit_get_value('profile_analysis', dbo.profile_analysis.id, 'usl', dbo.audit_get_first('request', dbo.request.id))) AS usl
+                               FROM            dbo.request INNER JOIN
+                                                         dbo.profile ON dbo.request.profile = dbo.profile.id INNER JOIN
+                                                         dbo.profile_analysis ON dbo.profile_analysis.profile = dbo.profile.id
+                               WHERE        (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
+					WHERE        (dbo.measurement.request = @j) AND (dbo.analysis.id = @i) AND state = 'VD'
+					)
+					SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+					SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					FETCH NEXT FROM analysis_cur INTO @i
+				END
+			SET @q4 = LEFT(@q4, LEN(@q4)-1) + ') VALUES'
+			SET @q5 = LEFT(@q5, LEN(@q5)-1) + ')'
+
+			-- Insert values
+			EXEC (@q4 + @q5)
+			CLOSE analysis_cur
 			
-			-- Handle analysis services
-			IF SUBSTRING(@keyword, 1, 1) = 'A'
-			BEGIN
-				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
-				
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
-				
-				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
-					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
-			END
 
-			-- Handle calculated fields
-			IF SUBSTRING(@keyword, 1, 1) = 'F'
-			BEGIN
-				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
-
-				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
-					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
-			END
-
-			EXEC calculation_iterate @request
-
-			FETCH NEXT FROM consume_cur INTO @j
+			FETCH NEXT FROM request_cur INTO @j
 		END
-		CLOSE consume_cur
-		DEALLOCATE consume_cur
+	CLOSE request_cur
 
-	END TRY
-	BEGIN CATCH
-		DEALLOCATE import_cur
-		DEALLOCATE consume_cur
-	END CATCH
+	-- Return table
+	SELECT * FROM ##t
+
+	-- Cleanup tables and cursors
+	DROP TABLE ##t
+	DEALLOCATE analysis_cur
+	DEALLOCATE request_cur
 END
 GO
-PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
+PRINT N'Prozedur "[dbo].[report_horizontal_profile]" wird erstellt...';
 
 
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Create audit trail from record
+-- Create date: 2024 September
+-- Description:	Horizontal profile table
 -- =============================================
-CREATE PROCEDURE [dbo].[template_run]
+CREATE PROCEDURE [dbo].[report_horizontal_profile]
 	-- Add the parameters for the stored procedure here
-	@template INT,
-	@priority INT,
-	@workflow INT
+	@request INT
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -10192,27 +9970,149 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	DECLARE @id INT = NULL
+	DECLARE analysis_cur CURSOR FOR SELECT DISTINCT profile_analysis.analysis, analysis.sortkey FROM profile_analysis INNER JOIN profile ON (profile.id = profile_analysis.profile) INNER JOIN analysis ON (analysis.id = profile_analysis.analysis) WHERE profile_analysis.applies = 1 AND profile.id IN (SELECT profile FROM request WHERE subrequest = @request) ORDER BY analysis.sortkey
+	DECLARE profile_cur CURSOR FOR SELECT request.profile FROM request WHERE subrequest = @request
+	DECLARE @q1 NVARCHAR(MAX)
+	DECLARE @q2 NVARCHAR(MAX)
+	DECLARE @q3 NVARCHAR(MAX)
+	DECLARE @q4 NVARCHAR(MAX)
+	DECLARE @q5 NVARCHAR(MAX)
 	DECLARE @i INT
+	DECLARE @j INT
+	DECLARE @d INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @p NVARCHAR(MAX)
+	DECLARE @a1 NVARCHAR(MAX)
+	DECLARE @a2 NVARCHAR(MAX)
+	DECLARE @min float
+	DECLARE @max float
+	DECLARE @min_inc float
+	DECLARE @max_inc float
+	DECLARE @language VARCHAR(32)
 
-	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
+	-- Get the language setting for acutal user
+	SET @language = (SELECT language FROM users WHERE name = ORIGINAL_LOGIN())
 
-	SET @id = SCOPE_IDENTITY()
-
-	BEGIN
-		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
-
-		OPEN tmpl
-		FETCH NEXT FROM tmpl INTO @i
-		WHILE @@FETCH_STATUS = 0
+	-- Create horizontal table for measurement values
+	SET @q1 = 'CREATE TABLE ##t (# NVARCHAR(MAX),'
+	
+	-- Build the query to create the table
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
-			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
-			FETCH NEXT FROM tmpl INTO @i
+			SET @q1 = @q1 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ' NVARCHAR(MAX),'
+			FETCH NEXT FROM analysis_cur INTO @i, @d
 		END
-		CLOSE tmpl
-		DEALLOCATE tmpl
-	END
+	SET @q1 = LEFT(@q1, LEN(@q1)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Create table by executing query
+	EXEC (@q1)
+
+	-- Build the query to insert the analysis services
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'caption_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+
+	-- Execute query to insert the analysis services
+	EXEC (@q2 + @q3)
+	
+	-- Create an insert query for units
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'unit_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Insert values
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for measurement values
+	SET @s = ''
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + @s + '''' + ','
+
+	OPEN profile_cur
+	FETCH NEXT FROM profile_cur INTO @j
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			
+			-- Create an insert query for inserting values
+			SET @p = (SELECT profile.title FROM profile WHERE profile.id = @j)
+			SET @q4 = 'INSERT INTO ##t (#,'
+			SET @q5 = '(' + '''' + @p + '''' + ','
+
+			OPEN analysis_cur
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+			WHILE @@FETCH_STATUS = 0
+				BEGIN
+					SET @min = (SELECT profile_analysis.lsl FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @max = (SELECT profile_analysis.usl FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @min_inc = (SELECT profile_analysis.lsl_include FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @max_inc = (SELECT profile_analysis.usl_include FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+
+					IF (SELECT COUNT(*) FROM analysis WHERE analysis.type ='A' AND analysis.id = @i) > 0
+					BEGIN
+						SET @a1 = (SELECT attribute.title FROM attribute WHERE attribute.analysis = @i AND attribute.value = @min)
+						SET @a2 = (SELECT attribute.title FROM attribute WHERE attribute.analysis = @i AND attribute.value = @max)
+						SET @p = IIF(@min = @max, @a1, IIF(@min IS NULL, '', IIF(@min_inc = 1, '>=', '>') + @s) + IIF(@min IS NULL OR @max IS NULL, '', ' ... ') + IIF(@max IS NULL, '', IIF(@max_inc = 1, '<=', '<') + @s))
+						SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+						SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					END
+					IF (SELECT COUNT(*) FROM analysis WHERE analysis.type ='A' AND analysis.id = @i) = 0
+					BEGIN
+						SET @p = IIF(@min = @max, CONVERT(VARCHAR(MAX), @min), IIF(@min IS NULL, '', IIF(@min_inc = 1, '>=', '>') + CONVERT(VARCHAR(MAX), @min)) + IIF(@min IS NULL OR @max IS NULL, '', ' ... ') + IIF(@max IS NULL, '', IIF(@max_inc = 1, '<=', '<') + CONVERT(VARCHAR(MAX), @max)))
+						SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+						SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					END
+					FETCH NEXT FROM analysis_cur INTO @i, @d
+				END
+			SET @q4 = LEFT(@q4, LEN(@q4)-1) + ') VALUES'
+			SET @q5 = LEFT(@q5, LEN(@q5)-1) + ')'
+
+			-- Insert values
+			EXEC (@q4 + @q5)
+			CLOSE analysis_cur
+			
+
+			FETCH NEXT FROM profile_cur INTO @j
+		END
+	CLOSE profile_cur
+
+	-- Return table
+	SELECT * FROM ##t
+
+	-- Cleanup tables and cursors
+	DROP TABLE ##t
+	DEALLOCATE analysis_cur
+	DEALLOCATE profile_cur
 END
 GO
 PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
@@ -10234,76 +10134,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.2.2'
-END
-GO
-PRINT N'Trigger "[dbo].[request_analysis_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[request_analysis_update] 
-   ON  [dbo].[request_analysis]
-   AFTER UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF ( (SELECT trigger_nestlevel() ) < 2 )
-	BEGIN
-		DECLARE @request INT, @analysis INT, @method INT, @i INT, @j INT
-
-		SET @request = (SELECT request FROM inserted)
-		SET @analysis = (SELECT analysis FROM inserted)
-		SET @method = (SELECT method FROM inserted)
-
-		IF (SELECT applies FROM inserted) = 1
-		BEGIN
-			-- Insert measurments according selected analsis
-			EXEC measurement_insert @request, @analysis, @method
-
-			-- Insert dependant analysis if applies
-			DECLARE cur CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @analysis AND analysis_id IS NOT NULL ORDER BY id
-			OPEN cur
-			FETCH NEXT FROM cur INTO @i
-			WHILE @@FETCH_STATUS = 0
-			BEGIN
-				EXEC measurement_insert @request, @i
-				
-				-- Handle any subdependence of analysis service
-				IF (SELECT calculation_activate FROM analysis WHERE id = @i) = 1
-				BEGIN
-					DECLARE cur2 CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @i AND analysis_id IS NOT NULL ORDER BY id
-					OPEN cur2
-					FETCH NEXT FROM cur2 INTO @j
-					WHILE @@FETCH_STATUS = 0
-					BEGIN
-						EXEC measurement_insert @request, @j
-						UPDATE request_analysis SET applies = 1 WHERE analysis = @j
-						FETCH NEXT FROM cur2 INTO @j
-					END
-					CLOSE cur2
-					DEALLOCATE cur2
-				END
-
-				UPDATE request_analysis SET applies = 1 WHERE analysis = @i
-				FETCH NEXT FROM cur INTO @i
-			END
-			CLOSE cur
-			DEALLOCATE cur
-		END
-
-		-- Retract if unapplied
-		IF (SELECT applies FROM inserted) = 0
-			UPDATE measurement SET state = 'RT' WHERE request = (SELECT request FROM inserted) AND analysis = (SELECT analysis FROM inserted)
-	END
+	SET @version_be = 'v2.3.0'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -10695,6 +10526,142 @@ BEGIN
 	END
 END
 GO
+PRINT N'Trigger "[dbo].[request_analysis_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[request_analysis_update] 
+   ON  [dbo].[request_analysis]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+	BEGIN
+		DECLARE @request INT, @analysis INT, @method INT, @i INT, @j INT
+
+		SET @request = (SELECT request FROM inserted)
+		SET @analysis = (SELECT analysis FROM inserted)
+		SET @method = (SELECT method FROM inserted)
+
+		IF (SELECT applies FROM inserted) = 1
+		BEGIN
+			-- Insert measurments according selected analsis
+			EXEC measurement_insert @request, @analysis, @method
+
+			-- Insert dependant analysis if applies
+			DECLARE cur CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @analysis AND analysis_id IS NOT NULL ORDER BY id
+			OPEN cur
+			FETCH NEXT FROM cur INTO @i
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				EXEC measurement_insert @request, @i
+				
+				-- Handle any subdependence of analysis service
+				IF (SELECT calculation_activate FROM analysis WHERE id = @i) = 1
+				BEGIN
+					DECLARE cur2 CURSOR FOR SELECT analysis_id FROM cfield WHERE analysis = @i AND analysis_id IS NOT NULL ORDER BY id
+					OPEN cur2
+					FETCH NEXT FROM cur2 INTO @j
+					WHILE @@FETCH_STATUS = 0
+					BEGIN
+						EXEC measurement_insert @request, @j
+						UPDATE request_analysis SET applies = 1 WHERE analysis = @j
+						FETCH NEXT FROM cur2 INTO @j
+					END
+					CLOSE cur2
+					DEALLOCATE cur2
+				END
+
+				UPDATE request_analysis SET applies = 1 WHERE analysis = @i
+				FETCH NEXT FROM cur INTO @i
+			END
+			CLOSE cur
+			DEALLOCATE cur
+		END
+
+		-- Retract if unapplied
+		IF (SELECT applies FROM inserted) = 0
+			UPDATE measurement SET state = 'RT' WHERE request = (SELECT request FROM inserted) AND analysis = (SELECT analysis FROM inserted)
+	END
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_iterate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[calculation_iterate]
+	-- Add the parameters for the stored procedure here
+	@request INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT
+	DECLARE @f FLOAT
+	DECLARE c_cur CURSOR FOR SELECT measurement.id FROM measurement INNER JOIN analysis ON (analysis.id = measurement.analysis) WHERE measurement.request = @request AND (measurement.state = 'CP' Or measurement.state = 'AQ' Or measurement.state = 'VD') AND analysis.calculation_activate = 1 ORDER BY measurement.id
+
+	OPEN c_cur
+	FETCH NEXT FROM c_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		EXEC calculation_perform @i, @f OUTPUT
+		UPDATE measurement SET value_num = @f WHERE id = @i AND (state = 'AQ' Or state = 'CP')
+		FETCH NEXT FROM c_cur INTO @i
+	END
+	CLOSE c_cur
+	DEALLOCATE c_cur
+END
+GO
+PRINT N'Prozedur "[dbo].[request_create_subrequest]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[request_create_subrequest] 
+	-- Add the parameters for the stored procedure here
+	@p_id INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @pk INT
+	DECLARE @ignore ColumnList
+
+	INSERT INTO @ignore VALUES('profile')
+
+	-- Duplicate record of choice
+	EXEC row_duplicate 'request', @ignore, @p_id, @pk OUTPUT
+
+	-- Attach newly created request to parent
+	UPDATE request SET subrequest = @p_id WHERE id = @p_id
+	UPDATE request SET subrequest = @p_id WHERE id = @pk
+END
+GO
 PRINT N'Prozedur "[dbo].[spa_create]" wird erstellt...';
 
 
@@ -10829,77 +10796,6 @@ BEGIN
 	SET @return_message = @p_message
 END
 GO
-PRINT N'Prozedur "[dbo].[calculation_test]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- ==============================================
-CREATE PROCEDURE [dbo].[calculation_test] 
-	-- Add the parameters for the stored procedure here
-	@analysis INT,
-	@response_message FLOAT OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @f KeyValueList
-	DECLARE @t StringList
-	DECLARE @equation NVARCHAR(MAX)
-	DECLARE @i INT
-	DECLARE @id INT
-	DECLARE @s NVARCHAR(MAX)
-	DECLARE @sql NVARCHAR(MAX)
-	DECLARE @result FLOAT
-	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
-
-	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
-
-	-- Get key and value
-	OPEN cur
-	FETCH NEXT FROM cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value FROM cvalidate WHERE id = @i))
-		END
-
-		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
-		BEGIN
-			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
-			INSERT INTO @f
-				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value FROM cvalidate WHERE id = @i))
-		END
-
-		FETCH NEXT FROM cur INTO @i
-	END
-	CLOSE cur
-	DEALLOCATE cur
-
-	-- Extract keywors of equation
-	INSERT INTO @t
-	EXEC calculation_extract_keyword @equation
-
-	-- Substitute keywords by value
-	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
-
-	-- Evaluate euqation
-	SET @sql = 'select @result = ' + @s
-	EXEC sp_executesql @sql, N'@result float output', @result OUT
-
-	-- Return value being calculated
-	SET @response_message = @result
-END
-GO
 PRINT N'Prozedur "[dbo].[mail_send]" wird erstellt...';
 
 
@@ -10983,6 +10879,183 @@ BEGIN
 	EXEC sp_OADestroy @init; -- Destroy Object
 
 	SET @strFile = @strPath
+END
+GO
+PRINT N'Prozedur "[dbo].[import_perform]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	-
+-- =============================================
+CREATE PROCEDURE [dbo].[import_perform] 
+	-- Add the parameters for the stored procedure here
+	@strFolder nvarchar(max)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @i INT, @j INT
+	DECLARE @keyword NVARCHAR(MAX), @value_txt NVARCHAR(MAX), @request INT, @method INT, @instrument INT, @measurement INT
+	DECLARE @imported BIT, @cmd NVARCHAR(MAX)
+	DECLARE @strCmd VARCHAR(1024)
+	DECLARE @strFile nvarchar(max)
+	DECLARE @files TABLE (ID INT IDENTITY, FileName VARCHAR(MAX))
+
+	BEGIN TRY
+		TRUNCATE TABLE import
+
+		-- Concatenate command string
+		SET @strCmd = CONCAT('dir ' , @strFolder, '\*.csv /b')
+
+		-- Create file list
+		INSERT INTO @files execute xp_cmdshell @strCmd
+		DELETE FROM @files WHERE FileName IS NULL
+
+		-- Import measurement values from import file
+		DECLARE import_cur CURSOR FOR SELECT id FROM @files ORDER BY id
+		OPEN import_cur
+		FETCH NEXT FROM import_cur INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Perform import of measurement data
+			SET @strFile=CONCAT(@strFolder, '\', (SELECT FileName FROM @files WHERE id = @i))
+			EXEC import_csv @strFile, @imported OUT
+
+			-- Delete imported file
+			IF @imported = 1
+			BEGIN
+				SET @cmd = 'xp_cmdshell ''del ' + @strFile + '"'''
+				EXEC (@cmd)
+			END
+			
+			FETCH NEXT FROM import_cur INTO @i
+		END
+		CLOSE import_cur
+		DEALLOCATE import_cur
+
+		-- Update measurements
+		DECLARE consume_cur CURSOR FOR SELECT id FROM import ORDER BY id
+		OPEN consume_cur
+		FETCH NEXT FROM consume_cur INTO @j
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			-- Consume imported values as measurement data
+			SET @keyword = (SELECT keyword FROM import WHERE id = @j)
+			SET @value_txt = (SELECT value_txt FROM import WHERE id = @j)
+			SET @request = (SELECT request FROM import WHERE id = @j)
+			SET @method = (SELECT method FROM import WHERE id = @j)
+			SET @instrument = (SELECT instrument FROM import WHERE id = @j)
+			
+			-- Handle analysis services
+			IF SUBSTRING(@keyword, 1, 1) = 'A'
+			BEGIN
+				SET @measurement = (SELECT id FROM measurement WHERE state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request)
+				
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement SET value_num = CONVERT(FLOAT, @value_txt), method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request
+				
+				IF ISNUMERIC(@value_txt) = 0 AND @measurement > 0
+					UPDATE measurement SET value_txt = @value_txt, method = @method, instrument = @instrument, state = 'AQ' WHERE id = @measurement --state = 'CP' AND analysis = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND request = @request			
+			END
+
+			-- Handle calculated fields
+			IF SUBSTRING(@keyword, 1, 1) = 'F'
+			BEGIN
+				SET @measurement = (SELECT measurement.id FROM measurement INNER JOIN measurement_cfield ON measurement.id = measurement_cfield.measurement WHERE measurement.state = 'CP' AND measurement_cfield.cfield = CAST(SUBSTRING(@keyword, 2, LEN(@keyword)) AS INT) AND measurement.request = @request)
+
+				IF ISNUMERIC(@value_txt) = 1 AND @measurement IS NOT NULL
+					UPDATE measurement_cfield SET value_num = CONVERT(FLOAT, @value_txt) WHERE cfield = CONVERT(INT, SUBSTRING(@keyword, 2, LEN(@keyword))) AND measurement = @measurement
+			END
+
+			EXEC calculation_iterate @request
+
+			FETCH NEXT FROM consume_cur INTO @j
+		END
+		CLOSE consume_cur
+		DEALLOCATE consume_cur
+
+	END TRY
+	BEGIN CATCH
+		DEALLOCATE import_cur
+		DEALLOCATE consume_cur
+	END CATCH
+END
+GO
+PRINT N'Prozedur "[dbo].[calculation_test]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- ==============================================
+CREATE PROCEDURE [dbo].[calculation_test] 
+	-- Add the parameters for the stored procedure here
+	@analysis INT,
+	@response_message FLOAT OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @f KeyValueList
+	DECLARE @t StringList
+	DECLARE @equation NVARCHAR(MAX)
+	DECLARE @i INT
+	DECLARE @id INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @sql NVARCHAR(MAX)
+	DECLARE @result FLOAT
+	DECLARE cur CURSOR FOR SELECT id FROM cvalidate WHERE analysis = @analysis ORDER BY id
+
+	SET @equation = (SELECT calculation FROM analysis WHERE id = @analysis)
+
+	-- Get key and value
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF (SELECT analysis_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT cfield_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[F'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value FROM cvalidate WHERE id = @i))
+		END
+
+		IF (SELECT cfield_id FROM cvalidate WHERE id = @i) IS NULL
+		BEGIN
+			SET @id = (SELECT analysis_id FROM cvalidate WHERE id = @i)
+			INSERT INTO @f
+				VALUES ('[A'+CAST(@id As NVARCHAR(MAX))+']', (SELECT value FROM cvalidate WHERE id = @i))
+		END
+
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
+
+	-- Extract keywors of equation
+	INSERT INTO @t
+	EXEC calculation_extract_keyword @equation
+
+	-- Substitute keywords by value
+	EXEC calculation_substitute_keyword @t, @f, @equation, @s OUT
+
+	-- Evaluate euqation
+	SET @sql = 'select @result = ' + @s
+	EXEC sp_executesql @sql, N'@result float output', @result OUT
+
+	-- Return value being calculated
+	SET @response_message = @result
 END
 GO
 PRINT N'Prozedur "[dbo].[mailqueue_process]" wird erstellt...';
@@ -11097,6 +11170,256 @@ BEGIN
 	DEALLOCATE mailqueue_cur
 END
 GO
+PRINT N'Trigger "[dbo].[billing_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER [dbo].[billing_insert]
+   ON  [dbo].[billing] 
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	DECLARE @i AS int
+	DECLARE @s AS nvarchar(max)
+	DECLARE @t TABLE(id INT)
+	DECLARE @u TABLE(project INT, customer INT)
+	
+    -- Insert statements for trigger here
+
+	-- Check dates
+	IF (SELECT billing.billing_from FROM billing WHERE id = (SELECT ID FROM inserted)) > (SELECT billing.billing_till FROM billing WHERE id = (SELECT ID FROM inserted))
+		THROW 51000, 'From date later then till date.', 1
+
+	-- Insert all customers to be billed into table customer_billing
+	INSERT INTO @t SELECT request.customer FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL
+	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_workload.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t) 
+	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t)
+	INSERT INTO @t SELECT project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.invoice = 1 AND project.customer NOT IN (SELECT id FROM @t)
+
+	-- Insert all projects and customers into @u
+	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
+	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
+	INSERT INTO @u SELECT project.id, project.customer FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.invoice = 1 AND project.id NOT IN (SELECT project FROM @u)
+	INSERT INTO @t SELECT customer FROM @u WHERE customer NOT IN (SELECT id FROM @t)
+	INSERT INTO billing_customer (billing, customer) SELECT (SELECT id FROM inserted), id FROM @t GROUP BY id
+
+	-- For each customer add the requests to be billed
+	DECLARE c_customer CURSOR FOR SELECT id FROM billing_customer WHERE billing = (SELECT id FROM inserted)
+
+	OPEN c_customer
+	FETCH NEXT FROM c_customer INTO @i
+	
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		-- Update requests for table billing_customer
+		SET @s = (SELECT CAST(request.id AS varchar(255)) + ',' FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id FOR xml path(''))
+		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
+		UPDATE billing_customer SET requests = @s WHERE billing_customer.id = @i
+
+		-- Update projects for table billing_customer
+		SET @s = (SELECT CAST(project AS varchar(255)) + ',' FROM @u WHERE customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY project FOR xml path(''))
+		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
+		UPDATE billing_customer SET projects = @s WHERE billing_customer.id = @i
+
+		-- Update date delivered for table billing_customer
+		SET @s = (SELECT CAST(FORMAT(audit.changed_at, 'd', 'de-de' ) AS varchar(255)) + ',' FROM request LEFT JOIN audit ON request.id = audit.table_id WHERE audit.table_name = 'request' AND audit.action_type = 'I' AND request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) FOR xml path(''))
+		SET @s = SUBSTRING(@s, 1,len(@s) - 1)
+		UPDATE billing_customer SET delivered = @s WHERE billing_customer.id = @i
+
+		-- Insert profile based service
+		;WITH t (request)
+		AS (
+		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i)  GROUP BY request.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, profile,category)
+		SELECT 
+		(SELECT id from billing_customer WHERE id = @i), 
+		COUNT(*), 
+		(SELECT price FROM profile WHERE id = profile), 
+		profile,
+		1
+		FROM request WHERE id IN (SELECT request FROM t) AND profile IS NOT NULL GROUP BY profile
+
+		-- Insert provided methods
+		;WITH t (request)
+		AS (
+		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, method, category) 
+		SELECT 
+			(SELECT id from billing_customer WHERE id = @i), 
+			COUNT(*), 
+			(SELECT price FROM method WHERE id = (SELECT method FROM inserted)), 
+			method,
+			2
+		FROM measurement WHERE request IN (SELECT request FROM t) AND method IS NOT NULL AND state = 'VD' AND method NOT IN (SELECT method FROM profile_analysis WHERE profile = (SELECT profile FROM request WHERE request.id = measurement.request AND applies = 1) AND method IS NOT NULL) GROUP BY method
+
+		-- Insert analysis services
+		;WITH t (request)
+		AS (
+		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, analysis, category) 
+		SELECT 
+			(SELECT id from billing_customer WHERE id = @i), 
+			COUNT(*), 
+			(SELECT price FROM analysis WHERE id = (SELECT analysis FROM inserted)), 
+			analysis,
+			3
+		FROM measurement WHERE request IN (SELECT request FROM t) AND method IS NULL AND state = 'VD' AND analysis NOT IN (SELECT analysis FROM profile_analysis WHERE profile = (SELECT profile FROM request WHERE request.id = measurement.request AND applies = 1) AND method IS NOT NULL) GROUP BY analysis
+
+		-- Insert provided extra services
+		;WITH t (request)
+		AS (
+		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, service, category)
+		SELECT 
+		(SELECT id from billing_customer WHERE id = @i), 
+		Sum(amount),
+		(SELECT price FROM service WHERE id = service), 
+		service,
+		4
+		FROM request_service WHERE request IN (SELECT request FROM t) GROUP BY service
+
+		-- Insert sold materials
+		;WITH t (request)
+		AS (
+		SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, material, category)
+		SELECT 
+		(SELECT id from billing_customer WHERE id = @i), 
+		Sum(amount),
+		(SELECT price FROM material WHERE id = material), 
+		material,
+		5
+		FROM request_material WHERE request IN (SELECT request FROM t) GROUP BY material
+
+		-- Insert project workloads
+		;WITH t (project)
+		AS (
+		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND task_workload.billing_customer IS NULL AND audit.action_type = 'I' AND project.invoice = 1 GROUP BY project.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, other, category)
+		SELECT
+		(SELECT id from billing_customer WHERE id = @i),
+		workload,
+		(SELECT hourly_rate FROM role INNER JOIN users ON users.role = role.id WHERE users.name = task_workload.created_by),
+		CONCAT('(P-', project.id, ') ', task_workload.created_at, ', ', task_workload.created_by),
+		6
+		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_workload.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t)
+
+		-- Insert project materials
+		;WITH t (project)
+		AS (
+		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.invoice = 1 GROUP BY project.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, other, material, category)
+		SELECT
+		(SELECT id from billing_customer WHERE id = @i),
+		Sum(amount),
+		(SELECT material.price FROM material WHERE material.id = task_material.material),
+		'(P) ',
+		task_material.material,
+		7
+		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task INNER JOIN material ON material.id = task_material.material LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_material.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t) GROUP BY task_material.material
+
+		-- Insert project services
+		;WITH t (project)
+		AS (
+		SELECT project.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.invoice = 1 GROUP BY project.id
+		)
+		INSERT INTO billing_position (billing_customer, amount, price, other, service, category)
+		SELECT
+		(SELECT id from billing_customer WHERE id = @i),
+		Sum(amount),
+		(SELECT service.price FROM service WHERE service.id = task_service.service),
+		'(P) ',
+		task_service.service,
+		8
+		FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task INNER JOIN material ON material.id = task_service.service LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND task_service.billing_customer IS NULL AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1 AND project.id IN (SELECT project FROM t) GROUP BY task_service.service
+
+		-- Insert sum and vat for invoice
+		UPDATE billing_customer SET revenue = (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
+
+		-- Insert discount for invoice
+		UPDATE billing_customer SET discount = (SELECT discount FROM customer WHERE customer.id = (SELECT customer from billing_customer WHERE id = @i)) / 100 * (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
+
+		-- Insert billing_customer id in table request
+		ALTER TABLE request DISABLE TRIGGER request_update
+		UPDATE request SET billing_customer = @i WHERE request.id IN (SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id)
+		ALTER TABLE request ENABLE TRIGGER request_update
+
+		-- Insert billing_customer id in table workload
+		UPDATE task_workload SET billing_customer = @i WHERE task_workload.id IN (SELECT task_workload.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1) 
+
+		-- Insert billing_customer id in table material
+		UPDATE task_material SET billing_customer = @i WHERE task_material.id IN (SELECT task_material.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_material ON task.id = task_material.task INNER JOIN material ON material.id = task_material.material LEFT JOIN audit ON audit.table_id = task_material.id WHERE audit.table_name = 'task_material' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1)
+
+		-- Insert billing_customer id in table service
+		UPDATE task_service SET billing_customer = @i WHERE task_service.id IN (SELECT task_service.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_service ON task.id = task_service.task INNER JOIN material ON material.id = task_service.service LEFT JOIN audit ON audit.table_id = task_service.id WHERE audit.table_name = 'task_service' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1)
+
+		FETCH NEXT FROM c_customer INTO @i
+	END
+	CLOSE c_customer
+	DEALLOCATE c_customer
+
+	UPDATE billing SET revenue = (SELECT SUM(revenue) FROM billing_customer WHERE billing = (SELECT id FROM inserted)) WHERE id = (SELECT id FROM inserted)
+	UPDATE billing SET discount = (SELECT SUM(discount) FROM billing_customer WHERE billing = (SELECT id FROM inserted)) WHERE id = (SELECT id FROM inserted)
+END
+GO
+PRINT N'Trigger "[dbo].[billing_delete]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER [dbo].[billing_delete] 
+   ON  [dbo].[billing] 
+   INSTEAD OF DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	DECLARE @i AS int
+
+    -- Insert statements for trigger here
+	DECLARE c_customer CURSOR FOR SELECT id FROM billing_customer WHERE billing = (SELECT id FROM deleted)
+
+	OPEN c_customer
+	FETCH NEXT FROM c_customer INTO @i
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		ALTER TABLE request DISABLE TRIGGER request_update
+		UPDATE request SET billing_customer = NULL WHERE billing_customer = @i
+		ALTER TABLE request ENABLE TRIGGER request_update
+		UPDATE task_workload SET billing_customer = NULL WHERE billing_customer = @i
+		UPDATE task_material SET billing_customer = NULL WHERE billing_customer = @i
+		UPDATE task_service SET billing_customer = NULL WHERE billing_customer = @i
+		FETCH NEXT FROM c_customer INTO @i
+	END
+	CLOSE c_customer
+	DEALLOCATE c_customer
+
+	DELETE billing WHERE id = (SELECT id FROM deleted)
+END
+GO
 PRINT N'Erweiterte Eigenschaft "[dbo].[condition].[type].[MS_Description]" wird erstellt...';
 
 
@@ -11137,377 +11460,11 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captur
 
 
 GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[profile_analysis].[tsl].[MS_Description]" wird erstellt...';
+PRINT N'Erweiterte Eigenschaft "[dbo].[measurement].[state].[MS_Description]" wird erstellt...';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Text specification limit', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'profile_analysis', @level2type = N'COLUMN', @level2name = N'tsl';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "request"
-            Begin Extent = 
-               Top = 12
-               Left = 76
-               Bottom = 259
-               Right = 369
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "audit"
-            Begin Extent = 
-               Top = 12
-               Left = 445
-               Bottom = 259
-               Right = 720
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 27
-         Width = 284
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-         Width = 750
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPane1]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[54] 4[23] 2[12] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "state"
-            Begin Extent = 
-               Top = 365
-               Left = 994
-               Bottom = 495
-               Right = 1164
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "request"
-            Begin Extent = 
-               Top = 264
-               Left = 679
-               Bottom = 394
-               Right = 861
-            End
-            DisplayFlags = 280
-            TopColumn = 18
-         End
-         Begin Table = "customer"
-            Begin Extent = 
-               Top = 147
-               Left = 996
-               Bottom = 277
-               Right = 1166
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "measurement"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 346
-               Right = 381
-            End
-            DisplayFlags = 280
-            TopColumn = 16
-         End
-         Begin Table = "analysis"
-            Begin Extent = 
-               Top = 449
-               Left = 570
-               Bottom = 579
-               Right = 765
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "instrument"
-            Begin Extent = 
-               Top = 747
-               Left = 340
-               Bottom = 877
-               Right = 515
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "method"
-            Begin Extent = 
-               Top = 584
-               Left = 437
-               Bottom = 713
-               Right = 607
-            End
-            Displ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPane2]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'ayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 11
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1575
-         Alias = 2220
-         Table = 2805
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPaneCount]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, AQ - Aquired, RE - Retest, RT - Retract, VD - Validated', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'measurement', @level2type = N'COLUMN', @level2name = N'state';
 
 
 GO
@@ -12716,11 +12673,377 @@ EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @leve
 
 
 GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[measurement].[state].[MS_Description]" wird erstellt...';
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPane1]" wird erstellt...';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, AQ - Aquired, RE - Retest, RT - Retract, VD - Validated', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'measurement', @level2type = N'COLUMN', @level2name = N'state';
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "request"
+            Begin Extent = 
+               Top = 12
+               Left = 76
+               Bottom = 259
+               Right = 369
+            End
+            DisplayFlags = 280
+            TopColumn = 4
+         End
+         Begin Table = "audit"
+            Begin Extent = 
+               Top = 12
+               Left = 445
+               Bottom = 259
+               Right = 720
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 27
+         Width = 284
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_owner].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_owner';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[profile_analysis].[tsl].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Text specification limit', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'profile_analysis', @level2type = N'COLUMN', @level2name = N'tsl';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[54] 4[23] 2[12] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "state"
+            Begin Extent = 
+               Top = 365
+               Left = 994
+               Bottom = 495
+               Right = 1164
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "request"
+            Begin Extent = 
+               Top = 264
+               Left = 679
+               Bottom = 394
+               Right = 861
+            End
+            DisplayFlags = 280
+            TopColumn = 18
+         End
+         Begin Table = "customer"
+            Begin Extent = 
+               Top = 147
+               Left = 996
+               Bottom = 277
+               Right = 1166
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "measurement"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 346
+               Right = 381
+            End
+            DisplayFlags = 280
+            TopColumn = 16
+         End
+         Begin Table = "analysis"
+            Begin Extent = 
+               Top = 449
+               Left = 570
+               Bottom = 579
+               Right = 765
+            End
+            DisplayFlags = 280
+            TopColumn = 4
+         End
+         Begin Table = "instrument"
+            Begin Extent = 
+               Top = 747
+               Left = 340
+               Bottom = 877
+               Right = 515
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "method"
+            Begin Extent = 
+               Top = 584
+               Left = 437
+               Bottom = 713
+               Right = 607
+            End
+            Displ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPane2]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'ayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 11
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1575
+         Alias = 2220
+         Table = 2805
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
 
 
 GO

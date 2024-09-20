@@ -2751,10 +2751,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="17114" />
+				<Property Name="Offset" Value="17221" />
 				<Property Name="CreateOffset" Value="194" />
 				<Property Name="Length" Value="1458" />
-				<Property Name="StartLine" Value="217" />
+				<Property Name="StartLine" Value="219" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER billing_audit &#xD;&#xA;   ON  dbo.billing &#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -3136,7 +3136,9 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
+		ALTER TABLE request DISABLE TRIGGER request_update
 		UPDATE request SET billing_customer = NULL WHERE billing_customer = @i
+		ALTER TABLE request ENABLE TRIGGER request_update
 		UPDATE task_workload SET billing_customer = NULL WHERE billing_customer = @i
 		UPDATE task_material SET billing_customer = NULL WHERE billing_customer = @i
 		UPDATE task_service SET billing_customer = NULL WHERE billing_customer = @i
@@ -3167,6 +3169,9 @@ END]]></Value>
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request_update]" />
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[request].[billing_customer]" />
@@ -3205,10 +3210,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="19245" />
+				<Property Name="Offset" Value="19352" />
 				<Property Name="CreateOffset" Value="194" />
-				<Property Name="Length" Value="1136" />
-				<Property Name="StartLine" Value="288" />
+				<Property Name="Length" Value="1243" />
+				<Property Name="StartLine" Value="290" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[billing_delete] &#xD;&#xA;   ON  [dbo].[billing] &#xD;&#xA;   INSTEAD OF DELETE&#xD;&#xA;AS" />
 			</Annotation>
@@ -3391,7 +3396,9 @@ BEGIN
 		UPDATE billing_customer SET discount = (SELECT discount FROM customer WHERE customer.id = (SELECT customer from billing_customer WHERE id = @i)) / 100 * (SELECT SUM(price * amount) FROM billing_position WHERE billing_customer = @i) WHERE billing_customer.id = @i
 
 		-- Insert billing_customer id in table request
+		ALTER TABLE request DISABLE TRIGGER request_update
 		UPDATE request SET billing_customer = @i WHERE request.id IN (SELECT request.id FROM request WHERE request.invoice = 1 AND request.billing_customer IS NULL AND request.customer = (SELECT customer from billing_customer WHERE id = @i) GROUP BY request.id)
+		ALTER TABLE request ENABLE TRIGGER request_update
 
 		-- Insert billing_customer id in table workload
 		UPDATE task_workload SET billing_customer = @i WHERE task_workload.id IN (SELECT task_workload.id FROM project INNER JOIN task ON project.id = task.project INNER JOIN task_workload ON task.id = task_workload.task LEFT JOIN audit ON audit.table_id = task_workload.id WHERE audit.table_name = 'task_workload' AND audit.changed_at >= (SELECT billing_from FROM inserted) AND audit.changed_at <= (SELECT billing_till FROM inserted) AND audit.action_type = 'I' AND project.customer = (SELECT customer from billing_customer WHERE id = @i) AND project.invoice = 1) 
@@ -4125,6 +4132,9 @@ END]]></Value>
 					<References Name="[dbo].[billing_customer].[id]" />
 				</Entry>
 				<Entry>
+					<References Name="[dbo].[request_update]" />
+				</Entry>
+				<Entry>
 					<References Name="[dbo].[request].[billing_customer]" />
 				</Entry>
 				<Entry>
@@ -4522,7 +4532,7 @@ END]]></Value>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="Offset" Value="421" />
 				<Property Name="CreateOffset" Value="194" />
-				<Property Name="Length" Value="16685" />
+				<Property Name="Length" Value="16792" />
 				<Property Name="StartLine" Value="14" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[billing_insert]&#xD;&#xA;   ON  [dbo].[billing] &#xD;&#xA;   AFTER INSERT&#xD;&#xA;AS" />
@@ -4897,10 +4907,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="18580" />
+				<Property Name="Offset" Value="18687" />
 				<Property Name="CreateOffset" Value="194" />
 				<Property Name="Length" Value="657" />
-				<Property Name="StartLine" Value="268" />
+				<Property Name="StartLine" Value="270" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[billing_update]&#xD;&#xA;   ON  dbo.billing &#xD;&#xA;   INSTEAD OF UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -25071,6 +25081,858 @@ END]]></Value>
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[qualification_insert_update]&#xD;&#xA;   ON  dbo.qualification &#xD;&#xA;   AFTER INSERT, UPDATE&#xD;&#xA;AS" />
 			</Annotation>
 		</Element>
+		<Element Type="SqlProcedure" Name="[dbo].[report_horizontal]">
+			<Property Name="BodyScript">
+				<Value><![CDATA[
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE analysis_cur CURSOR FOR SELECT analysis.id FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id IN (SELECT measurement.analysis FROM request INNER JOIN measurement ON (measurement.request = request.id) WHERE request = @request OR subrequest = @request) ORDER BY analysis.sortkey
+	DECLARE request_cur CURSOR FOR SELECT request.id FROM request WHERE request.subrequest = @request
+	DECLARE @q1 NVARCHAR(MAX)
+	DECLARE @q2 NVARCHAR(MAX)
+	DECLARE @q3 NVARCHAR(MAX)
+	DECLARE @q4 NVARCHAR(MAX)
+	DECLARE @q5 NVARCHAR(MAX)
+	DECLARE @i INT
+	DECLARE @j INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @p NVARCHAR(MAX)
+	DECLARE @language VARCHAR(32)
+
+	-- Get the language setting for acutal user
+	SET @language = (SELECT language FROM users WHERE name = ORIGINAL_LOGIN())
+
+	-- Create horizontal table for measurement values
+	SET @q1 = 'CREATE TABLE ##t (# NVARCHAR(MAX),'
+	
+	-- Build the query to create the table
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @q1 = @q1 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ' NVARCHAR(MAX),'
+			FETCH NEXT FROM analysis_cur INTO @i
+		END
+	SET @q1 = LEFT(@q1, LEN(@q1)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Create table by executing query
+	EXEC (@q1)
+
+	-- Build the query to insert the analysis services
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'caption_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+
+	-- Execute query to insert the analysis services
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for units
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'unit_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Insert values
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for measurement values
+	SET @s = ''
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + @s + '''' + ','
+
+	OPEN request_cur
+	FETCH NEXT FROM request_cur INTO @j
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			
+			-- Create an insert query for inserting values
+			SET @p = (SELECT smppoint.title FROM request INNER JOIN smppoint ON (smppoint.id = request.smppoint) WHERE request.id = @j)
+			SET @q4 = 'INSERT INTO ##t (#,'
+			SET @q5 = '(' + '''' + @p + '''' + ','
+
+			OPEN analysis_cur
+			FETCH NEXT FROM analysis_cur INTO @i
+			WHILE @@FETCH_STATUS = 0
+				BEGIN
+					SET @p = (
+					SELECT dbo.measurement.value_txt + IIF(dbo.measurement.out_of_spec = '', '', ' *') 
+					FROM dbo.measurement INNER JOIN
+                         dbo.analysis ON dbo.measurement.analysis = dbo.analysis.id LEFT OUTER JOIN
+                         dbo.instrument ON dbo.measurement.instrument = dbo.instrument.id LEFT OUTER JOIN
+                         dbo.technique ON dbo.analysis.technique = dbo.technique.id LEFT OUTER JOIN
+                         dbo.method ON dbo.measurement.method = dbo.method.id LEFT OUTER JOIN
+                             (SELECT        dbo.request.id, dbo.profile_analysis.analysis, dbo.profile_analysis.tsl, CONVERT(float, dbo.audit_get_value('profile_analysis', dbo.profile_analysis.id, 'lsl', dbo.audit_get_first('request', dbo.request.id))) AS lsl, 
+                                                         CONVERT(float, dbo.audit_get_value('profile_analysis', dbo.profile_analysis.id, 'usl', dbo.audit_get_first('request', dbo.request.id))) AS usl
+                               FROM            dbo.request INNER JOIN
+                                                         dbo.profile ON dbo.request.profile = dbo.profile.id INNER JOIN
+                                                         dbo.profile_analysis ON dbo.profile_analysis.profile = dbo.profile.id
+                               WHERE        (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
+					WHERE        (dbo.measurement.request = @j) AND (dbo.analysis.id = @i) AND state = 'VD'
+					)
+					SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+					SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					FETCH NEXT FROM analysis_cur INTO @i
+				END
+			SET @q4 = LEFT(@q4, LEN(@q4)-1) + ') VALUES'
+			SET @q5 = LEFT(@q5, LEN(@q5)-1) + ')'
+
+			-- Insert values
+			EXEC (@q4 + @q5)
+			CLOSE analysis_cur
+			
+
+			FETCH NEXT FROM request_cur INTO @j
+		END
+	CLOSE request_cur
+
+	-- Return table
+	SELECT * FROM ##t
+
+	-- Cleanup tables and cursors
+	DROP TABLE ##t
+	DEALLOCATE analysis_cur
+	DEALLOCATE request_cur
+END]]></Value>
+			</Property>
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[applies]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[report_horizontal].[@request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[sortkey]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users].[language]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users].[name]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry />
+				<Entry />
+				<Entry />
+				<Entry />
+				<Entry>
+					<References Name="[dbo].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[applies]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[unit]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[smppoint]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[smppoint].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[smppoint]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[smppoint].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[instrument]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[instrument]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[instrument].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[technique]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[technique]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[technique].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[tsl]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[audit_get_value]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[audit_get_first]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[applies]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[value_txt]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[out_of_spec]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[measurement].[state]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry />
+			</Relationship>
+			<Relationship Name="Parameters">
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[report_horizontal].[@request]">
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Schema">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SysCommentsObjectAnnotation">
+				<Property Name="CreateOffset" Value="175" />
+				<Property Name="Length" Value="6668" />
+				<Property Name="StartLine" Value="1" />
+				<Property Name="StartColumn" Value="1" />
+				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2024 September&#xD;&#xA;-- Description:&#x9;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[report_horizontal]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@request INT&#xD;&#xA;AS" />
+			</Annotation>
+		</Element>
+		<Element Type="SqlProcedure" Name="[dbo].[report_horizontal_profile]">
+			<Property Name="BodyScript">
+				<Value><![CDATA[
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE analysis_cur CURSOR FOR SELECT DISTINCT profile_analysis.analysis, analysis.sortkey FROM profile_analysis INNER JOIN profile ON (profile.id = profile_analysis.profile) INNER JOIN analysis ON (analysis.id = profile_analysis.analysis) WHERE profile_analysis.applies = 1 AND profile.id IN (SELECT profile FROM request WHERE subrequest = @request) ORDER BY analysis.sortkey
+	DECLARE profile_cur CURSOR FOR SELECT request.profile FROM request WHERE subrequest = @request
+	DECLARE @q1 NVARCHAR(MAX)
+	DECLARE @q2 NVARCHAR(MAX)
+	DECLARE @q3 NVARCHAR(MAX)
+	DECLARE @q4 NVARCHAR(MAX)
+	DECLARE @q5 NVARCHAR(MAX)
+	DECLARE @i INT
+	DECLARE @j INT
+	DECLARE @d INT
+	DECLARE @s NVARCHAR(MAX)
+	DECLARE @p NVARCHAR(MAX)
+	DECLARE @a1 NVARCHAR(MAX)
+	DECLARE @a2 NVARCHAR(MAX)
+	DECLARE @min float
+	DECLARE @max float
+	DECLARE @min_inc float
+	DECLARE @max_inc float
+	DECLARE @language VARCHAR(32)
+
+	-- Get the language setting for acutal user
+	SET @language = (SELECT language FROM users WHERE name = ORIGINAL_LOGIN())
+
+	-- Create horizontal table for measurement values
+	SET @q1 = 'CREATE TABLE ##t (# NVARCHAR(MAX),'
+	
+	-- Build the query to create the table
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @q1 = @q1 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ' NVARCHAR(MAX),'
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+		END
+	SET @q1 = LEFT(@q1, LEN(@q1)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Create table by executing query
+	EXEC (@q1)
+
+	-- Build the query to insert the analysis services
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'caption_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+
+	-- Execute query to insert the analysis services
+	EXEC (@q2 + @q3)
+	
+	-- Create an insert query for units
+	SET @s = N'SELECT @s = ' + @language + ' FROM translation WHERE container = ' + '''' + 'analysis' + '''' + ' AND item = ' + '''' + 'unit_' + ''''
+	EXEC sp_executesql @query = @s,  @params = N'@s NVARCHAR(MAX) OUTPUT', @s = @s output
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + ISNULL(@s, '') + '''' + ','
+
+	OPEN analysis_cur
+	FETCH NEXT FROM analysis_cur INTO @i, @d
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+		END
+	SET @q2 = LEFT(@q2, LEN(@q2)-1) + ') VALUES'
+	SET @q3 = LEFT(@q3, LEN(@q3)-1) + ')'
+	CLOSE analysis_cur
+	
+	-- Insert values
+	EXEC (@q2 + @q3)
+
+	-- Create an insert query for measurement values
+	SET @s = ''
+	SET @q2 = 'INSERT INTO ##t (#,'
+	SET @q3 = '(' + '''' + @s + '''' + ','
+
+	OPEN profile_cur
+	FETCH NEXT FROM profile_cur INTO @j
+	WHILE @@FETCH_STATUS = 0
+		BEGIN
+			
+			-- Create an insert query for inserting values
+			SET @p = (SELECT profile.title FROM profile WHERE profile.id = @j)
+			SET @q4 = 'INSERT INTO ##t (#,'
+			SET @q5 = '(' + '''' + @p + '''' + ','
+
+			OPEN analysis_cur
+			FETCH NEXT FROM analysis_cur INTO @i, @d
+			WHILE @@FETCH_STATUS = 0
+				BEGIN
+					SET @min = (SELECT profile_analysis.lsl FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @max = (SELECT profile_analysis.usl FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @min_inc = (SELECT profile_analysis.lsl_include FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+					SET @max_inc = (SELECT profile_analysis.usl_include FROM profile_analysis WHERE profile_analysis.analysis = @i AND profile_analysis.profile = @j)
+
+					IF (SELECT COUNT(*) FROM analysis WHERE analysis.type ='A' AND analysis.id = @i) > 0
+					BEGIN
+						SET @a1 = (SELECT attribute.title FROM attribute WHERE attribute.analysis = @i AND attribute.value = @min)
+						SET @a2 = (SELECT attribute.title FROM attribute WHERE attribute.analysis = @i AND attribute.value = @max)
+						SET @p = IIF(@min = @max, @a1, IIF(@min IS NULL, '', IIF(@min_inc = 1, '>=', '>') + @s) + IIF(@min IS NULL OR @max IS NULL, '', ' ... ') + IIF(@max IS NULL, '', IIF(@max_inc = 1, '<=', '<') + @s))
+						SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+						SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					END
+					IF (SELECT COUNT(*) FROM analysis WHERE analysis.type ='A' AND analysis.id = @i) = 0
+					BEGIN
+						SET @p = IIF(@min = @max, CONVERT(VARCHAR(MAX), @min), IIF(@min IS NULL, '', IIF(@min_inc = 1, '>=', '>') + CONVERT(VARCHAR(MAX), @min)) + IIF(@min IS NULL OR @max IS NULL, '', ' ... ') + IIF(@max IS NULL, '', IIF(@max_inc = 1, '<=', '<') + CONVERT(VARCHAR(MAX), @max)))
+						SET @q4 = @q4 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
+						SET @q5 = @q5 + '''' + ISNULL(@p,'') + '''' + ','
+					END
+					FETCH NEXT FROM analysis_cur INTO @i, @d
+				END
+			SET @q4 = LEFT(@q4, LEN(@q4)-1) + ') VALUES'
+			SET @q5 = LEFT(@q5, LEN(@q5)-1) + ')'
+
+			-- Insert values
+			EXEC (@q4 + @q5)
+			CLOSE analysis_cur
+			
+
+			FETCH NEXT FROM profile_cur INTO @j
+		END
+	CLOSE profile_cur
+
+	-- Return table
+	SELECT * FROM ##t
+
+	-- Cleanup tables and cursors
+	DROP TABLE ##t
+	DEALLOCATE analysis_cur
+	DEALLOCATE profile_cur
+END]]></Value>
+			</Property>
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[float]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[sortkey]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[applies]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[report_horizontal_profile].[@request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users].[language]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[users].[name]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry />
+				<Entry />
+				<Entry />
+				<Entry />
+				<Entry>
+					<References Name="[dbo].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[method]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[method_analysis].[applies]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[unit]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[lsl]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[usl]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[lsl_include]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[profile_analysis].[usl_include]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[type]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[analysis].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attribute]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attribute].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attribute].[analysis]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attribute].[value]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[varchar]" />
+				</Entry>
+				<Entry />
+			</Relationship>
+			<Relationship Name="Parameters">
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[report_horizontal_profile].[@request]">
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Schema">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SysCommentsObjectAnnotation">
+				<Property Name="CreateOffset" Value="199" />
+				<Property Name="Length" Value="6835" />
+				<Property Name="StartLine" Value="1" />
+				<Property Name="StartColumn" Value="1" />
+				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2024 September&#xD;&#xA;-- Description:&#x9;Horizontal profile table&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[report_horizontal_profile]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@request INT&#xD;&#xA;AS" />
+			</Annotation>
+		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[report_multiple]">
 			<Property Name="BodyScript">
 				<Value><![CDATA[
@@ -35225,7 +36087,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.2.2'
+	SET @version_be = 'v2.3.0'
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />

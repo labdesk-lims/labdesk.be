@@ -196,6 +196,8 @@
     <Build Include="dbo\User Defined Types\BigIntList.sql" />
     <Build Include="dbo\User Defined Types\ColumnList.sql" />
     <Build Include="dbo\User Defined Types\xml_diff_list.sql" />
+    <Build Include="dbo\Stored Procedures\report_horizontal.sql" />
+    <Build Include="dbo\Stored Procedures\report_horizontal_profile.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="dbo\Script.PreDeployment.sql">
