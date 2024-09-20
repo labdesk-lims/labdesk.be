@@ -30,5 +30,6 @@ BEGIN
 		THROW 51000, 'Filter without user id need to be global.', 1
 
 	-- Allow just one filter by form to be activated
-	UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END

@@ -11362,7 +11362,8 @@ BEGIN
 		THROW 51000, 'Filter without user id need to be global.', 1
 
 	-- Allow just one filter by form to be activated
-	UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -11400,7 +11401,7 @@ END]]></Value>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="Offset" Value="469" />
 				<Property Name="CreateOffset" Value="204" />
-				<Property Name="Length" Value="781" />
+				<Property Name="Length" Value="825" />
 				<Property Name="StartLine" Value="14" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;Check validity of global filter&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[filter_insert_update]&#xD;&#xA;   ON  [dbo].[filter] &#xD;&#xA;   AFTER INSERT,UPDATE&#xD;&#xA;AS" />
@@ -36087,7 +36088,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.3.0'
+	SET @version_be = 'v2.3.1'
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />

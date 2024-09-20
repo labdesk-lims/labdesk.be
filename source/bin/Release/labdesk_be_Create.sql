@@ -946,23 +946,6 @@ CREATE TABLE [dbo].[setup] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[filter]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[filter] (
-    [id]     INT            IDENTITY (1, 1) NOT NULL,
-    [form]   VARCHAR (255)  NOT NULL,
-    [userid] VARCHAR (255)  NULL,
-    [title]  VARCHAR (255)  NULL,
-    [filter] NVARCHAR (MAX) NULL,
-    [global] BIT            NOT NULL,
-    [active] BIT            NOT NULL,
-    CONSTRAINT [PK_filter] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[traversal]" wird erstellt...';
 
 
@@ -1779,6 +1762,23 @@ CREATE TABLE [dbo].[instrument_method] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[filter]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[filter] (
+    [id]     INT            IDENTITY (1, 1) NOT NULL,
+    [form]   VARCHAR (255)  NOT NULL,
+    [userid] VARCHAR (255)  NULL,
+    [title]  VARCHAR (255)  NULL,
+    [filter] NVARCHAR (MAX) NULL,
+    [global] BIT            NOT NULL,
+    [active] BIT            NOT NULL,
+    CONSTRAINT [PK_filter] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_uid]" wird erstellt...';
 
 
@@ -2136,24 +2136,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[setup]
     ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_global]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[filter]
-    ADD CONSTRAINT [DF_filter_global] DEFAULT ((0)) FOR [global];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[filter]
-    ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
 
 
 GO
@@ -2739,6 +2721,24 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_instrument_method_applies]" wird erste
 GO
 ALTER TABLE [dbo].[instrument_method]
     ADD CONSTRAINT [DF_instrument_method_applies] DEFAULT ((0)) FOR [applies];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_global]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[filter]
+    ADD CONSTRAINT [DF_filter_global] DEFAULT ((0)) FOR [global];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[filter]
+    ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
 
 
 GO
@@ -5965,32 +5965,6 @@ BEGIN
 		THROW 51000, 'Only one row config is allowed.', 1 
 END
 GO
-PRINT N'Trigger "[dbo].[filter_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	Check validity of global filter
--- =============================================
-CREATE TRIGGER [dbo].[filter_insert_update]
-   ON  [dbo].[filter] 
-   AFTER INSERT,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT userid FROM inserted) IS NULL AND (SELECT global FROM inserted) = 0
-		THROW 51000, 'Filter without user id need to be global.', 1
-
-	-- Allow just one filter by form to be activated
-	UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
-END
-GO
 PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
 
 
@@ -8554,6 +8528,33 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
+PRINT N'Trigger "[dbo].[filter_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	Check validity of global filter
+-- =============================================
+CREATE TRIGGER [dbo].[filter_insert_update]
+   ON  [dbo].[filter] 
+   AFTER INSERT,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT userid FROM inserted) IS NULL AND (SELECT global FROM inserted) = 0
+		THROW 51000, 'Filter without user id need to be global.', 1
+
+	-- Allow just one filter by form to be activated
+	IF ( (SELECT trigger_nestlevel() ) < 2 )
+		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+END
+GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
 
@@ -9111,28 +9112,6 @@ BEGIN
 		END
 	CLOSE msmt_cur
 	DEALLOCATE msmt_cur
-END
-GO
-PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
-
-
-GO
--- ==================================================
--- Author:		Kogel, Lutz
--- Create date: 2022 June
--- Description:	Used to identify the backend version
--- ==================================================
-CREATE PROCEDURE [dbo].[version_be]
-	-- Add the parameters for the stored procedure here
-	@version_be nvarchar(256) OUTPUT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	SET @version_be = 'v2.3.0'
 END
 GO
 PRINT N'Prozedur "[dbo].[users_get_Customer]" wird erstellt...';
@@ -10135,6 +10114,28 @@ BEGIN
 		-- Insert analysis specific cfield
 		INSERT INTO measurement_cfield (cfield, measurement) SELECT id, @id FROM cfield WHERE analysis = (SELECT analysis FROM measurement WHERE id = @id) AND analysis_id IS NULL
 	END
+END
+GO
+PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
+
+
+GO
+-- ==================================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 June
+-- Description:	Used to identify the backend version
+-- ==================================================
+CREATE PROCEDURE [dbo].[version_be]
+	-- Add the parameters for the stored procedure here
+	@version_be nvarchar(256) OUTPUT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SET @version_be = 'v2.3.1'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
