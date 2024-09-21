@@ -929,23 +929,6 @@ CREATE TABLE [dbo].[strposition] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[setup] (
-    [id]              INT           IDENTITY (1, 1) NOT NULL,
-    [email_profile]   VARCHAR (255) NULL,
-    [alert_document]  INT           NULL,
-    [show_desktop]    BIT           NULL,
-    [vat]             FLOAT (53)    NOT NULL,
-    [upload_max_byte] INT           NOT NULL,
-    [version_fe]      VARCHAR (255) NULL,
-    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[traversal]" wird erstellt...';
 
 
@@ -1779,6 +1762,24 @@ CREATE TABLE [dbo].[filter] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[setup] (
+    [id]              INT           IDENTITY (1, 1) NOT NULL,
+    [email_profile]   VARCHAR (255) NULL,
+    [alert_document]  INT           NULL,
+    [show_desktop]    BIT           NULL,
+    [verbous]         BIT           NULL,
+    [vat]             FLOAT (53)    NOT NULL,
+    [upload_max_byte] INT           NOT NULL,
+    [version_fe]      VARCHAR (255) NULL,
+    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_uid]" wird erstellt...';
 
 
@@ -2109,33 +2110,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_Table_1_d]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[role_permission]
     ADD CONSTRAINT [DF_Table_1_d] DEFAULT ((0)) FOR [can_delete];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_show_desktop]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_show_desktop] DEFAULT ((0)) FOR [show_desktop];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_vat]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_vat] DEFAULT ((0)) FOR [vat];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
 
 
 GO
@@ -2739,6 +2713,42 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[filter]
     ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_show_desktop]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_show_desktop] DEFAULT 0 FOR [show_desktop];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_verbous]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_verbous] DEFAULT 0 FOR [verbous];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_vat]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_vat] DEFAULT 0 FOR [vat];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
 
 
 GO
@@ -3849,15 +3859,6 @@ ALTER TABLE [dbo].[instrument_method]
 
 
 GO
-PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[setup]
-    ADD CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100));
-
-
-GO
 PRINT N'CHECK-Einschränkung "[dbo].[CK_method]" wird erstellt...';
 
 
@@ -3873,6 +3874,15 @@ PRINT N'CHECK-Einschränkung "[dbo].[CK_customer]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[customer]
     ADD CONSTRAINT [CK_customer] CHECK ([discount]>=(0) AND [discount]<=(100));
+
+
+GO
+PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[setup]
+    ADD CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100));
 
 
 GO
@@ -5940,29 +5950,6 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[setup_insert]
-   ON  dbo.setup
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT COUNT(id) FROM setup) > 1
-		THROW 51000, 'Only one row config is allowed.', 1 
 END
 GO
 PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
@@ -8555,6 +8542,29 @@ BEGIN
 		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END
 GO
+PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[setup_insert]
+   ON  dbo.setup
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT COUNT(id) FROM setup) > 1
+		THROW 51000, 'Only one row config is allowed.', 1 
+END
+GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
 
@@ -10135,7 +10145,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.3.1'
+	SET @version_be = 'v2.4.1'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
