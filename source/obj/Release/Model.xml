@@ -15019,6 +15019,7 @@ BEGIN
 		SET @message = 1
 	END TRY
 	BEGIN CATCH
+		PRINT ERROR_MESSAGE()
 		SET @message = 0
 	END CATCH
 END]]></Value>
@@ -15076,7 +15077,7 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="CreateOffset" Value="172" />
-				<Property Name="Length" Value="966" />
+				<Property Name="Length" Value="991" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 March&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[import_csv]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@strPath VARCHAR(MAX),&#xD;&#xA;&#x9;@message BIT OUT&#xD;&#xA;AS" />
@@ -15173,6 +15174,7 @@ BEGIN
 
 	END TRY
 	BEGIN CATCH
+		PRINT ERROR_MESSAGE()
 		DEALLOCATE import_cur
 		DEALLOCATE consume_cur
 	END CATCH
@@ -15410,7 +15412,7 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="CreateOffset" Value="172" />
-				<Property Name="Length" Value="3961" />
+				<Property Name="Length" Value="3986" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 March&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[import_perform] &#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@strFolder nvarchar(max)&#xD;&#xA;AS" />

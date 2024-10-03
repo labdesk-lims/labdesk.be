@@ -33,6 +33,7 @@ BEGIN
 		SET @message = 1
 	END TRY
 	BEGIN CATCH
+		PRINT ERROR_MESSAGE()
 		SET @message = 0
 	END CATCH
 END
