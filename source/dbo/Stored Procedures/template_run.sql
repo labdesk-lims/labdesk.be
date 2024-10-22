@@ -22,6 +22,8 @@ BEGIN
 
 	SET @id = SCOPE_IDENTITY()
 
+	UPDATE request SET subrequest = NULL WHERE id = @id
+
 	BEGIN
 		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
 

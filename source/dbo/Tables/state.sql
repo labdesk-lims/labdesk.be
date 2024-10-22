@@ -2,8 +2,10 @@
     [id]       INT           IDENTITY (1, 1) NOT NULL,
     [title]    VARCHAR (255) NULL,
     [state]    CHAR (2)      NULL,
+	[role]     INT           NULL,
     [workflow] INT           NOT NULL,
     CONSTRAINT [PK_state] PRIMARY KEY CLUSTERED ([id] ASC),
+	CONSTRAINT [FK_state_role] FOREIGN KEY ([role]) REFERENCES [dbo].[role] ([id]),
     CONSTRAINT [FK_state_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]) ON DELETE CASCADE
 );
 

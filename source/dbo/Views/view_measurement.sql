@@ -1,7 +1,7 @@
 ﻿CREATE VIEW dbo.view_measurement
 AS
 SELECT dbo.measurement.id, dbo.measurement.request, dbo.customer.name AS customer, dbo.analysis.title AS analysis, dbo.method.title AS method, dbo.instrument.title AS instrument, dbo.measurement.value_txt AS value, dbo.audit_get_value('analysis', dbo.analysis.id, 'unit', dbo.measurement.acquired_at) AS unit, dbo.measurement.out_of_spec, dbo.measurement.state, 
-         dbo.request.profile, dbo.measurement.subcontraction
+         dbo.request.profile, dbo.measurement.subcontraction, dbo.request.smppoint, dbo.request.smp_date
 FROM  dbo.state INNER JOIN
          dbo.request ON dbo.state.id = dbo.request.state INNER JOIN
          dbo.customer ON dbo.request.customer = dbo.customer.id INNER JOIN

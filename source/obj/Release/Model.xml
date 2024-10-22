@@ -11378,8 +11378,8 @@ BEGIN
 		THROW 51000, 'Filter without user id need to be global.', 1
 
 	-- Allow just one filter by form to be activated
-	IF ( (SELECT trigger_nestlevel() ) < 2 )
-		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+	-- IF ( (SELECT trigger_nestlevel() ) < 2 )
+	-- 	   UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -11390,24 +11390,6 @@ END]]></Value>
 				<Entry>
 					<References Name="[dbo].[filter].[global]" />
 				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter].[active]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter].[id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter].[id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter].[form]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[filter].[form]" />
-				</Entry>
 			</Relationship>
 			<Relationship Name="Parent">
 				<Entry>
@@ -11417,7 +11399,7 @@ END]]></Value>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="Offset" Value="469" />
 				<Property Name="CreateOffset" Value="204" />
-				<Property Name="Length" Value="825" />
+				<Property Name="Length" Value="834" />
 				<Property Name="StartLine" Value="14" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;Check validity of global filter&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[filter_insert_update]&#xD;&#xA;   ON  [dbo].[filter] &#xD;&#xA;   AFTER INSERT,UPDATE&#xD;&#xA;AS" />
@@ -13700,6 +13682,29 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="235" />
 		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_state_role]">
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[state].[role]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[state]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[role].[id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[role]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="236" />
+		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_state_workflow]">
 			<Property Name="OnDeleteAction" Value="1" />
 			<Relationship Name="Columns">
@@ -13722,7 +13727,7 @@ END]]></Value>
 					<References Name="[dbo].[workflow]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="236" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="237" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_step_state]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -13746,7 +13751,7 @@ END]]></Value>
 					<References Name="[dbo].[state]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="237" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="238" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_strposition_material]">
 			<Relationship Name="Columns">
@@ -13769,7 +13774,7 @@ END]]></Value>
 					<References Name="[dbo].[material]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="238" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="239" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_strposition_request]">
 			<Relationship Name="Columns">
@@ -13792,7 +13797,7 @@ END]]></Value>
 					<References Name="[dbo].[request]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="239" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="240" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_strposition_smpcontainer]">
 			<Relationship Name="Columns">
@@ -13815,7 +13820,7 @@ END]]></Value>
 					<References Name="[dbo].[smpcontainer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="240" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="241" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_strposition_storage]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -13839,7 +13844,7 @@ END]]></Value>
 					<References Name="[dbo].[storage]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="241" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="242" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_task_material_billing_customer]">
 			<Property Name="OnDeleteAction" Value="2" />
@@ -13863,7 +13868,7 @@ END]]></Value>
 					<References Name="[dbo].[billing_customer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="242" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="243" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_task_project]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -13887,7 +13892,7 @@ END]]></Value>
 					<References Name="[dbo].[project]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="243" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="244" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_task_service_billing_customer]">
 			<Property Name="OnDeleteAction" Value="2" />
@@ -13911,7 +13916,7 @@ END]]></Value>
 					<References Name="[dbo].[billing_customer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="244" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="245" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_task_users]">
 			<Relationship Name="Columns">
@@ -13934,7 +13939,7 @@ END]]></Value>
 					<References Name="[dbo].[users]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="245" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="246" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_task_workload_billing_customer]">
 			<Property Name="OnDeleteAction" Value="2" />
@@ -13958,7 +13963,7 @@ END]]></Value>
 					<References Name="[dbo].[billing_customer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="246" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="247" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_customer]">
 			<Relationship Name="Columns">
@@ -13981,7 +13986,7 @@ END]]></Value>
 					<References Name="[dbo].[customer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="247" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="248" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_customer1]">
 			<Relationship Name="Columns">
@@ -14004,7 +14009,7 @@ END]]></Value>
 					<References Name="[dbo].[customer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="248" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="249" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_priority]">
 			<Relationship Name="Columns">
@@ -14027,7 +14032,7 @@ END]]></Value>
 					<References Name="[dbo].[priority]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="249" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="250" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_profile_priority]">
 			<Relationship Name="Columns">
@@ -14050,7 +14055,7 @@ END]]></Value>
 					<References Name="[dbo].[priority]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="250" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="251" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_profile_profile]">
 			<Relationship Name="Columns">
@@ -14073,7 +14078,7 @@ END]]></Value>
 					<References Name="[dbo].[profile]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="251" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="252" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_profile_smppoint]">
 			<Relationship Name="Columns">
@@ -14096,7 +14101,7 @@ END]]></Value>
 					<References Name="[dbo].[smppoint]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="252" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="253" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_profile_template]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -14120,7 +14125,7 @@ END]]></Value>
 					<References Name="[dbo].[template]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="253" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="254" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_profile_workflow]">
 			<Relationship Name="Columns">
@@ -14143,7 +14148,7 @@ END]]></Value>
 					<References Name="[dbo].[workflow]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="254" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="255" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_template_workflow]">
 			<Relationship Name="Columns">
@@ -14166,7 +14171,7 @@ END]]></Value>
 					<References Name="[dbo].[workflow]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="255" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="256" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_traversal_request]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -14190,7 +14195,7 @@ END]]></Value>
 					<References Name="[dbo].[request]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="256" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="257" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_uncertainty_analysis]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -14214,7 +14219,7 @@ END]]></Value>
 					<References Name="[dbo].[analysis]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="257" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="258" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_users_contact]">
 			<Relationship Name="Columns">
@@ -14237,7 +14242,7 @@ END]]></Value>
 					<References Name="[dbo].[contact]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="258" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="259" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_users_role]">
 			<Relationship Name="Columns">
@@ -14260,7 +14265,7 @@ END]]></Value>
 					<References Name="[dbo].[role]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="259" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="260" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_workload_task]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -14284,7 +14289,7 @@ END]]></Value>
 					<References Name="[dbo].[task]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="260" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="261" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_workplace_department]">
 			<Relationship Name="Columns">
@@ -14307,7 +14312,7 @@ END]]></Value>
 					<References Name="[dbo].[department]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="261" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="262" />
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[folder_create]">
 			<Property Name="BodyScript">
@@ -14529,7 +14534,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="262" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="263" />
 			<AttachedAnnotation Disambiguator="172" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[formulation_audit]">
@@ -14880,7 +14885,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="263" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="264" />
 			<AttachedAnnotation Disambiguator="173" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[import]">
@@ -14989,7 +14994,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="264" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="265" />
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[import_csv]">
 			<Property Name="BodyScript">
@@ -15632,7 +15637,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="265" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="266" />
 			<AttachedAnnotation Disambiguator="174" />
 			<AttachedAnnotation Disambiguator="175" />
 			<AttachedAnnotation Disambiguator="178" />
@@ -15923,7 +15928,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="266" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="267" />
 			<AttachedAnnotation Disambiguator="176" />
 			<AttachedAnnotation Disambiguator="177" />
 		</Element>
@@ -16157,7 +16162,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="267" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="268" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[instype_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -16846,7 +16851,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="268" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="269" />
 			<AttachedAnnotation Disambiguator="180" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[laboratory_audit]">
@@ -17292,7 +17297,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="269" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="270" />
 			<AttachedAnnotation Disambiguator="181" />
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[mailqueue_process]">
@@ -17650,7 +17655,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="270" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="271" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[manufacturer_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -18025,7 +18030,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="271" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="272" />
 			<AttachedAnnotation Disambiguator="182" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[material_audit]">
@@ -18498,7 +18503,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="272" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="273" />
 			<AttachedAnnotation Disambiguator="183" />
 			<AttachedAnnotation Disambiguator="188" />
 			<AttachedAnnotation Disambiguator="189" />
@@ -18685,7 +18690,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="273" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="274" />
 			<AttachedAnnotation Disambiguator="184" />
 			<AttachedAnnotation Disambiguator="185" />
 		</Element>
@@ -18952,7 +18957,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="274" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="275" />
 			<AttachedAnnotation Disambiguator="186" />
 			<AttachedAnnotation Disambiguator="187" />
 		</Element>
@@ -20856,7 +20861,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="275" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="276" />
 			<AttachedAnnotation Disambiguator="58" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[method_analysis]">
@@ -20951,7 +20956,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="276" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="277" />
 			<AttachedAnnotation Disambiguator="191" />
 			<AttachedAnnotation Disambiguator="192" />
 		</Element>
@@ -21455,7 +21460,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="277" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="278" />
 			<AttachedAnnotation Disambiguator="195" />
 			<AttachedAnnotation Disambiguator="196" />
 		</Element>
@@ -21517,7 +21522,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="278" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="279" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[permission].[uq_permission]">
 			<Property Name="IsUnique" Value="True" />
@@ -22015,7 +22020,7 @@ END]]></Value>
 					<References Name="[dbo].[setup]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="279" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="280" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_contact]">
 			<Relationship Name="ColumnSpecifications">
@@ -22053,7 +22058,7 @@ END]]></Value>
 					<References Name="[dbo].[smpcontainer]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="280" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="281" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_customer]">
 			<Relationship Name="ColumnSpecifications">
@@ -22186,7 +22191,7 @@ END]]></Value>
 					<References Name="[dbo].[formulation]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="262" />
+			<AttachedAnnotation Disambiguator="263" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_handbook]">
 			<Relationship Name="ColumnSpecifications">
@@ -22205,7 +22210,7 @@ END]]></Value>
 					<References Name="[dbo].[handbook]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="263" />
+			<AttachedAnnotation Disambiguator="264" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_import]">
 			<Relationship Name="ColumnSpecifications">
@@ -22224,7 +22229,7 @@ END]]></Value>
 					<References Name="[dbo].[import]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="264" />
+			<AttachedAnnotation Disambiguator="265" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_instrument]">
 			<Relationship Name="ColumnSpecifications">
@@ -22243,7 +22248,7 @@ END]]></Value>
 					<References Name="[dbo].[instrument]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="265" />
+			<AttachedAnnotation Disambiguator="266" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_instrument_certificate]">
 			<Relationship Name="ColumnSpecifications">
@@ -22281,7 +22286,7 @@ END]]></Value>
 					<References Name="[dbo].[instrument_method]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="266" />
+			<AttachedAnnotation Disambiguator="267" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_instrument_type]">
 			<Relationship Name="ColumnSpecifications">
@@ -22300,7 +22305,7 @@ END]]></Value>
 					<References Name="[dbo].[instype]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="267" />
+			<AttachedAnnotation Disambiguator="268" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_laboratory]">
 			<Relationship Name="ColumnSpecifications">
@@ -22319,7 +22324,7 @@ END]]></Value>
 					<References Name="[dbo].[laboratory]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="268" />
+			<AttachedAnnotation Disambiguator="269" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_mail_queue]">
 			<Relationship Name="ColumnSpecifications">
@@ -22338,7 +22343,7 @@ END]]></Value>
 					<References Name="[dbo].[mailqueue]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="269" />
+			<AttachedAnnotation Disambiguator="270" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_manufacturer]">
 			<Relationship Name="ColumnSpecifications">
@@ -22357,7 +22362,7 @@ END]]></Value>
 					<References Name="[dbo].[manufacturer]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="270" />
+			<AttachedAnnotation Disambiguator="271" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_material]">
 			<Relationship Name="ColumnSpecifications">
@@ -22376,7 +22381,7 @@ END]]></Value>
 					<References Name="[dbo].[material]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="271" />
+			<AttachedAnnotation Disambiguator="272" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_measurement]">
 			<Relationship Name="ColumnSpecifications">
@@ -22395,7 +22400,7 @@ END]]></Value>
 					<References Name="[dbo].[measurement]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="272" />
+			<AttachedAnnotation Disambiguator="273" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_measurement_cfield]">
 			<Relationship Name="ColumnSpecifications">
@@ -22414,7 +22419,7 @@ END]]></Value>
 					<References Name="[dbo].[measurement_cfield]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="273" />
+			<AttachedAnnotation Disambiguator="274" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_measurement_condition]">
 			<Relationship Name="ColumnSpecifications">
@@ -22433,7 +22438,7 @@ END]]></Value>
 					<References Name="[dbo].[measurement_condition]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="274" />
+			<AttachedAnnotation Disambiguator="275" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_member]">
 			<Relationship Name="ColumnSpecifications">
@@ -22452,7 +22457,7 @@ END]]></Value>
 					<References Name="[dbo].[project_member]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="281" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="282" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_method]">
 			<Relationship Name="ColumnSpecifications">
@@ -22471,7 +22476,7 @@ END]]></Value>
 					<References Name="[dbo].[method]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="275" />
+			<AttachedAnnotation Disambiguator="276" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_method_analysis]">
 			<Relationship Name="ColumnSpecifications">
@@ -22490,7 +22495,7 @@ END]]></Value>
 					<References Name="[dbo].[method_analysis]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="276" />
+			<AttachedAnnotation Disambiguator="277" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_method_smptype]">
 			<Relationship Name="ColumnSpecifications">
@@ -22509,7 +22514,7 @@ END]]></Value>
 					<References Name="[dbo].[method_smptype]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="277" />
+			<AttachedAnnotation Disambiguator="278" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_method_user]">
 			<Relationship Name="ColumnSpecifications">
@@ -22528,7 +22533,7 @@ END]]></Value>
 					<References Name="[dbo].[qualification]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="282" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="283" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_permission]">
 			<Relationship Name="ColumnSpecifications">
@@ -22547,7 +22552,7 @@ END]]></Value>
 					<References Name="[dbo].[permission]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="278" />
+			<AttachedAnnotation Disambiguator="279" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_priority]">
 			<Relationship Name="ColumnSpecifications">
@@ -22566,7 +22571,7 @@ END]]></Value>
 					<References Name="[dbo].[priority]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="283" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="284" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_profile]">
 			<Relationship Name="ColumnSpecifications">
@@ -22585,7 +22590,7 @@ END]]></Value>
 					<References Name="[dbo].[profile]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="284" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="285" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_profile_analysis]">
 			<Relationship Name="ColumnSpecifications">
@@ -22604,7 +22609,7 @@ END]]></Value>
 					<References Name="[dbo].[profile_analysis]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="285" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="286" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_project]">
 			<Relationship Name="ColumnSpecifications">
@@ -22623,7 +22628,7 @@ END]]></Value>
 					<References Name="[dbo].[project]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="286" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="287" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_project_customfield]">
 			<Relationship Name="ColumnSpecifications">
@@ -22642,7 +22647,7 @@ END]]></Value>
 					<References Name="[dbo].[project_customfield]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="287" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="288" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_project_material]">
 			<Relationship Name="ColumnSpecifications">
@@ -22661,7 +22666,7 @@ END]]></Value>
 					<References Name="[dbo].[task_material]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="288" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="289" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_project_service]">
 			<Relationship Name="ColumnSpecifications">
@@ -22680,7 +22685,7 @@ END]]></Value>
 					<References Name="[dbo].[task_service]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="289" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="290" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_request]">
 			<Relationship Name="ColumnSpecifications">
@@ -22700,7 +22705,7 @@ END]]></Value>
 					<References Name="[dbo].[request]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="290" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="291" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_request_analysis]">
 			<Relationship Name="ColumnSpecifications">
@@ -22719,7 +22724,7 @@ END]]></Value>
 					<References Name="[dbo].[request_analysis]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="291" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="292" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_request_customfield]">
 			<Relationship Name="ColumnSpecifications">
@@ -22738,7 +22743,7 @@ END]]></Value>
 					<References Name="[dbo].[request_customfield]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="292" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="293" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_request_material]">
 			<Relationship Name="ColumnSpecifications">
@@ -22757,7 +22762,7 @@ END]]></Value>
 					<References Name="[dbo].[request_material]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="293" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="294" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_request_service]">
 			<Relationship Name="ColumnSpecifications">
@@ -22776,7 +22781,7 @@ END]]></Value>
 					<References Name="[dbo].[request_service]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="294" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="295" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_role]">
 			<Relationship Name="ColumnSpecifications">
@@ -22795,7 +22800,7 @@ END]]></Value>
 					<References Name="[dbo].[role]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="295" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="296" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_role_permission]">
 			<Relationship Name="ColumnSpecifications">
@@ -22814,7 +22819,7 @@ END]]></Value>
 					<References Name="[dbo].[role_permission]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="296" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="297" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_service]">
 			<Relationship Name="ColumnSpecifications">
@@ -22833,7 +22838,7 @@ END]]></Value>
 					<References Name="[dbo].[service]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="297" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="298" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_smpcondition]">
 			<Relationship Name="ColumnSpecifications">
@@ -22852,7 +22857,7 @@ END]]></Value>
 					<References Name="[dbo].[smpcondition]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="298" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="299" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_smpmatrix]">
 			<Relationship Name="ColumnSpecifications">
@@ -22871,7 +22876,7 @@ END]]></Value>
 					<References Name="[dbo].[smpmatrix]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="299" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="300" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_smppoint]">
 			<Relationship Name="ColumnSpecifications">
@@ -22890,7 +22895,7 @@ END]]></Value>
 					<References Name="[dbo].[smppoint]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="300" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="301" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_smppreservation]">
 			<Relationship Name="ColumnSpecifications">
@@ -22909,7 +22914,7 @@ END]]></Value>
 					<References Name="[dbo].[smppreservation]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="301" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="302" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_smptype]">
 			<Relationship Name="ColumnSpecifications">
@@ -22928,7 +22933,7 @@ END]]></Value>
 					<References Name="[dbo].[smptype]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="302" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="303" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_spa]">
 			<Relationship Name="ColumnSpecifications">
@@ -22947,7 +22952,7 @@ END]]></Value>
 					<References Name="[dbo].[spa]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="303" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="304" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_state]">
 			<Relationship Name="ColumnSpecifications">
@@ -22966,7 +22971,7 @@ END]]></Value>
 					<References Name="[dbo].[state]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="304" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="305" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_step]">
 			<Relationship Name="ColumnSpecifications">
@@ -22985,7 +22990,7 @@ END]]></Value>
 					<References Name="[dbo].[step]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="305" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="306" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_storage]">
 			<Relationship Name="ColumnSpecifications">
@@ -23004,7 +23009,7 @@ END]]></Value>
 					<References Name="[dbo].[storage]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="306" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="307" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_strposition]">
 			<Relationship Name="ColumnSpecifications">
@@ -23023,7 +23028,7 @@ END]]></Value>
 					<References Name="[dbo].[strposition]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="307" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="308" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_supplier]">
 			<Relationship Name="ColumnSpecifications">
@@ -23042,7 +23047,7 @@ END]]></Value>
 					<References Name="[dbo].[supplier]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="308" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="309" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_tableflag]">
 			<Relationship Name="ColumnSpecifications">
@@ -23061,7 +23066,7 @@ END]]></Value>
 					<References Name="[dbo].[tableflag]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="309" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="310" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_task]">
 			<Relationship Name="ColumnSpecifications">
@@ -23080,7 +23085,7 @@ END]]></Value>
 					<References Name="[dbo].[task]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="310" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="311" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_technique]">
 			<Relationship Name="ColumnSpecifications">
@@ -23099,7 +23104,7 @@ END]]></Value>
 					<References Name="[dbo].[technique]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="311" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="312" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_template]">
 			<Relationship Name="ColumnSpecifications">
@@ -23118,7 +23123,7 @@ END]]></Value>
 					<References Name="[dbo].[template]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="312" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="313" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_template_profile]">
 			<Relationship Name="ColumnSpecifications">
@@ -23137,7 +23142,7 @@ END]]></Value>
 					<References Name="[dbo].[template_profile]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="313" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="314" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_translation]">
 			<Relationship Name="ColumnSpecifications">
@@ -23156,7 +23161,7 @@ END]]></Value>
 					<References Name="[dbo].[translation]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="314" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="315" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_traversal]">
 			<Relationship Name="ColumnSpecifications">
@@ -23175,7 +23180,7 @@ END]]></Value>
 					<References Name="[dbo].[traversal]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="315" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="316" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_uncertainty]">
 			<Relationship Name="ColumnSpecifications">
@@ -23194,7 +23199,7 @@ END]]></Value>
 					<References Name="[dbo].[uncertainty]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="316" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="317" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_users_name]">
 			<Relationship Name="ColumnSpecifications">
@@ -23213,7 +23218,7 @@ END]]></Value>
 					<References Name="[dbo].[users]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="317" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="318" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_workflow]">
 			<Relationship Name="ColumnSpecifications">
@@ -23232,7 +23237,7 @@ END]]></Value>
 					<References Name="[dbo].[workflow]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="318" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="319" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_workload]">
 			<Relationship Name="ColumnSpecifications">
@@ -23251,7 +23256,7 @@ END]]></Value>
 					<References Name="[dbo].[task_workload]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="319" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="320" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_workplace]">
 			<Relationship Name="ColumnSpecifications">
@@ -23270,7 +23275,7 @@ END]]></Value>
 					<References Name="[dbo].[workplace]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="320" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="321" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[priority]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -23346,7 +23351,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="283" />
+			<AttachedAnnotation Disambiguator="284" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[priority_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -23610,7 +23615,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="284" />
+			<AttachedAnnotation Disambiguator="285" />
 			<AttachedAnnotation Disambiguator="200" />
 			<AttachedAnnotation Disambiguator="201" />
 		</Element>
@@ -23833,7 +23838,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="285" />
+			<AttachedAnnotation Disambiguator="286" />
 			<AttachedAnnotation Disambiguator="197" />
 			<AttachedAnnotation Disambiguator="198" />
 			<AttachedAnnotation Disambiguator="199" />
@@ -24369,7 +24374,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="286" />
+			<AttachedAnnotation Disambiguator="287" />
 			<AttachedAnnotation Disambiguator="202" />
 			<AttachedAnnotation Disambiguator="207" />
 		</Element>
@@ -24554,7 +24559,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="287" />
+			<AttachedAnnotation Disambiguator="288" />
 			<AttachedAnnotation Disambiguator="203" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[project_insert]">
@@ -24670,7 +24675,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="281" />
+			<AttachedAnnotation Disambiguator="282" />
 			<AttachedAnnotation Disambiguator="205" />
 			<AttachedAnnotation Disambiguator="206" />
 		</Element>
@@ -25056,7 +25061,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="282" />
+			<AttachedAnnotation Disambiguator="283" />
 			<AttachedAnnotation Disambiguator="193" />
 			<AttachedAnnotation Disambiguator="194" />
 			<AttachedAnnotation Disambiguator="209" />
@@ -26664,7 +26669,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="290" />
+			<AttachedAnnotation Disambiguator="291" />
 			<AttachedAnnotation Disambiguator="213" />
 			<AttachedAnnotation Disambiguator="214" />
 			<AttachedAnnotation Disambiguator="215" />
@@ -26771,7 +26776,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="291" />
+			<AttachedAnnotation Disambiguator="292" />
 			<AttachedAnnotation Disambiguator="210" />
 			<AttachedAnnotation Disambiguator="211" />
 			<AttachedAnnotation Disambiguator="212" />
@@ -27320,7 +27325,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="292" />
+			<AttachedAnnotation Disambiguator="293" />
 			<AttachedAnnotation Disambiguator="216" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[request_customfield_audit]">
@@ -27939,7 +27944,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="293" />
+			<AttachedAnnotation Disambiguator="294" />
 			<AttachedAnnotation Disambiguator="218" />
 			<AttachedAnnotation Disambiguator="219" />
 		</Element>
@@ -28140,7 +28145,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="294" />
+			<AttachedAnnotation Disambiguator="295" />
 			<AttachedAnnotation Disambiguator="223" />
 			<AttachedAnnotation Disambiguator="224" />
 		</Element>
@@ -28744,7 +28749,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="295" />
+			<AttachedAnnotation Disambiguator="296" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[role_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -29226,7 +29231,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="296" />
+			<AttachedAnnotation Disambiguator="297" />
 			<AttachedAnnotation Disambiguator="233" />
 			<AttachedAnnotation Disambiguator="234" />
 		</Element>
@@ -29646,7 +29651,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="297" />
+			<AttachedAnnotation Disambiguator="298" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[service_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -29895,7 +29900,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="279" />
+			<AttachedAnnotation Disambiguator="280" />
 			<AttachedAnnotation Disambiguator="59" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[setup_insert]">
@@ -30010,7 +30015,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="298" />
+			<AttachedAnnotation Disambiguator="299" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smpcondition_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -30193,7 +30198,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="280" />
+			<AttachedAnnotation Disambiguator="281" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smpcontainer_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -30376,7 +30381,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="299" />
+			<AttachedAnnotation Disambiguator="300" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smpmatrix_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -30574,7 +30579,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="300" />
+			<AttachedAnnotation Disambiguator="301" />
 			<AttachedAnnotation Disambiguator="235" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smppoint_audit]">
@@ -30758,7 +30763,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="301" />
+			<AttachedAnnotation Disambiguator="302" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smppreservation_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -30941,7 +30946,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="302" />
+			<AttachedAnnotation Disambiguator="303" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[smptype_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -31366,7 +31371,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="303" />
+			<AttachedAnnotation Disambiguator="304" />
 		</Element>
 		<Element Type="SqlProcedure" Name="[dbo].[spa_create]">
 			<Property Name="BodyScript">
@@ -31742,6 +31747,21 @@ END]]></Value>
 					</Element>
 				</Entry>
 				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[state].[role]">
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[state].[workflow]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
@@ -31763,8 +31783,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="304" />
+			<AttachedAnnotation Disambiguator="305" />
 			<AttachedAnnotation Disambiguator="236" />
+			<AttachedAnnotation Disambiguator="237" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[state_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -31865,10 +31886,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="1514" />
+				<Property Name="Offset" Value="1629" />
 				<Property Name="CreateOffset" Value="174" />
 				<Property Name="Length" Value="1445" />
-				<Property Name="StartLine" Value="47" />
+				<Property Name="StartLine" Value="49" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[state_audit]&#xD;&#xA;   ON  [dbo].[state] &#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -31951,10 +31972,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="385" />
+				<Property Name="Offset" Value="500" />
 				<Property Name="CreateOffset" Value="175" />
 				<Property Name="Length" Value="1121" />
-				<Property Name="StartLine" Value="12" />
+				<Property Name="StartLine" Value="14" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 February&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[state_insert]&#xD;&#xA;   ON  [dbo].[state]&#xD;&#xA;   AFTER INSERT&#xD;&#xA;AS" />
 			</Annotation>
@@ -32083,10 +32104,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="2967" />
+				<Property Name="Offset" Value="3082" />
 				<Property Name="CreateOffset" Value="194" />
 				<Property Name="Length" Value="3533" />
-				<Property Name="StartLine" Value="98" />
+				<Property Name="StartLine" Value="100" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[state_update]&#xD;&#xA;   ON  dbo.state&#xD;&#xA;   AFTER UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -32166,8 +32187,8 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="305" />
-			<AttachedAnnotation Disambiguator="237" />
+			<AttachedAnnotation Disambiguator="306" />
+			<AttachedAnnotation Disambiguator="238" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[step_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -32334,7 +32355,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="306" />
+			<AttachedAnnotation Disambiguator="307" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[storage_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -32666,11 +32687,11 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="307" />
-			<AttachedAnnotation Disambiguator="238" />
+			<AttachedAnnotation Disambiguator="308" />
 			<AttachedAnnotation Disambiguator="239" />
 			<AttachedAnnotation Disambiguator="240" />
 			<AttachedAnnotation Disambiguator="241" />
+			<AttachedAnnotation Disambiguator="242" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[strposition_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -32933,7 +32954,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="308" />
+			<AttachedAnnotation Disambiguator="309" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[supplier_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -33118,7 +33139,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="309" />
+			<AttachedAnnotation Disambiguator="310" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[task]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -33349,9 +33370,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="310" />
-			<AttachedAnnotation Disambiguator="243" />
-			<AttachedAnnotation Disambiguator="245" />
+			<AttachedAnnotation Disambiguator="311" />
+			<AttachedAnnotation Disambiguator="244" />
+			<AttachedAnnotation Disambiguator="246" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[task_attachment]">
 			<Property Name="IsDeleteTrigger" Value="True" />
@@ -33605,9 +33626,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="288" />
+			<AttachedAnnotation Disambiguator="289" />
 			<AttachedAnnotation Disambiguator="204" />
-			<AttachedAnnotation Disambiguator="242" />
+			<AttachedAnnotation Disambiguator="243" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[task_material_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -33821,9 +33842,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="289" />
+			<AttachedAnnotation Disambiguator="290" />
 			<AttachedAnnotation Disambiguator="208" />
-			<AttachedAnnotation Disambiguator="244" />
+			<AttachedAnnotation Disambiguator="245" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[task_service_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -34050,9 +34071,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="319" />
-			<AttachedAnnotation Disambiguator="246" />
-			<AttachedAnnotation Disambiguator="260" />
+			<AttachedAnnotation Disambiguator="320" />
+			<AttachedAnnotation Disambiguator="247" />
+			<AttachedAnnotation Disambiguator="261" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[technique]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -34143,7 +34164,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="311" />
+			<AttachedAnnotation Disambiguator="312" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[technique_aduit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -34391,11 +34412,11 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="312" />
-			<AttachedAnnotation Disambiguator="247" />
+			<AttachedAnnotation Disambiguator="313" />
 			<AttachedAnnotation Disambiguator="248" />
 			<AttachedAnnotation Disambiguator="249" />
-			<AttachedAnnotation Disambiguator="255" />
+			<AttachedAnnotation Disambiguator="250" />
+			<AttachedAnnotation Disambiguator="256" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[template_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -34504,6 +34525,157 @@ END]]></Value>
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2025 May&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[template_audit] &#xD;&#xA;   ON  dbo.template &#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>
 		</Element>
+		<Element Type="SqlProcedure" Name="[dbo].[template_duplicate]">
+			<Property Name="BodyScript">
+				<Value><![CDATA[
+BEGIN
+	DECLARE @id_keys table([id] INT)
+	DECLARE @id INT
+
+	INSERT INTO template (customer, title, description, priority, workflow, report_template, deactivate) OUTPUT inserted.id INTO @id_keys VALUES((SELECT customer FROM template WHERE id = @pTemplate), (SELECT title FROM template WHERE id = @pTemplate) + '_duplicate', (SELECT description FROM template WHERE id = @pTemplate), (SELECT priority FROM template WHERE id = @pTemplate), (SELECT workflow FROM template WHERE id = @pTemplate), (SELECT report_template FROM template WHERE id = @pTemplate), (SELECT deactivate FROM template WHERE id = @pTemplate))
+
+	SET @id = (SELECT TOP 1 id FROM @id_keys)
+
+	INSERT INTO template_profile (template, profile, priority, workflow, smppoint) (SELECT @id, profile, priority,workflow, smppoint FROM template_profile WHERE template = @pTemplate)
+END]]></Value>
+			</Property>
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[customer]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[description]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[priority]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[workflow]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[report_template]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[deactivate]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[customer]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_duplicate].[@pTemplate]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[description]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[priority]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[workflow]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[report_template]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[deactivate]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_duplicate].[@id_keys].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile].[template]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile].[profile]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile].[priority]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile].[workflow]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[template_profile].[smppoint]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DynamicObjects">
+				<Entry>
+					<Element Type="SqlDynamicColumnSource" Name="[dbo].[template_duplicate].[@id_keys]">
+						<Relationship Name="Columns">
+							<Entry>
+								<Element Type="SqlSimpleColumn" Name="[dbo].[template_duplicate].[@id_keys].[id]">
+									<Relationship Name="TypeSpecifier">
+										<Entry>
+											<Element Type="SqlTypeSpecifier">
+												<Relationship Name="Type">
+													<Entry>
+														<References ExternalSource="BuiltIns" Name="[int]" />
+													</Entry>
+												</Relationship>
+											</Element>
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Parameters">
+				<Entry>
+					<Element Type="SqlSubroutineParameter" Name="[dbo].[template_duplicate].[@pTemplate]">
+						<Relationship Name="Type">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="Schema">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SysCommentsObjectAnnotation">
+				<Property Name="CreateOffset" Value="166" />
+				<Property Name="Length" Value="1082" />
+				<Property Name="StartLine" Value="1" />
+				<Property Name="StartColumn" Value="1" />
+				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Create date: 2024 October&#xD;&#xA;-- Description:&#x9;Duplicate template&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[template_duplicate]&#xD;&#xA;&#x9;@pTemplate As INT&#xD;&#xA;AS" />
+			</Annotation>
+		</Element>
 		<Element Type="SqlTable" Name="[dbo].[template_profile]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
 			<Relationship Name="Columns">
@@ -34609,12 +34781,12 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="313" />
-			<AttachedAnnotation Disambiguator="250" />
+			<AttachedAnnotation Disambiguator="314" />
 			<AttachedAnnotation Disambiguator="251" />
 			<AttachedAnnotation Disambiguator="252" />
 			<AttachedAnnotation Disambiguator="253" />
 			<AttachedAnnotation Disambiguator="254" />
+			<AttachedAnnotation Disambiguator="255" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[template_profile_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -34739,6 +34911,8 @@ BEGIN
 
 	SET @id = SCOPE_IDENTITY()
 
+	UPDATE request SET subrequest = NULL WHERE id = @id
+
 	BEGIN
 		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
 
@@ -34800,6 +34974,12 @@ END]]></Value>
 					<References Name="[dbo].[template_run].[@workflow]" />
 				</Entry>
 				<Entry>
+					<References Name="[dbo].[request].[subrequest]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[id]" />
+				</Entry>
+				<Entry>
 					<References Name="[dbo].[template]" />
 				</Entry>
 				<Entry>
@@ -34834,12 +35014,6 @@ END]]></Value>
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[template_profile].[smppoint]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[request].[subrequest]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[request].[id]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="Parameters">
@@ -34896,7 +35070,7 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
 				<Property Name="CreateOffset" Value="201" />
-				<Property Name="Length" Value="1563" />
+				<Property Name="Length" Value="1619" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 March&#xD;&#xA;-- Description:&#x9;Create audit trail from record&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE PROCEDURE [dbo].[template_run]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@template INT,&#xD;&#xA;&#x9;@priority INT,&#xD;&#xA;&#x9;@workflow INT&#xD;&#xA;AS" />
@@ -35008,7 +35182,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="314" />
+			<AttachedAnnotation Disambiguator="315" />
 			<AttachedAnnotation Disambiguator="60" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[translation_audit]">
@@ -35207,8 +35381,8 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="315" />
-			<AttachedAnnotation Disambiguator="256" />
+			<AttachedAnnotation Disambiguator="316" />
+			<AttachedAnnotation Disambiguator="257" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[uncertainty]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -35303,8 +35477,8 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="316" />
-			<AttachedAnnotation Disambiguator="257" />
+			<AttachedAnnotation Disambiguator="317" />
+			<AttachedAnnotation Disambiguator="258" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[uncertainty_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -35601,9 +35775,9 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="317" />
-			<AttachedAnnotation Disambiguator="258" />
+			<AttachedAnnotation Disambiguator="318" />
 			<AttachedAnnotation Disambiguator="259" />
+			<AttachedAnnotation Disambiguator="260" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[users].[uq_users]">
 			<Property Name="IsUnique" Value="True" />
@@ -36122,7 +36296,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.4.2'
+	SET @version_be = 'v2.5.0'
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -36769,7 +36943,7 @@ ORDER BY dbo.measurement.sortkey, dbo.technique.sortkey, dbo.analysis.sortkey]]>
 			<Property Name="QueryScript">
 				<Value><![CDATA[
 SELECT dbo.measurement.id, dbo.measurement.request, dbo.customer.name AS customer, dbo.analysis.title AS analysis, dbo.method.title AS method, dbo.instrument.title AS instrument, dbo.measurement.value_txt AS value, dbo.audit_get_value('analysis', dbo.analysis.id, 'unit', dbo.measurement.acquired_at) AS unit, dbo.measurement.out_of_spec, dbo.measurement.state, 
-         dbo.request.profile, dbo.measurement.subcontraction
+         dbo.request.profile, dbo.measurement.subcontraction, dbo.request.smppoint, dbo.request.smp_date
 FROM  dbo.state INNER JOIN
          dbo.request ON dbo.state.id = dbo.request.state INNER JOIN
          dbo.customer ON dbo.request.customer = dbo.customer.id INNER JOIN
@@ -36890,6 +37064,24 @@ WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
 						</Relationship>
 					</Element>
 				</Entry>
+				<Entry>
+					<Element Type="SqlComputedColumn" Name="[dbo].[view_measurement].[smppoint]">
+						<Relationship Name="ExpressionDependencies">
+							<Entry>
+								<References Name="[dbo].[request].[smppoint]" />
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlComputedColumn" Name="[dbo].[view_measurement].[smp_date]">
+						<Relationship Name="ExpressionDependencies">
+							<Entry>
+								<References Name="[dbo].[request].[smp_date]" />
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
 			</Relationship>
 			<Relationship Name="QueryDependencies">
 				<Entry>
@@ -36992,6 +37184,12 @@ WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
 					<References Name="[dbo].[measurement].[subcontraction]" />
 				</Entry>
 				<Entry>
+					<References Name="[dbo].[request].[smppoint]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[request].[smp_date]" />
+				</Entry>
+				<Entry>
 					<References Name="[dbo].[state].[state]" />
 				</Entry>
 			</Relationship>
@@ -37001,7 +37199,7 @@ WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="1071" />
+				<Property Name="Length" Value="1115" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="CREATE VIEW dbo.view_measurement&#xD;&#xA;AS" />
@@ -38422,7 +38620,7 @@ ORDER BY sortkey_measurement, sortkey_technique, sortkey_analysis]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="318" />
+			<AttachedAnnotation Disambiguator="319" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[workflow_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -38728,8 +38926,8 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="320" />
-			<AttachedAnnotation Disambiguator="261" />
+			<AttachedAnnotation Disambiguator="321" />
+			<AttachedAnnotation Disambiguator="262" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[workplace_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />

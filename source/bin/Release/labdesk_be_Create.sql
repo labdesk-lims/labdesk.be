@@ -628,20 +628,6 @@ CREATE TABLE [dbo].[uncertainty] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[workflow]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[workflow] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [deactivate]  BIT            NOT NULL,
-    CONSTRAINT [PK_workflow] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[errorlog]" wird erstellt...';
 
 
@@ -1152,20 +1138,6 @@ CREATE TABLE [dbo].[method] (
     [subcontraction] BIT            NOT NULL,
     [deactivate]     BIT            NOT NULL,
     CONSTRAINT [PK_method] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[state]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[state] (
-    [id]       INT           IDENTITY (1, 1) NOT NULL,
-    [title]    VARCHAR (255) NULL,
-    [state]    CHAR (2)      NULL,
-    [workflow] INT           NOT NULL,
-    CONSTRAINT [PK_state] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1745,6 +1717,24 @@ CREATE TABLE [dbo].[instrument_method] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[setup] (
+    [id]              INT           IDENTITY (1, 1) NOT NULL,
+    [email_profile]   VARCHAR (255) NULL,
+    [alert_document]  INT           NULL,
+    [show_desktop]    BIT           NULL,
+    [verbous]         BIT           NULL,
+    [vat]             FLOAT (53)    NOT NULL,
+    [upload_max_byte] INT           NOT NULL,
+    [version_fe]      VARCHAR (255) NULL,
+    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'Tabelle "[dbo].[filter]" wird erstellt...';
 
 
@@ -1762,20 +1752,31 @@ CREATE TABLE [dbo].[filter] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[setup]" wird erstellt...';
+PRINT N'Tabelle "[dbo].[workflow]" wird erstellt...';
 
 
 GO
-CREATE TABLE [dbo].[setup] (
-    [id]              INT           IDENTITY (1, 1) NOT NULL,
-    [email_profile]   VARCHAR (255) NULL,
-    [alert_document]  INT           NULL,
-    [show_desktop]    BIT           NULL,
-    [verbous]         BIT           NULL,
-    [vat]             FLOAT (53)    NOT NULL,
-    [upload_max_byte] INT           NOT NULL,
-    [version_fe]      VARCHAR (255) NULL,
-    CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC)
+CREATE TABLE [dbo].[workflow] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [deactivate]  BIT            NOT NULL,
+    CONSTRAINT [PK_workflow] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[state]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[state] (
+    [id]       INT           IDENTITY (1, 1) NOT NULL,
+    [title]    VARCHAR (255) NULL,
+    [state]    CHAR (2)      NULL,
+    [role]     INT           NULL,
+    [workflow] INT           NOT NULL,
+    CONSTRAINT [PK_state] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1957,15 +1958,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_condition_type]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[condition]
     ADD CONSTRAINT [DF_condition_type] DEFAULT ('N') FOR [type];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workflow_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[workflow]
-    ADD CONSTRAINT [DF_workflow_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
@@ -2698,24 +2690,6 @@ ALTER TABLE [dbo].[instrument_method]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_global]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[filter]
-    ADD CONSTRAINT [DF_filter_global] DEFAULT ((0)) FOR [global];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[filter]
-    ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_show_desktop]" wird erstellt...';
 
 
@@ -2749,6 +2723,33 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_setup_upload_max]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[setup]
     ADD CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) FOR [upload_max_byte];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_global]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[filter]
+    ADD CONSTRAINT [DF_filter_global] DEFAULT ((0)) FOR [global];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[filter]
+    ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_workflow_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[workflow]
+    ADD CONSTRAINT [DF_workflow_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
@@ -3373,15 +3374,6 @@ ALTER TABLE [dbo].[attribute]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_state_workflow]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[state]
-    ADD CONSTRAINT [FK_state_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]) ON DELETE CASCADE;
-
-
-GO
 PRINT N'Fremdschlüssel "[dbo].[FK_material_supplier]" wird erstellt...';
 
 
@@ -3856,6 +3848,24 @@ PRINT N'Fremdschlüssel "[dbo].[FK_instrument_method_method]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[instrument_method]
     ADD CONSTRAINT [FK_instrument_method_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_state_role]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[state]
+    ADD CONSTRAINT [FK_state_role] FOREIGN KEY ([role]) REFERENCES [dbo].[role] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_state_workflow]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[state]
+    ADD CONSTRAINT [FK_state_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]) ON DELETE CASCADE;
 
 
 GO
@@ -4860,60 +4870,6 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[uncertainty_audit]
    ON  [dbo].[uncertainty]
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[workflow_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[workflow_audit]
-   ON  [dbo].[workflow] 
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -6753,192 +6709,6 @@ BEGIN
 	END
 END
 GO
-PRINT N'Trigger "[dbo].[state_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 February
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[state_insert]
-   ON  [dbo].[state]
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE cur CURSOR FOR SELECT id FROM state WHERE workflow = (SELECT workflow FROM inserted) ORDER BY id
-	DECLARE @i INT
-	DECLARE @state CHAR(2)
-
-	SET @state = (SELECT state FROM inserted)
-	IF @state <> 'CP' AND @state <> 'RT' AND @state <> 'RC' AND @state <> 'VD' AND @state <> 'MA' AND @state <> 'DP' AND @state <> 'ST' AND @state <> 'DX'
-		THROW 51000, 'State unknown.', 1
-
-	OPEN cur
-	FETCH NEXT FROM cur INTO @i
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		INSERT INTO step (step, state) SELECT id, @i FROM state WHERE id NOT IN (SELECT step FROM step WHERE state = @i) AND workflow = (SELECT workflow FROM inserted)
-		FETCH NEXT FROM cur INTO @i
-	END
-	CLOSE cur
-	DEALLOCATE cur
-END
-GO
-PRINT N'Trigger "[dbo].[state_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[state_audit]
-   ON  [dbo].[state] 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[state_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER [dbo].[state_update]
-   ON  dbo.state
-   AFTER UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @state_inserted CHAR(2), @state_preceding CHAR(2)
-
-	SET @state_inserted = (SELECT state FROM inserted) 
-	SET @state_preceding = (SELECT state FROM state WHERE id = (SELECT id FROM inserted) -1)
-
-	-- Check if state is a valid one
-	IF @state_inserted <> 'CP' AND @state_inserted <> 'RT' AND @state_inserted <> 'RC' AND @state_inserted <> 'VD' AND @state_inserted <> 'MA' AND @state_inserted <> 'DP' AND @state_inserted <> 'ST' AND @state_inserted <> 'DX'
-	RAISERROR (15600, -1, -1, 'State unknown.')
-
-	-- Manage allowed state traversals
-	-- -------------------------------------------------------
-	-- L1 					  CP
-	--                       /  \
-	-- L2                   RC  RT -> DX
-	--                ______|_______________________
-	--                |		|		|		|		|
-	-- L3             VD	DP		ST		DX		RT -> DX
-	--           _____|_________
-	--          |		|		|
-	-- L4       MA		ST		DX
-	--     _____|____
-	--     |		|
-	-- L5  ST		DX
-	-- -------------------------------------------------------
-	-- CP - Captured	RT - Retract	RC - Received
-	-- VD - Validated	MA - Mailed		DP - Dispatched
-	-- ST - Stored		DX - Disposed
-	-- -------------------------------------------------------
-		
-	-- ---------------------------------------------------
-	-- L1 -> L2
-	-- ---------------------------------------------------
-
-	-- Only allow states from L2
-	IF @state_preceding = 'CP' AND @state_inserted <> 'RC' OR @state_inserted <> 'RT'
-		RAISERROR (15600, -1, -1, 'State not valid for L1 -> L2.')
-
-	-- ---------------------------------------------------
-	-- L2 -> L3
-	-- ---------------------------------------------------
-		
-	-- Retracted samples only can be disposed
-	IF @state_preceding = 'RT' and @state_inserted <> 'RT' OR @state_inserted <> 'DX'
-		RAISERROR (15600, -1, -1, 'Retracted samples can not be changed.')
-
-	-- Only allow states from L3
-	IF @state_preceding = 'RC' AND @state_inserted <> 'VD' OR @state_inserted <> 'DP' OR  @state_inserted <> 'ST' OR @state_inserted <> 'DX' OR @state_inserted <> 'RT'
-		RAISERROR (15600, -1, -1, 'State not valid for L2 -> L3.')
-
-	-- Do not allow to validate request if measurements are unvalidated
-	IF @state_inserted = 'VD' AND (SELECT COUNT(*) FROM measurement WHERE request = (SELECT request FROM inserted) AND (state = 'AQ' OR state = 'CP')) > 0
-		RAISERROR (15600, -1, -1, 'Validation of request failed. Non validated measurements are found.')
-
-	-- ---------------------------------------------------
-	-- L3 - > L4
-	-- ---------------------------------------------------
-
-	-- Only allow states from L4
-	IF @state_preceding = 'VD' AND @state_inserted <> 'MA' OR @state_inserted <> 'ST' OR @state_inserted <> 'DX'
-		RAISERROR (15600, -1, -1, 'State not valid for L3 -> L4.')
-
-	-- ---------------------------------------------------
-	-- L4 - > L5
-	-- ---------------------------------------------------
-		
-	-- Only allow states from L5
-	IF @state_preceding = 'MA' AND @state_inserted <> 'ST' OR @state_inserted <> 'DX'
-		RAISERROR (15600, -1, -1, 'State not valid for L4 -> L5.')
-END
-GO
-DISABLE TRIGGER [dbo].[state_update]
-    ON [dbo].[state];
-
-
-GO
 PRINT N'Trigger "[dbo].[customfield_audit]" wird erstellt...';
 
 
@@ -8515,6 +8285,29 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
+PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[setup_insert]
+   ON  dbo.setup
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT COUNT(id) FROM setup) > 1
+		THROW 51000, 'Only one row config is allowed.', 1 
+END
+GO
 PRINT N'Trigger "[dbo].[filter_insert_update]" wird erstellt...';
 
 
@@ -8538,11 +8331,11 @@ BEGIN
 		THROW 51000, 'Filter without user id need to be global.', 1
 
 	-- Allow just one filter by form to be activated
-	IF ( (SELECT trigger_nestlevel() ) < 2 )
-		UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+	-- IF ( (SELECT trigger_nestlevel() ) < 2 )
+	-- 	   UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END
 GO
-PRINT N'Trigger "[dbo].[setup_insert]" wird erstellt...';
+PRINT N'Trigger "[dbo].[workflow_audit]" wird erstellt...';
 
 
 GO
@@ -8551,8 +8344,62 @@ GO
 -- Create date: 2022 January
 -- Description:	-
 -- =============================================
-CREATE TRIGGER [dbo].[setup_insert]
-   ON  dbo.setup
+CREATE TRIGGER [dbo].[workflow_audit]
+   ON  [dbo].[workflow] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[state_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 February
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[state_insert]
+   ON  [dbo].[state]
    AFTER INSERT
 AS 
 BEGIN
@@ -8561,9 +8408,172 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	IF (SELECT COUNT(id) FROM setup) > 1
-		THROW 51000, 'Only one row config is allowed.', 1 
+	DECLARE cur CURSOR FOR SELECT id FROM state WHERE workflow = (SELECT workflow FROM inserted) ORDER BY id
+	DECLARE @i INT
+	DECLARE @state CHAR(2)
+
+	SET @state = (SELECT state FROM inserted)
+	IF @state <> 'CP' AND @state <> 'RT' AND @state <> 'RC' AND @state <> 'VD' AND @state <> 'MA' AND @state <> 'DP' AND @state <> 'ST' AND @state <> 'DX'
+		THROW 51000, 'State unknown.', 1
+
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		INSERT INTO step (step, state) SELECT id, @i FROM state WHERE id NOT IN (SELECT step FROM step WHERE state = @i) AND workflow = (SELECT workflow FROM inserted)
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
 END
+GO
+PRINT N'Trigger "[dbo].[state_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[state_audit]
+   ON  [dbo].[state] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[state_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER [dbo].[state_update]
+   ON  dbo.state
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @state_inserted CHAR(2), @state_preceding CHAR(2)
+
+	SET @state_inserted = (SELECT state FROM inserted) 
+	SET @state_preceding = (SELECT state FROM state WHERE id = (SELECT id FROM inserted) -1)
+
+	-- Check if state is a valid one
+	IF @state_inserted <> 'CP' AND @state_inserted <> 'RT' AND @state_inserted <> 'RC' AND @state_inserted <> 'VD' AND @state_inserted <> 'MA' AND @state_inserted <> 'DP' AND @state_inserted <> 'ST' AND @state_inserted <> 'DX'
+	RAISERROR (15600, -1, -1, 'State unknown.')
+
+	-- Manage allowed state traversals
+	-- -------------------------------------------------------
+	-- L1 					  CP
+	--                       /  \
+	-- L2                   RC  RT -> DX
+	--                ______|_______________________
+	--                |		|		|		|		|
+	-- L3             VD	DP		ST		DX		RT -> DX
+	--           _____|_________
+	--          |		|		|
+	-- L4       MA		ST		DX
+	--     _____|____
+	--     |		|
+	-- L5  ST		DX
+	-- -------------------------------------------------------
+	-- CP - Captured	RT - Retract	RC - Received
+	-- VD - Validated	MA - Mailed		DP - Dispatched
+	-- ST - Stored		DX - Disposed
+	-- -------------------------------------------------------
+		
+	-- ---------------------------------------------------
+	-- L1 -> L2
+	-- ---------------------------------------------------
+
+	-- Only allow states from L2
+	IF @state_preceding = 'CP' AND @state_inserted <> 'RC' OR @state_inserted <> 'RT'
+		RAISERROR (15600, -1, -1, 'State not valid for L1 -> L2.')
+
+	-- ---------------------------------------------------
+	-- L2 -> L3
+	-- ---------------------------------------------------
+		
+	-- Retracted samples only can be disposed
+	IF @state_preceding = 'RT' and @state_inserted <> 'RT' OR @state_inserted <> 'DX'
+		RAISERROR (15600, -1, -1, 'Retracted samples can not be changed.')
+
+	-- Only allow states from L3
+	IF @state_preceding = 'RC' AND @state_inserted <> 'VD' OR @state_inserted <> 'DP' OR  @state_inserted <> 'ST' OR @state_inserted <> 'DX' OR @state_inserted <> 'RT'
+		RAISERROR (15600, -1, -1, 'State not valid for L2 -> L3.')
+
+	-- Do not allow to validate request if measurements are unvalidated
+	IF @state_inserted = 'VD' AND (SELECT COUNT(*) FROM measurement WHERE request = (SELECT request FROM inserted) AND (state = 'AQ' OR state = 'CP')) > 0
+		RAISERROR (15600, -1, -1, 'Validation of request failed. Non validated measurements are found.')
+
+	-- ---------------------------------------------------
+	-- L3 - > L4
+	-- ---------------------------------------------------
+
+	-- Only allow states from L4
+	IF @state_preceding = 'VD' AND @state_inserted <> 'MA' OR @state_inserted <> 'ST' OR @state_inserted <> 'DX'
+		RAISERROR (15600, -1, -1, 'State not valid for L3 -> L4.')
+
+	-- ---------------------------------------------------
+	-- L4 - > L5
+	-- ---------------------------------------------------
+		
+	-- Only allow states from L5
+	IF @state_preceding = 'MA' AND @state_inserted <> 'ST' OR @state_inserted <> 'DX'
+		RAISERROR (15600, -1, -1, 'State not valid for L4 -> L5.')
+END
+GO
+DISABLE TRIGGER [dbo].[state_update]
+    ON [dbo].[state];
+
+
 GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
@@ -8861,7 +8871,7 @@ GO
 CREATE VIEW dbo.view_measurement
 AS
 SELECT dbo.measurement.id, dbo.measurement.request, dbo.customer.name AS customer, dbo.analysis.title AS analysis, dbo.method.title AS method, dbo.instrument.title AS instrument, dbo.measurement.value_txt AS value, dbo.audit_get_value('analysis', dbo.analysis.id, 'unit', dbo.measurement.acquired_at) AS unit, dbo.measurement.out_of_spec, dbo.measurement.state, 
-         dbo.request.profile, dbo.measurement.subcontraction
+         dbo.request.profile, dbo.measurement.subcontraction, dbo.request.smppoint, dbo.request.smp_date
 FROM  dbo.state INNER JOIN
          dbo.request ON dbo.state.id = dbo.request.state INNER JOIN
          dbo.customer ON dbo.request.customer = dbo.customer.id INNER JOIN
@@ -9330,50 +9340,6 @@ OutputDataSet = pd.DataFrame(esd_test(InputDataSet["value"], ' + CAST(@max_outli
 '
 
 	EXECUTE sp_execute_external_script @language = N'Python', @script = @s, @input_data_1 = @inquery
-END
-GO
-PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 March
--- Description:	Create audit trail from record
--- =============================================
-CREATE PROCEDURE [dbo].[template_run]
-	-- Add the parameters for the stored procedure here
-	@template INT,
-	@priority INT,
-	@workflow INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	DECLARE @id INT = NULL
-	DECLARE @i INT
-
-	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
-
-	SET @id = SCOPE_IDENTITY()
-
-	BEGIN
-		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
-
-		OPEN tmpl
-		FETCH NEXT FROM tmpl INTO @i
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
-			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
-			FETCH NEXT FROM tmpl INTO @i
-		END
-		CLOSE tmpl
-		DEALLOCATE tmpl
-	END
 END
 GO
 PRINT N'Prozedur "[dbo].[lims_initialize]" wird erstellt...';
@@ -10127,6 +10093,74 @@ BEGIN
 	END CATCH
 END
 GO
+PRINT N'Prozedur "[dbo].[template_run]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 March
+-- Description:	Create audit trail from record
+-- =============================================
+CREATE PROCEDURE [dbo].[template_run]
+	-- Add the parameters for the stored procedure here
+	@template INT,
+	@priority INT,
+	@workflow INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	DECLARE @id INT = NULL
+	DECLARE @i INT
+
+	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
+
+	SET @id = SCOPE_IDENTITY()
+
+	UPDATE request SET subrequest = NULL WHERE id = @id
+
+	BEGIN
+		DECLARE tmpl CURSOR FOR SELECT template_profile.id FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template.id = (@template)
+
+		OPEN tmpl
+		FETCH NEXT FROM tmpl INTO @i
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+			INSERT INTO request (customer, priority, profile, workflow, smppoint) SELECT customer, template_profile.priority, template_profile.profile, template_profile.workflow, template_profile.smppoint FROM template INNER JOIN template_profile ON (template.id = template_profile.template) WHERE template_profile.id = @i
+			UPDATE request SET subrequest = @id WHERE id = SCOPE_IDENTITY()
+			FETCH NEXT FROM tmpl INTO @i
+		END
+		CLOSE tmpl
+		DEALLOCATE tmpl
+	END
+END
+GO
+PRINT N'Prozedur "[dbo].[template_duplicate]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Create date: 2024 October
+-- Description:	Duplicate template
+-- =============================================
+CREATE PROCEDURE [dbo].[template_duplicate]
+	@pTemplate As INT
+AS
+BEGIN
+	DECLARE @id_keys table([id] INT)
+	DECLARE @id INT
+
+	INSERT INTO template (customer, title, description, priority, workflow, report_template, deactivate) OUTPUT inserted.id INTO @id_keys VALUES((SELECT customer FROM template WHERE id = @pTemplate), (SELECT title FROM template WHERE id = @pTemplate) + '_duplicate', (SELECT description FROM template WHERE id = @pTemplate), (SELECT priority FROM template WHERE id = @pTemplate), (SELECT workflow FROM template WHERE id = @pTemplate), (SELECT report_template FROM template WHERE id = @pTemplate), (SELECT deactivate FROM template WHERE id = @pTemplate))
+
+	SET @id = (SELECT TOP 1 id FROM @id_keys)
+
+	INSERT INTO template_profile (template, profile, priority, workflow, smppoint) (SELECT @id, profile, priority,workflow, smppoint FROM template_profile WHERE template = @pTemplate)
+END
+GO
 PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
 
 
@@ -10146,7 +10180,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.4.2'
+	SET @version_be = 'v2.5.0'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -11454,22 +11488,6 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Desc
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[state].[title].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, IM - Intermediate, RJ - Reject, RC - Received, VD - Validated, ML - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'title';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[state].[state].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, RT - Retract, RC - Received, VD - Validated, MA - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'state';
 
 
 GO
@@ -13057,6 +13075,22 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_measurement].[MS_DiagramPaneCount]" 
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_measurement';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[state].[title].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, IM - Intermediate, RJ - Reject, RC - Received, VD - Validated, ML - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'title';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[state].[state].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, RT - Retract, RC - Received, VD - Validated, MA - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'state';
 
 
 GO
