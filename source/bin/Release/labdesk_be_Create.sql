@@ -8665,6 +8665,19 @@ FROM            dbo.request INNER JOIN
                          dbo.audit ON dbo.request.id = dbo.audit.table_id
 WHERE        (dbo.audit.table_name = 'request') AND (dbo.audit.action_type = 'I') AND (dbo.audit.changed_by = SUSER_SNAME())
 GO
+PRINT N'Sicht "[dbo].[view_request_role]" wird erstellt...';
+
+
+GO
+CREATE VIEW dbo.view_request_role
+AS
+SELECT dbo.request.*, dbo.users.name
+FROM  dbo.role INNER JOIN
+         dbo.users ON dbo.role.id = dbo.users.role INNER JOIN
+         dbo.request INNER JOIN
+         dbo.state ON dbo.request.state = dbo.state.id ON dbo.role.id = dbo.state.role
+WHERE (dbo.users.name = SUSER_SNAME())
+GO
 PRINT N'Funktion "[dbo].[audit_get_first]" wird erstellt...';
 
 
@@ -13091,6 +13104,178 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[state].[state].[MS_Description]" wird ers
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'CP - Captured, RT - Retract, RC - Received, VD - Validated, MA - Mailed, DP - Dispatched, ST - Stored, DX - Disposed', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'state', @level2type = N'COLUMN', @level2name = N'state';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_role].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "request"
+            Begin Extent = 
+               Top = 12
+               Left = 76
+               Bottom = 671
+               Right = 575
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "users"
+            Begin Extent = 
+               Top = 13
+               Left = 1492
+               Bottom = 260
+               Right = 1767
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "state"
+            Begin Extent = 
+               Top = 363
+               Left = 651
+               Bottom = 610
+               Right = 926
+            End
+            DisplayFlags = 280
+            TopColumn = 1
+         End
+         Begin Table = "role"
+            Begin Extent = 
+               Top = 194
+               Left = 1083
+               Bottom = 441
+               Right = 1358
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 9
+         Width = 284
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+         Width = 750
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+En', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_role';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_role].[MS_DiagramPane2]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'd
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_role';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_role].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_role';
 
 
 GO
