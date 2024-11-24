@@ -63,7 +63,7 @@ BEGIN
 	FETCH NEXT FROM analysis_cur INTO @i, @d
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis WHERE analysis.id = @i)
 			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
 			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
 			FETCH NEXT FROM analysis_cur INTO @i, @d
@@ -85,7 +85,7 @@ BEGIN
 	FETCH NEXT FROM analysis_cur INTO @i, @d
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @s = (SELECT analysis.unit FROM analysis WHERE analysis.id = @i)
 			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
 			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
 			FETCH NEXT FROM analysis_cur INTO @i, @d

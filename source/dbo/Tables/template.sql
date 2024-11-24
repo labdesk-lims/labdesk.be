@@ -3,6 +3,7 @@
     [customer]        INT            NOT NULL,
     [title]           VARCHAR (255)  NULL,
     [description]     NVARCHAR (MAX) NULL,
+    [client_order_id]  VARCHAR (255)   NULL,
     [priority]        INT            NOT NULL,
     [workflow]        INT            NOT NULL,
     [report_template] VARCHAR (255)  NULL,

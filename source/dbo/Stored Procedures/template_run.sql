@@ -7,7 +7,8 @@ CREATE PROCEDURE [dbo].[template_run]
 	-- Add the parameters for the stored procedure here
 	@template INT,
 	@priority INT,
-	@workflow INT
+	@workflow INT,
+	@client_order_id VARCHAR (255)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -18,7 +19,7 @@ BEGIN
 	DECLARE @id INT = NULL
 	DECLARE @i INT
 
-	INSERT INTO request (description, customer, priority, workflow) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow)
+	INSERT INTO request (description, customer, priority, workflow, client_order_id) VALUES ((SELECT '[' + SUSER_NAME() + '] ' + convert(nvarchar(max), (SELECT SYSDATETIME()))), (SELECT customer FROM template WHERE id = @template), @priority, @workflow, @client_order_id)
 
 	SET @id = SCOPE_IDENTITY()
 

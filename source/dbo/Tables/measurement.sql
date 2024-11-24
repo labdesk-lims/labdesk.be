@@ -104,9 +104,14 @@ BEGIN
 	DECLARE @usl FLOAT
 	DECLARE @lsl_include BIT
 	DECLARE @usl_include BIT
+	DECLARE @num_format NCHAR(1)
+	DECLARE @num_culture NCHAR(5)
 
 	IF ( (SELECT trigger_nestlevel() ) < 2 )
 	BEGIN
+		SET @num_format = (SELECT TOP 1 num_format FROM setup)
+		SET @num_culture = (SELECT TOP 1 num_culture FROM setup)
+
 		SET @request = (SELECT request FROM deleted)
 		SET @analysis = (SELECT analysis FROM deleted)
 
@@ -223,7 +228,7 @@ BEGIN
 			-- Set value_txt in case of numeric values
 			IF (SELECT type FROM analysis WHERE id = (SELECT analysis FROM inserted)) = 'N'
 			BEGIN
-				UPDATE measurement SET value_txt = (ROUND((SELECT value_num FROM inserted), (SELECT precision FROM analysis WHERE id = (SELECT analysis FROM inserted)))) WHERE id = (SELECT id FROM inserted)
+				UPDATE measurement SET value_txt = FORMAT(ROUND((SELECT value_num FROM inserted), (SELECT precision FROM analysis WHERE id = (SELECT analysis FROM inserted))), @num_format, @num_culture) WHERE id = (SELECT id FROM inserted)
 			END
 
 			-- Check for qc measurement and block instrument in case of out of control event

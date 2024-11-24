@@ -206,4 +206,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </PreDeploy>
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="labdesk_be.refactorlog" />
+  </ItemGroup>
 </Project>

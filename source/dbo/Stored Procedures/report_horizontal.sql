@@ -13,7 +13,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	DECLARE analysis_cur CURSOR FOR SELECT analysis.id FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id IN (SELECT measurement.analysis FROM request INNER JOIN measurement ON (measurement.request = request.id) WHERE request = @request OR subrequest = @request) ORDER BY analysis.sortkey
+	DECLARE analysis_cur CURSOR FOR SELECT analysis.id FROM analysis WHERE analysis.id IN (SELECT measurement.analysis FROM request INNER JOIN measurement ON (measurement.request = request.id) WHERE request = @request OR subrequest = @request) ORDER BY analysis.sortkey
 	DECLARE request_cur CURSOR FOR SELECT request.id FROM request WHERE request.subrequest = @request
 	DECLARE @q1 NVARCHAR(MAX)
 	DECLARE @q2 NVARCHAR(MAX)
@@ -42,7 +42,7 @@ BEGIN
 		END
 	SET @q1 = LEFT(@q1, LEN(@q1)-1) + ')'
 	CLOSE analysis_cur
-	
+	PRINT @q1
 	-- Create table by executing query
 	EXEC (@q1)
 
@@ -56,7 +56,7 @@ BEGIN
 	FETCH NEXT FROM analysis_cur INTO @i
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @s = (SELECT TOP 1 analysis.title FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @s = (SELECT TOP 1 analysis.title FROM analysis WHERE analysis.id = @i)
 			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
 			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
 			FETCH NEXT FROM analysis_cur INTO @i
@@ -78,7 +78,7 @@ BEGIN
 	FETCH NEXT FROM analysis_cur INTO @i
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @s = (SELECT analysis.unit FROM analysis INNER JOIN method_analysis ON (method_analysis.analysis = analysis.id) INNER JOIN method ON (method.id = method_analysis.method) WHERE method_analysis.applies = 1 AND analysis.id = @i)
+			SET @s = (SELECT analysis.unit FROM analysis WHERE analysis.id = @i)
 			SET @q2 = @q2 + 'ID' + CONVERT(VARCHAR(MAX), @i) + ','
 			SET @q3 = @q3 + '''' + ISNULL(@s,'') + '''' + ','
 			FETCH NEXT FROM analysis_cur INTO @i
