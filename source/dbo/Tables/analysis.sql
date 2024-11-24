@@ -98,6 +98,7 @@ BEGIN
 	IF NOT EXISTS (SELECT id FROM deleted)
 	BEGIN
 		INSERT INTO method_analysis (method, analysis) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_analysis WHERE analysis = @id) AND deactivate = 0
+		INSERT INTO profile_analysis (profile, analysis) SELECT DISTINCT profile.id, @id FROM analysis LEFT JOIN profile ON (profile.id <> 0)
 	END
 
 	IF (SELECT calculation_activate FROM inserted) = 1 AND (SELECT calculation FROM inserted) IS NULL

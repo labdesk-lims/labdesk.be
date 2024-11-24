@@ -200,6 +200,7 @@
     <Build Include="dbo\Stored Procedures\report_horizontal_profile.sql" />
     <Build Include="dbo\Stored Procedures\template_duplicate.sql" />
     <Build Include="dbo\Views\view_request_role.sql" />
+    <Build Include="dbo\Stored Procedures\profile_duplicate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="dbo\Script.PreDeployment.sql">
