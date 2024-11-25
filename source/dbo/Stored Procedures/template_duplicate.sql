@@ -9,7 +9,7 @@ BEGIN
 	DECLARE @id_keys table([id] INT)
 	DECLARE @id INT
 
-	INSERT INTO template (customer, title, description, priority, workflow, report_template, deactivate) OUTPUT inserted.id INTO @id_keys VALUES((SELECT customer FROM template WHERE id = @pTemplate), (SELECT title FROM template WHERE id = @pTemplate) + '_duplicate', (SELECT description FROM template WHERE id = @pTemplate), (SELECT priority FROM template WHERE id = @pTemplate), (SELECT workflow FROM template WHERE id = @pTemplate), (SELECT report_template FROM template WHERE id = @pTemplate), 1)
+	INSERT INTO template (customer, title, description, priority, workflow, report_template, client_order_id, deactivate) OUTPUT inserted.id INTO @id_keys VALUES((SELECT customer FROM template WHERE id = @pTemplate), (SELECT title FROM template WHERE id = @pTemplate) + '_duplicate', (SELECT description FROM template WHERE id = @pTemplate), (SELECT priority FROM template WHERE id = @pTemplate), (SELECT workflow FROM template WHERE id = @pTemplate), (SELECT report_template FROM template WHERE id = @pTemplate), (SELECT client_order_id FROM template WHERE id = @pTemplate), 1)
 
 	SET @id = (SELECT TOP 1 id FROM @id_keys)
 
