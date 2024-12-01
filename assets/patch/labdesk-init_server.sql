@@ -11,10 +11,6 @@ RECONFIGURE;
 GO
 EXECUTE sp_configure 'external scripts enabled', 1;
 GO
-RECONFIGURE; 
-GO
-EXEC sp_configure 'xp_cmdshell', 1
-GO
 RECONFIGURE;
 GO
 sp_configure 'Ole Automation Procedures', 1;
