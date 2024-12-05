@@ -108,7 +108,7 @@ BEGIN
 		BEGIN
 			
 			-- Create an insert query for inserting values
-			SET @p = (SELECT profile.title FROM profile WHERE profile.id = @j)
+			SET @p = (SELECT profile.description FROM profile WHERE profile.id = @j)
 			SET @q4 = 'INSERT INTO ##t (#,'
 			SET @q5 = '(' + '''' + @p + '''' + ','
 
