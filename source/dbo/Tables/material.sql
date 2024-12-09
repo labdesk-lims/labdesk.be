@@ -70,3 +70,32 @@ BEGIN
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2024 December
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[material_insert_update]
+   ON  dbo.material
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	-- Insert material_hp cross table
+	IF NOT EXISTS (SELECT id FROM deleted)
+	BEGIN
+		INSERT INTO material_hp (identifier, material) SELECT item, (SELECT id FROM inserted) FROM translation WHERE container = 'material' AND (item LIKE 'hazard_%' OR item LIKE '%precautionary_%' OR item LIKE 'EUH_%') ORDER BY item ASC
+	END
+
+	-- UPDATE material_hp cross table
+	IF EXISTS (SELECT id FROM deleted)
+	BEGIN
+		INSERT INTO material_hp (identifier, material) SELECT item, (SELECT id FROM inserted) item FROM translation WHERE container = 'material' AND (item LIKE 'hazard_%' OR item LIKE '%precautionary_%' OR item LIKE 'EUH_%') AND item NOT IN (SELECT identifier FROM material_hp WHERE material = (SELECT ID FROM inserted))
+	END
+END

@@ -6,6 +6,7 @@
     [verbous]         BIT           CONSTRAINT [DF_setup_verbous] DEFAULT 0 NULL,
     [vat]             FLOAT (53)    CONSTRAINT [DF_setup_vat] DEFAULT 0 NOT NULL,
     [upload_max_byte] INT           CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) NOT NULL,
+    [nav_button]      BIT           NOT NULL DEFAULT 0,
     [num_format] NCHAR(1) NOT NULL DEFAULT 'G', 
     [num_culture] NCHAR(5) NOT NULL DEFAULT 'de-de', 
     [version_fe]      VARCHAR (255) NULL, 
