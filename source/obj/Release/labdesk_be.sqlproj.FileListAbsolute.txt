@@ -16,7 +16,3 @@ C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\sourc
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\labdesk_be.sqlproj.AssemblyReference.cache
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\labdesk_be.dll
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\labdesk_be.pdb
-C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\Model.xml
-C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\refactor.xml
-C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\postdeploy.sql
-C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\predeploy.sql

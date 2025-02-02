@@ -14,7 +14,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	DECLARE analysis_cur CURSOR FOR SELECT DISTINCT profile_analysis.analysis, analysis.sortkey FROM profile_analysis INNER JOIN profile ON (profile.id = profile_analysis.profile) INNER JOIN analysis ON (analysis.id = profile_analysis.analysis) WHERE profile_analysis.applies = 1 AND profile.id IN (SELECT profile FROM request WHERE subrequest = @request) ORDER BY analysis.sortkey
-	DECLARE profile_cur CURSOR FOR SELECT request.profile FROM request WHERE subrequest = @request
+	DECLARE profile_cur CURSOR FOR SELECT request.profile FROM request WHERE subrequest = @request GROUP BY request.profile
 	DECLARE @q1 NVARCHAR(MAX)
 	DECLARE @q2 NVARCHAR(MAX)
 	DECLARE @q3 NVARCHAR(MAX)
@@ -29,8 +29,8 @@ BEGIN
 	DECLARE @a2 NVARCHAR(MAX)
 	DECLARE @min float
 	DECLARE @max float
-	DECLARE @min_inc float
-	DECLARE @max_inc float
+	DECLARE @min_inc bit
+	DECLARE @max_inc bit
 	DECLARE @language VARCHAR(32)
 
 	-- Get the language setting for acutal user
@@ -110,7 +110,7 @@ BEGIN
 			-- Create an insert query for inserting values
 			SET @p = (SELECT profile.description FROM profile WHERE profile.id = @j)
 			SET @q4 = 'INSERT INTO ##t (#,'
-			SET @q5 = '(' + '''' + @p + '''' + ','
+			SET @q5 = '(' + '''' + ISNULL(@p, '') + '''' + ','
 
 			OPEN analysis_cur
 			FETCH NEXT FROM analysis_cur INTO @i, @d
