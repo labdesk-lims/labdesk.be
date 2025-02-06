@@ -8,7 +8,8 @@
     [upload_max_byte] INT           CONSTRAINT [DF_setup_upload_max] DEFAULT ((1000000)) NOT NULL,
     [nav_button]      BIT           NOT NULL DEFAULT 0,
     [num_format] NCHAR(1) NOT NULL DEFAULT 'G', 
-    [num_culture] NCHAR(5) NOT NULL DEFAULT 'de-de', 
+    [num_culture] NCHAR(5) NOT NULL DEFAULT 'de-de',
+    [auto_validate] BIT NOT NULL CONSTRAINT [DF_setup_auto_validate] DEFAULT 0, 
     [version_fe]      VARCHAR (255) NULL, 
     CONSTRAINT [PK_configuration] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [CK_setup] CHECK ([vat]>=(0) AND [vat]<=(100))

@@ -106,6 +106,9 @@ BEGIN
 	DECLARE @usl_include BIT
 	DECLARE @num_format NCHAR(1)
 	DECLARE @num_culture NCHAR(5)
+	DECLARE @auto_validate BIT
+
+	SET @auto_validate = (SELECT TOP 1 auto_validate FROM setup)
 
 	IF ( (SELECT trigger_nestlevel() ) < 2 )
 	BEGIN
@@ -265,6 +268,12 @@ BEGIN
 		BEGIN
 			UPDATE measurement SET validated_by = SUSER_NAME() WHERE id = (SELECT id FROM inserted)
 			UPDATE measurement SET validated_at = GETDATE() WHERE id = (SELECT id FROM inserted)
+		END
+
+		-- Auto-Validate if set in table setup
+		IF @auto_validate = 1 AND ((SELECT state FROM inserted) = 'CP' OR (SELECT state FROM inserted) = 'AQ')
+		BEGIN
+			UPDATE measurement SET state = 'VD' WHERE id = (SELECT id FROM inserted)
 		END
 	END
 END
