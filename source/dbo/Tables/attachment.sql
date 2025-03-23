@@ -22,7 +22,6 @@
     [material]         INT             NULL,
     [service]          INT             NULL,
     [project]          INT             NULL,
-    [task]             INT             NULL,
     [billing_customer] INT             NULL,
     CONSTRAINT [PK_attachment] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_attachment_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE CASCADE,
@@ -37,7 +36,6 @@
     CONSTRAINT [FK_attachment_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE,
     CONSTRAINT [FK_attachment_service] FOREIGN KEY ([service]) REFERENCES [dbo].[service] ([id]) ON DELETE CASCADE,
     CONSTRAINT [FK_attachment_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_attachment_task] FOREIGN KEY ([task]) REFERENCES [dbo].[task] ([id]),
     CONSTRAINT [FK_attachment_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id])
 );
 

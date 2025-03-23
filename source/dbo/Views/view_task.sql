@@ -1,10 +1,14 @@
 ﻿CREATE VIEW dbo.view_task
 AS
-SELECT        dbo.task.id, dbo.task.title, dbo.project.id AS project_id, dbo.project.title AS project_title, dbo.task.description, dbo.task.created_by, dbo.task.created_at, dbo.task.planned_start, dbo.task.planned_end, dbo.task.workload_planned, 
-                         dbo.task.fulfillment
-FROM            dbo.task INNER JOIN
-                         dbo.project ON dbo.task.project = dbo.project.id
-WHERE        (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1)
+SELECT dbo.task.id, dbo.task.title, dbo.project.id AS project_id, dbo.project.title AS project_title, dbo.task.description, dbo.task.created_by, dbo.task.created_at, dbo.task.planned_start, dbo.task.planned_end, dbo.task.workload_planned, dbo.task.fulfillment
+FROM   dbo.task INNER JOIN
+             dbo.project ON dbo.task.project = dbo.project.id
+WHERE (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND
+             (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND (dbo.task.predecessor IS NULL OR 
+			 dbo.task.id IN
+                 (SELECT predecessor
+                 FROM    dbo.task
+                 WHERE fulfillment = 100 AND dbo.task.predecessor IS NOT NULL))
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]

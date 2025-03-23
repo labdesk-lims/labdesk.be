@@ -11,23 +11,24 @@
     [realized_start]   DATETIME       NULL,
     [realized_end]     DATETIME       NULL,
     [fulfillment]      INT            CONSTRAINT [DF_task_fullfillment] DEFAULT ((0)) NULL,
+	[predecessor]	   INT            NULL,
     [project]          INT            NULL,
     [deactivate]       BIT            CONSTRAINT [DF_task_deactivate] DEFAULT ((0)) NULL,
     CONSTRAINT [PK_task] PRIMARY KEY CLUSTERED ([id] ASC),
+	CONSTRAINT [PK_task_predecessor] FOREIGN KEY ([id]) REFERENCES [dbo].[task] ([id]),
     CONSTRAINT [FK_task_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE,
     CONSTRAINT [FK_task_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id])
 );
 
-
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2022 June
--- Description:	Delete attachments
+-- Create date: 2025 February
+-- Description:	Check plausibility of predecessor
 -- =============================================
-CREATE TRIGGER task_attachment
+CREATE TRIGGER task_insert_update
    ON  dbo.task
-   AFTER DELETE
+   AFTER INSERT, UPDATE
 AS 
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,7 +36,9 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	DELETE FROM attachment WHERE task = (SELECT id FROM deleted)
+	-- Check if profile selection is valid
+	IF (SELECT id FROM task WHERE project = (SELECT project FROM inserted) AND id = (SELECT predecessor FROM inserted)) IS NULL AND (SELECT predecessor FROM inserted) IS NOT NULL
+		THROW 51000, 'Task not part of the project.', 1
 END
 
 GO

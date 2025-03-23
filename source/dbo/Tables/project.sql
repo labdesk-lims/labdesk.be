@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[project] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [id]          INT NOT NULL IDENTITY,
     [title]       VARCHAR (255)  NULL,
     [description] NVARCHAR (MAX) NULL,
     [profile]     INT            NULL,
