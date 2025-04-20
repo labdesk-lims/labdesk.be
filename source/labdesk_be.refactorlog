@@ -14,4 +14,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="num_culture" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="50343e7a-3aeb-4d82-bcdb-a00ab8828cae" ChangeDateTime="04/19/2025 07:52:02">
+    <Property Name="ElementName" Value="[dbo].[translation].[factory]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[translation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="factoryset" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3829aef3-bd5f-4d71-8f56-3bceacfc3c20" ChangeDateTime="04/19/2025 07:52:07">
+    <Property Name="ElementName" Value="[dbo].[translation].[factoryset]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[translation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="factory" />
+  </Operation>
 </Operations>

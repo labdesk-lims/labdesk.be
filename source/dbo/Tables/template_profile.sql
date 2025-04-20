@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[template_profile] (
     [id]       INT IDENTITY (1, 1) NOT NULL,
     [template] INT NOT NULL,
-    [profile]  INT NOT NULL,
-    [priority] INT NOT NULL,
+    [profile]  INT NULL,
+    [priority] INT NULL,
     [workflow] INT NOT NULL,
     [smppoint] INT NULL,
     CONSTRAINT [PK_template_profile] PRIMARY KEY CLUSTERED ([id] ASC),

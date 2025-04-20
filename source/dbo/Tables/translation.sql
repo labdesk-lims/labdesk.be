@@ -5,6 +5,8 @@
     [en]        NVARCHAR (MAX) NULL,
     [de]        NVARCHAR (MAX) NULL,
     [custom]    NVARCHAR (MAX) NULL,
+    [mandantory] BIT DEFAULT ((0)) NOT NULL,
+    [factory] BIT DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
 );
@@ -60,3 +62,24 @@ BEGIN
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2025 April
+-- Description:	Preserve factory seetings
+-- =============================================
+CREATE TRIGGER translation_update 
+   ON  translation
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT factory FROM inserted) = 1 AND (SELECT mandantory FROM inserted) <> (SELECT mandantory FROM deleted)
+		THROW 51000, 'Factory settings can not be modified.', 1
+END
+GO

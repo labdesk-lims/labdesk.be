@@ -351,6 +351,31 @@ CREATE UNIQUE NONCLUSTERED INDEX [uq_users]
 
 
 GO
+PRINT N'Tabelle "[dbo].[task]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[task] (
+    [id]               INT            IDENTITY (1, 1) NOT NULL,
+    [title]            VARCHAR (255)  NULL,
+    [description]      NVARCHAR (MAX) NULL,
+    [created_by]       VARCHAR (255)  NULL,
+    [created_at]       DATETIME       NULL,
+    [responsible]      INT            NULL,
+    [planned_start]    DATETIME       NULL,
+    [planned_end]      DATETIME       NULL,
+    [workload_planned] FLOAT (53)     NULL,
+    [realized_start]   DATETIME       NULL,
+    [realized_end]     DATETIME       NULL,
+    [fulfillment]      INT            NULL,
+    [predecessor]      INT            NULL,
+    [project]          INT            NULL,
+    [deactivate]       BIT            NULL,
+    CONSTRAINT [PK_task] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'Tabelle "[dbo].[request_service]" wird erstellt...';
 
 
@@ -419,15 +444,34 @@ PRINT N'Tabelle "[dbo].[template]" wird erstellt...';
 GO
 CREATE TABLE [dbo].[template] (
     [id]              INT            IDENTITY (1, 1) NOT NULL,
-    [customer]        INT            NOT NULL,
+    [customer]        INT            NULL,
     [title]           VARCHAR (255)  NULL,
     [description]     NVARCHAR (MAX) NULL,
     [client_order_id] VARCHAR (255)  NULL,
-    [priority]        INT            NOT NULL,
+    [priority]        INT            NULL,
     [workflow]        INT            NOT NULL,
     [report_template] VARCHAR (255)  NULL,
     [deactivate]      BIT            NOT NULL,
     CONSTRAINT [PK_template] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[project]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[project] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [profile]     INT            NULL,
+    [owner]       VARCHAR (255)  NOT NULL,
+    [started]     BIT            NULL,
+    [deactivate]  BIT            NULL,
+    [customer]    INT            NULL,
+    [invoice]     BIT            NULL,
+    CONSTRAINT [PK_project] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -442,23 +486,6 @@ CREATE TABLE [dbo].[project_customfield] (
     [field_value] NVARCHAR (MAX) NULL,
     [project]     INT            NOT NULL,
     CONSTRAINT [PK_project_customfield] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[translation]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[translation] (
-    [id]        INT            IDENTITY (1, 1) NOT NULL,
-    [container] VARCHAR (255)  NULL,
-    [item]      VARCHAR (255)  NULL,
-    [en]        NVARCHAR (MAX) NULL,
-    [de]        NVARCHAR (MAX) NULL,
-    [custom]    NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
 );
 
 
@@ -942,32 +969,6 @@ CREATE TABLE [dbo].[traversal] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[analysis]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[analysis] (
-    [id]                   INT            IDENTITY (1, 1) NOT NULL,
-    [title]                VARCHAR (255)  NULL,
-    [technique]            INT            NULL,
-    [description]          NVARCHAR (MAX) NULL,
-    [unit]                 VARCHAR (255)  NULL,
-    [type]                 CHAR (1)       NOT NULL,
-    [precision]            INT            NOT NULL,
-    [ldl]                  FLOAT (53)     NULL,
-    [udl]                  FLOAT (53)     NULL,
-    [calculation]          NVARCHAR (MAX) NULL,
-    [calculation_activate] BIT            NOT NULL,
-    [condition_activate]   BIT            NOT NULL,
-    [uncertainty_activate] BIT            NOT NULL,
-    [sortkey]              INT            NULL,
-    [deactivate]           BIT            NOT NULL,
-    [price]                MONEY          NOT NULL,
-    CONSTRAINT [PK_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[department]" wird erstellt...';
 
 
@@ -993,6 +994,40 @@ CREATE TABLE [dbo].[technique] (
     [sortkey]     INT            NULL,
     [deactivate]  BIT            NULL,
     CONSTRAINT [PK_technique] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[attachment]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[attachment] (
+    [id]               INT             IDENTITY (1, 1) NOT NULL,
+    [title]            VARCHAR (255)   NULL,
+    [file_name]        NVARCHAR (MAX)  NULL,
+    [version_control]  BIT             NULL,
+    [reminder]         DATETIME        NULL,
+    [responsible]      INT             NULL,
+    [revision]         DATETIME        NULL,
+    [repetition]       INT             NULL,
+    [upload_by]        VARCHAR (255)   NULL,
+    [upload_at]        DATETIME        NULL,
+    [attach]           BIT             NOT NULL,
+    [blob]             VARBINARY (MAX) NULL,
+    [certificate]      INT             NULL,
+    [qualification]    INT             NULL,
+    [request]          INT             NULL,
+    [method]           INT             NULL,
+    [instrument]       INT             NULL,
+    [customer]         INT             NULL,
+    [manufacturer]     INT             NULL,
+    [supplier]         INT             NULL,
+    [material]         INT             NULL,
+    [service]          INT             NULL,
+    [project]          INT             NULL,
+    [billing_customer] INT             NULL,
+    CONSTRAINT [PK_attachment] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1220,7 +1255,7 @@ CREATE TABLE [dbo].[request] (
     [id]               INT             IDENTITY (1, 1) NOT NULL,
     [description]      NVARCHAR (MAX)  NULL,
     [photo]            VARBINARY (MAX) NULL,
-    [customer]         INT             NOT NULL,
+    [customer]         INT             NULL,
     [cc_email]         NVARCHAR (MAX)  NULL,
     [smp_date]         DATETIME        NULL,
     [smptype]          INT             NULL,
@@ -1233,7 +1268,7 @@ CREATE TABLE [dbo].[request] (
     [smp_composit]     BIT             NOT NULL,
     [client_sample_id] VARCHAR (255)   NULL,
     [client_order_id]  VARCHAR (255)   NULL,
-    [priority]         INT             NOT NULL,
+    [priority]         INT             NULL,
     [internal_use]     BIT             NOT NULL,
     [profile]          INT             NULL,
     [project]          INT             NULL,
@@ -1258,8 +1293,8 @@ GO
 CREATE TABLE [dbo].[template_profile] (
     [id]       INT IDENTITY (1, 1) NOT NULL,
     [template] INT NOT NULL,
-    [profile]  INT NOT NULL,
-    [priority] INT NOT NULL,
+    [profile]  INT NULL,
+    [priority] INT NULL,
     [workflow] INT NOT NULL,
     [smppoint] INT NULL,
     CONSTRAINT [PK_template_profile] PRIMARY KEY CLUSTERED ([id] ASC)
@@ -1723,80 +1758,47 @@ CREATE TABLE [dbo].[material_hp] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[project]" wird erstellt...';
+PRINT N'Tabelle "[dbo].[analysis]" wird erstellt...';
 
 
 GO
-CREATE TABLE [dbo].[project] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [profile]     INT            NULL,
-    [owner]       VARCHAR (255)  NOT NULL,
-    [started]     BIT            NULL,
-    [deactivate]  BIT            NULL,
-    [customer]    INT            NULL,
-    [invoice]     BIT            NULL,
-    CONSTRAINT [PK_project] PRIMARY KEY CLUSTERED ([id] ASC)
+CREATE TABLE [dbo].[analysis] (
+    [id]                   INT            IDENTITY (1, 1) NOT NULL,
+    [title]                VARCHAR (255)  NULL,
+    [technique]            INT            NULL,
+    [description]          NVARCHAR (MAX) NULL,
+    [unit]                 VARCHAR (255)  NULL,
+    [type]                 CHAR (1)       NOT NULL,
+    [precision]            INT            NOT NULL,
+    [ldl]                  FLOAT (53)     NULL,
+    [udl]                  FLOAT (53)     NULL,
+    [calculation]          NVARCHAR (MAX) NULL,
+    [calculation_activate] BIT            NOT NULL,
+    [condition_activate]   BIT            NOT NULL,
+    [uncertainty_activate] BIT            NOT NULL,
+    [sortkey]              INT            NULL,
+    [deactivate]           BIT            NOT NULL,
+    [price]                MONEY          NOT NULL,
+    CONSTRAINT [PK_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
 GO
-PRINT N'Tabelle "[dbo].[task]" wird erstellt...';
+PRINT N'Tabelle "[dbo].[translation]" wird erstellt...';
 
 
 GO
-CREATE TABLE [dbo].[task] (
-    [id]               INT            IDENTITY (1, 1) NOT NULL,
-    [title]            VARCHAR (255)  NULL,
-    [description]      NVARCHAR (MAX) NULL,
-    [created_by]       VARCHAR (255)  NULL,
-    [created_at]       DATETIME       NULL,
-    [responsible]      INT            NULL,
-    [planned_start]    DATETIME       NULL,
-    [planned_end]      DATETIME       NULL,
-    [workload_planned] FLOAT (53)     NULL,
-    [realized_start]   DATETIME       NULL,
-    [realized_end]     DATETIME       NULL,
-    [fulfillment]      INT            NULL,
-    [predecessor]      INT            NULL,
-    [project]          INT            NULL,
-    [deactivate]       BIT            NULL,
-    CONSTRAINT [PK_task] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[attachment]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[attachment] (
-    [id]               INT             IDENTITY (1, 1) NOT NULL,
-    [title]            VARCHAR (255)   NULL,
-    [file_name]        NVARCHAR (MAX)  NULL,
-    [version_control]  BIT             NULL,
-    [reminder]         DATETIME        NULL,
-    [responsible]      INT             NULL,
-    [revision]         DATETIME        NULL,
-    [repetition]       INT             NULL,
-    [upload_by]        VARCHAR (255)   NULL,
-    [upload_at]        DATETIME        NULL,
-    [attach]           BIT             NOT NULL,
-    [blob]             VARBINARY (MAX) NULL,
-    [certificate]      INT             NULL,
-    [qualification]    INT             NULL,
-    [request]          INT             NULL,
-    [method]           INT             NULL,
-    [instrument]       INT             NULL,
-    [customer]         INT             NULL,
-    [manufacturer]     INT             NULL,
-    [supplier]         INT             NULL,
-    [material]         INT             NULL,
-    [service]          INT             NULL,
-    [project]          INT             NULL,
-    [billing_customer] INT             NULL,
-    CONSTRAINT [PK_attachment] PRIMARY KEY CLUSTERED ([id] ASC)
+CREATE TABLE [dbo].[translation] (
+    [id]         INT            IDENTITY (1, 1) NOT NULL,
+    [container]  VARCHAR (255)  NULL,
+    [item]       VARCHAR (255)  NULL,
+    [en]         NVARCHAR (MAX) NULL,
+    [de]         NVARCHAR (MAX) NULL,
+    [custom]     NVARCHAR (MAX) NULL,
+    [mandantory] BIT            NOT NULL,
+    [factory]    BIT            NOT NULL,
+    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
 );
 
 
@@ -1816,6 +1818,42 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_language]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[users]
     ADD CONSTRAINT [DF_users_language] DEFAULT (N'en') FOR [language];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_created_by]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [DF_task_created_by] DEFAULT (suser_name()) FOR [created_by];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_created_at]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [DF_task_created_at] DEFAULT (getdate()) FOR [created_at];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_fullfillment]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [DF_task_fullfillment] DEFAULT ((0)) FOR [fulfillment];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [DF_task_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
@@ -1870,6 +1908,42 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_template_deactivate]" wird erstellt...
 GO
 ALTER TABLE [dbo].[template]
     ADD CONSTRAINT [DF_template_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_owner]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_owner] DEFAULT (suser_name()) FOR [owner];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_started]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_started] DEFAULT ((0)) FOR [started];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_invoice]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_invoice] DEFAULT ((0)) FOR [invoice];
 
 
 GO
@@ -2152,69 +2226,6 @@ ALTER TABLE [dbo].[filter]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_type]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_type] DEFAULT ('N') FOR [type];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_precision]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_precision] DEFAULT ((0)) FOR [precision];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_calculation_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_calculation_activate] DEFAULT ((0)) FOR [calculation_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_condition_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_condition_activate] DEFAULT ((0)) FOR [condition_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_uncertainty_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_uncertainty_activate] DEFAULT ((0)) FOR [uncertainty_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_price]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_price] DEFAULT ((0)) FOR [price];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_department_deactivate]" wird erstellt...';
 
 
@@ -2230,6 +2241,24 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_technique_deactivate]" wird erstellt..
 GO
 ALTER TABLE [dbo].[technique]
     ADD CONSTRAINT [DF_technique_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_attachment_version_control]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [DF_attachment_version_control] DEFAULT ((0)) FOR [version_control];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_attachment_attach]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [DF_attachment_attach] DEFAULT ((0)) FOR [attach];
 
 
 GO
@@ -2728,93 +2757,84 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_owner]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_type]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_owner] DEFAULT (suser_name()) FOR [owner];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_type] DEFAULT ('N') FOR [type];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_started]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_precision]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_started] DEFAULT ((0)) FOR [started];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_precision] DEFAULT ((0)) FOR [precision];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_deactivate]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_calculation_activate]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_deactivate] DEFAULT ((0)) FOR [deactivate];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_calculation_activate] DEFAULT ((0)) FOR [calculation_activate];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_invoice]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_condition_activate]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_invoice] DEFAULT ((0)) FOR [invoice];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_condition_activate] DEFAULT ((0)) FOR [condition_activate];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_created_by]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_uncertainty_activate]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [DF_task_created_by] DEFAULT (suser_name()) FOR [created_by];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_uncertainty_activate] DEFAULT ((0)) FOR [uncertainty_activate];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_created_at]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_deactivate]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [DF_task_created_at] DEFAULT (getdate()) FOR [created_at];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_deactivate] DEFAULT ((0)) FOR [deactivate];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_fullfillment]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_price]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [DF_task_fullfillment] DEFAULT ((0)) FOR [fulfillment];
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_price] DEFAULT ((0)) FOR [price];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_task_deactivate]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [DF_task_deactivate] DEFAULT ((0)) FOR [deactivate];
+ALTER TABLE [dbo].[translation]
+    ADD DEFAULT ((0)) FOR [mandantory];
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_attachment_version_control]" wird erstellt...';
+PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [DF_attachment_version_control] DEFAULT ((0)) FOR [version_control];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_attachment_attach]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [DF_attachment_attach] DEFAULT ((0)) FOR [attach];
+ALTER TABLE [dbo].[translation]
+    ADD DEFAULT ((0)) FOR [factory];
 
 
 GO
@@ -2833,6 +2853,33 @@ PRINT N'Fremdschlüssel "[dbo].[FK_users_role]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[users]
     ADD CONSTRAINT [FK_users_role] FOREIGN KEY ([role]) REFERENCES [dbo].[role] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[PK_task_predecessor]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [PK_task_predecessor] FOREIGN KEY ([id]) REFERENCES [dbo].[task] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_task_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [FK_task_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_task_users]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[task]
+    ADD CONSTRAINT [FK_task_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id]);
 
 
 GO
@@ -2923,6 +2970,24 @@ PRINT N'Fremdschlüssel "[dbo].[FK_template_workflow]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[template]
     ADD CONSTRAINT [FK_template_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [FK_project_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_profile]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [FK_project_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
 
 
 GO
@@ -3241,12 +3306,120 @@ ALTER TABLE [dbo].[traversal]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_analysis_technique]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_billing_customer]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [FK_analysis_technique] FOREIGN KEY ([technique]) REFERENCES [dbo].[technique] ([id]);
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_instrument]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_instrument_certificate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_instrument_certificate] FOREIGN KEY ([certificate]) REFERENCES [dbo].[certificate] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_manufacturer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_manufacturer] FOREIGN KEY ([manufacturer]) REFERENCES [dbo].[manufacturer] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_material]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_method]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_qualification]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_qualification] FOREIGN KEY ([qualification]) REFERENCES [dbo].[qualification] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_request]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_service]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_service] FOREIGN KEY ([service]) REFERENCES [dbo].[service] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_supplier]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_attachment_users]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[attachment]
+    ADD CONSTRAINT [FK_attachment_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id]);
 
 
 GO
@@ -3781,165 +3954,12 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_customer]" wird erstellt...';
+PRINT N'Fremdschlüssel "[dbo].[FK_analysis_technique]" wird erstellt...';
 
 
 GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [FK_project_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_profile]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [FK_project_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[PK_task_predecessor]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [PK_task_predecessor] FOREIGN KEY ([id]) REFERENCES [dbo].[task] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_task_project]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [FK_task_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_task_users]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[task]
-    ADD CONSTRAINT [FK_task_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_billing_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_billing_customer] FOREIGN KEY ([billing_customer]) REFERENCES [dbo].[billing_customer] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_instrument]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_instrument] FOREIGN KEY ([instrument]) REFERENCES [dbo].[instrument] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_instrument_certificate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_instrument_certificate] FOREIGN KEY ([certificate]) REFERENCES [dbo].[certificate] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_manufacturer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_manufacturer] FOREIGN KEY ([manufacturer]) REFERENCES [dbo].[manufacturer] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_material]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_material] FOREIGN KEY ([material]) REFERENCES [dbo].[material] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_method]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_method] FOREIGN KEY ([method]) REFERENCES [dbo].[method] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_project]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_qualification]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_qualification] FOREIGN KEY ([qualification]) REFERENCES [dbo].[qualification] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_request]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_service]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_service] FOREIGN KEY ([service]) REFERENCES [dbo].[service] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_supplier]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_supplier] FOREIGN KEY ([supplier]) REFERENCES [dbo].[supplier] ([id]) ON DELETE CASCADE;
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_attachment_users]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[attachment]
-    ADD CONSTRAINT [FK_attachment_users] FOREIGN KEY ([responsible]) REFERENCES [dbo].[users] ([id]);
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [FK_analysis_technique] FOREIGN KEY ([technique]) REFERENCES [dbo].[technique] ([id]);
 
 
 GO
@@ -3985,6 +4005,83 @@ CREATE TRIGGER users_audit
 AS 
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[task_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2025 February
+-- Description:	Check plausibility of predecessor
+-- =============================================
+CREATE TRIGGER task_insert_update
+   ON  dbo.task
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	-- Check if profile selection is valid
+	IF (SELECT id FROM task WHERE project = (SELECT project FROM inserted) AND id = (SELECT predecessor FROM inserted)) IS NULL AND (SELECT predecessor FROM inserted) IS NOT NULL
+		THROW 51000, 'Task not part of the project.', 1
+END
+GO
+PRINT N'Trigger "[dbo].[task_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER task_audit
+   ON  dbo.task
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
@@ -4291,17 +4388,42 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
+PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
 
 
 GO
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Kogel, Lutz
+-- Create date: 2023 June
+-- Description:	-
 -- =============================================
-CREATE TRIGGER translation_audit 
-   ON  translation
+CREATE TRIGGER [dbo].[project_insert]
+   ON  [dbo].[project]
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+
+	-- Insert custom fields
+	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
+
+END
+GO
+PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_audit]
+   ON  dbo.project
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -5932,133 +6054,6 @@ BEGIN
 	-- 	   UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
 END
 GO
-PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 April
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[analysis_audit] 
-   ON  dbo.analysis
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[analysis_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[analysis_insert_update]
-   ON  dbo.analysis
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM method_analysis WHERE applies = 1 AND analysis = (SELECT (id) FROM inserted)) > 0
-		THROW 51000, 'Deactivation failed. Analysis is still in use.', 1
-
-	-- Update instrument_method and method_analysis cross table
-	DECLARE @id INT
-
-	SET @id = (SELECT id FROM inserted)
-
-	IF NOT EXISTS (SELECT id FROM deleted)
-	BEGIN
-		INSERT INTO method_analysis (method, analysis) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_analysis WHERE analysis = @id) AND deactivate = 0
-		INSERT INTO profile_analysis (profile, analysis) SELECT DISTINCT profile.id, @id FROM analysis LEFT JOIN profile ON (profile.id <> 0)
-	END
-
-	IF (SELECT calculation_activate FROM inserted) = 1 AND (SELECT calculation FROM inserted) IS NULL
-		THROW 51000, 'Activation failed. Calculation not found.', 1
-
-	IF (SELECT ldl FROM inserted) > (SELECT udl FROM inserted)
-		THROW 51000,  'LDL bigger than UDL.', 1
-
-	IF (SELECT precision FROM inserted) < 0
-		THROW 51000,  'Precision must be zero or bigger.', 1
-
-	IF (SELECT type FROM inserted) <> 'N' AND (SELECT type FROM inserted) <> 'A' AND (SELECT type FROM inserted) <> 'T'
-		THROW 51000,  'Type unknown.', 1
-END
-GO
-PRINT N'Trigger "[dbo].[analysis_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[analysis_delete] 
-   ON  dbo.analysis 
-   INSTEAD OF DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @err_msg NVARCHAR(MAX)
-
-	IF (SELECT COUNT(*) FROM cfield WHERE analysis_id = (SELECT id FROM deleted)) > 0 OR (SELECT COUNT(*) FROM profile_analysis WHERE analysis = (SELECT id FROM deleted) AND applies = 1) > 0
-		THROW 51000, 'Can not delete. Analysis used in cfield or profile.', 1
-	ELSE
-		DELETE FROM analysis WHERE id = (SELECT id FROM deleted)
-END
-GO
 PRINT N'Trigger "[dbo].[department_audit]" wird erstellt...';
 
 
@@ -6188,6 +6183,113 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[attachment_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 June
+-- Description:	Version control validity check
+-- ==============================================
+CREATE TRIGGER [dbo].[attachment_update]
+   ON  dbo.attachment
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT version_control FROM inserted) = 1 AND ((SELECT reminder FROM inserted) = NULL OR (SELECT responsible FROM inserted) = NULL OR (SELECT repetition FROM inserted) = NULL)
+		THROW 51000, 'Version control needs reminder, revision and repetion values to be set.', 1 
+
+	IF (SELECT version_control FROM inserted) = 1 AND (SELECT revision FROM inserted) <> (SELECT revision FROM deleted)
+		UPDATE attachment SET reminder = DateAdd(day, (SELECT repetition FROM inserted), GetDate()) WHERE id = (SELECT id FROM inserted)
+END
+GO
+PRINT N'Trigger "[dbo].[attachment_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER [dbo].[attachment_insert] 
+   ON  dbo.attachment
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT version_control FROM inserted) = 1 AND ((SELECT reminder FROM inserted) = NULL OR (SELECT responsible FROM inserted) = NULL OR (SELECT repetition FROM inserted) = NULL)
+		THROW 51000, 'Version control needs reminder, revision and repetion values to be set.', 1 
+END
+GO
+PRINT N'Trigger "[dbo].[attachment_audit]" wird erstellt...';
+
+
+GO
+-- ==================================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 June
+-- Description:	Audit trail support in case of
+-- version control
+-- ==================================================
+CREATE TRIGGER [dbo].[attachment_audit]
+   ON  dbo.attachment
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT version_control FROM inserted) = 1
+	BEGIN
+		DECLARE @table_name nvarchar(256)
+		DECLARE @table_id INT
+		DECLARE @action_type char(1)
+		DECLARE @inserted xml, @deleted xml
+
+		IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+		RETURN;
+
+		-- Get table infos
+		SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+		-- Get action
+		IF EXISTS (SELECT * FROM inserted)
+			BEGIN
+				SELECT @table_id = id FROM inserted
+				IF EXISTS (SELECT * FROM deleted)
+					SELECT @action_type = 'U'
+				ELSE
+					SELECT @action_type = 'I'
+			END
+		ELSE
+			BEGIN
+				SELECT @table_id = id FROM deleted
+				SELECT @action_type = 'D'
+			END
+
+		-- Create xml log
+		SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+		SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+		-- Insert log
+		INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+		SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+	END
 END
 GO
 PRINT N'Trigger "[dbo].[measurement_cfield_audit]" wird erstellt...';
@@ -8420,42 +8522,17 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
+PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
 
 
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2023 June
+-- Create date: 2022 April
 -- Description:	-
 -- =============================================
-CREATE TRIGGER [dbo].[project_insert]
-   ON  [dbo].[project]
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-
-	-- Insert custom fields
-	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
-
-END
-GO
-PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[project_audit]
-   ON  dbo.project
+CREATE TRIGGER [dbo].[analysis_audit] 
+   ON  dbo.analysis
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -8499,17 +8576,17 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[task_insert_update]" wird erstellt...';
+PRINT N'Trigger "[dbo].[analysis_insert_update]" wird erstellt...';
 
 
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2025 February
--- Description:	Check plausibility of predecessor
--- =============================================
-CREATE TRIGGER task_insert_update
-   ON  dbo.task
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[analysis_insert_update]
+   ON  dbo.analysis
    AFTER INSERT, UPDATE
 AS 
 BEGIN
@@ -8518,12 +8595,37 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	-- Check if profile selection is valid
-	IF (SELECT id FROM task WHERE project = (SELECT project FROM inserted) AND id = (SELECT predecessor FROM inserted)) IS NULL AND (SELECT predecessor FROM inserted) IS NOT NULL
-		THROW 51000, 'Task not part of the project.', 1
+	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM method_analysis WHERE applies = 1 AND analysis = (SELECT (id) FROM inserted)) > 0
+		THROW 51000, 'Deactivation failed. Analysis is still in use.', 1
+
+	-- Update instrument_method and method_analysis cross table
+	DECLARE @id INT
+
+	SET @id = (SELECT id FROM inserted)
+
+	IF NOT EXISTS (SELECT id FROM deleted)
+	BEGIN
+		INSERT INTO method_analysis (method, analysis) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_analysis WHERE analysis = @id) AND deactivate = 0
+		IF (SELECT COUNT(id) FROM PROFILE) > 0
+		BEGIN
+			INSERT INTO profile_analysis (profile, analysis) SELECT DISTINCT profile.id, @id FROM analysis LEFT JOIN profile ON (profile.id <> 0)
+		END
+	END
+
+	IF (SELECT calculation_activate FROM inserted) = 1 AND (SELECT calculation FROM inserted) IS NULL
+		THROW 51000, 'Activation failed. Calculation not found.', 1
+
+	IF (SELECT ldl FROM inserted) > (SELECT udl FROM inserted)
+		THROW 51000,  'LDL bigger than UDL.', 1
+
+	IF (SELECT precision FROM inserted) < 0
+		THROW 51000,  'Precision must be zero or bigger.', 1
+
+	IF (SELECT type FROM inserted) <> 'N' AND (SELECT type FROM inserted) <> 'A' AND (SELECT type FROM inserted) <> 'T'
+		THROW 51000,  'Type unknown.', 1
 END
 GO
-PRINT N'Trigger "[dbo].[task_audit]" wird erstellt...';
+PRINT N'Trigger "[dbo].[analysis_delete]" wird erstellt...';
 
 
 GO
@@ -8531,12 +8633,40 @@ GO
 -- Author:		Kogel, Lutz
 -- Create date: 2022 January
 -- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[analysis_delete] 
+   ON  dbo.analysis 
+   INSTEAD OF DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @err_msg NVARCHAR(MAX)
+
+	IF (SELECT COUNT(*) FROM cfield WHERE analysis_id = (SELECT id FROM deleted)) > 0 OR (SELECT COUNT(*) FROM profile_analysis WHERE analysis = (SELECT id FROM deleted) AND applies = 1) > 0
+		THROW 51000, 'Can not delete. Analysis used in cfield or profile.', 1
+	ELSE
+		DELETE FROM analysis WHERE id = (SELECT id FROM deleted)
+END
+GO
+PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
+
+
+GO
 -- =============================================
-CREATE TRIGGER task_audit
-   ON  dbo.task
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER translation_audit 
+   ON  translation
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
@@ -8576,17 +8706,17 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[attachment_update]" wird erstellt...';
+PRINT N'Trigger "[dbo].[translation_update]" wird erstellt...';
 
 
 GO
 -- =============================================
 -- Author:		Kogel, Lutz
--- Create date: 2022 June
--- Description:	Version control validity check
--- ==============================================
-CREATE TRIGGER [dbo].[attachment_update]
-   ON  dbo.attachment
+-- Create date: 2025 April
+-- Description:	Preserve factory seetings
+-- =============================================
+CREATE TRIGGER translation_update 
+   ON  translation
    AFTER UPDATE
 AS 
 BEGIN
@@ -8595,92 +8725,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	IF (SELECT version_control FROM inserted) = 1 AND ((SELECT reminder FROM inserted) = NULL OR (SELECT responsible FROM inserted) = NULL OR (SELECT repetition FROM inserted) = NULL)
-		THROW 51000, 'Version control needs reminder, revision and repetion values to be set.', 1 
-
-	IF (SELECT version_control FROM inserted) = 1 AND (SELECT revision FROM inserted) <> (SELECT revision FROM deleted)
-		UPDATE attachment SET reminder = DateAdd(day, (SELECT repetition FROM inserted), GetDate()) WHERE id = (SELECT id FROM inserted)
-END
-GO
-PRINT N'Trigger "[dbo].[attachment_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER [dbo].[attachment_insert] 
-   ON  dbo.attachment
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT version_control FROM inserted) = 1 AND ((SELECT reminder FROM inserted) = NULL OR (SELECT responsible FROM inserted) = NULL OR (SELECT repetition FROM inserted) = NULL)
-		THROW 51000, 'Version control needs reminder, revision and repetion values to be set.', 1 
-END
-GO
-PRINT N'Trigger "[dbo].[attachment_audit]" wird erstellt...';
-
-
-GO
--- ==================================================
--- Author:		Kogel, Lutz
--- Create date: 2022 June
--- Description:	Audit trail support in case of
--- version control
--- ==================================================
-CREATE TRIGGER [dbo].[attachment_audit]
-   ON  dbo.attachment
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT version_control FROM inserted) = 1
-	BEGIN
-		DECLARE @table_name nvarchar(256)
-		DECLARE @table_id INT
-		DECLARE @action_type char(1)
-		DECLARE @inserted xml, @deleted xml
-
-		IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-		RETURN;
-
-		-- Get table infos
-		SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-		-- Get action
-		IF EXISTS (SELECT * FROM inserted)
-			BEGIN
-				SELECT @table_id = id FROM inserted
-				IF EXISTS (SELECT * FROM deleted)
-					SELECT @action_type = 'U'
-				ELSE
-					SELECT @action_type = 'I'
-			END
-		ELSE
-			BEGIN
-				SELECT @table_id = id FROM deleted
-				SELECT @action_type = 'D'
-			END
-
-		-- Create xml log
-		SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-		SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-		-- Insert log
-		INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-		SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-	END
+	IF (SELECT factory FROM inserted) = 1 AND (SELECT mandantory FROM inserted) <> (SELECT mandantory FROM deleted)
+		THROW 51000, 'Factory settings can not be modified.', 1
 END
 GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
@@ -8959,6 +9005,22 @@ FROM  dbo.measurement INNER JOIN
                      dbo.profile_analysis ON dbo.profile_analysis.profile = dbo.profile.id
             WHERE (dbo.profile_analysis.applies = 1)) AS t ON t.analysis = dbo.measurement.analysis AND dbo.measurement.request = t.id
 GO
+PRINT N'Sicht "[dbo].[view_task]" wird erstellt...';
+
+
+GO
+CREATE VIEW dbo.view_task
+AS
+SELECT dbo.task.id, dbo.task.title, dbo.project.id AS project_id, dbo.project.title AS project_title, dbo.task.description, dbo.task.created_by, dbo.task.created_at, dbo.task.planned_start, dbo.task.planned_end, dbo.task.workload_planned, dbo.task.fulfillment
+FROM   dbo.task INNER JOIN
+             dbo.project ON dbo.task.project = dbo.project.id
+WHERE (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND
+             (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND (dbo.task.predecessor IS NULL OR 
+			 dbo.task.id IN
+                 (SELECT predecessor
+                 FROM    dbo.task
+                 WHERE fulfillment = 100 AND dbo.task.predecessor IS NOT NULL))
+GO
 PRINT N'Sicht "[dbo].[view_project_owner]" wird erstellt...';
 
 
@@ -8990,22 +9052,6 @@ FROM  dbo.state INNER JOIN
          dbo.method ON dbo.measurement.method = dbo.method.id
 WHERE (dbo.measurement.state = 'CP') AND (dbo.state.state = 'RC') OR
          (dbo.measurement.state = 'AQ')
-GO
-PRINT N'Sicht "[dbo].[view_task]" wird erstellt...';
-
-
-GO
-CREATE VIEW dbo.view_task
-AS
-SELECT dbo.task.id, dbo.task.title, dbo.project.id AS project_id, dbo.project.title AS project_title, dbo.task.description, dbo.task.created_by, dbo.task.created_at, dbo.task.planned_start, dbo.task.planned_end, dbo.task.workload_planned, dbo.task.fulfillment
-FROM   dbo.task INNER JOIN
-             dbo.project ON dbo.task.project = dbo.project.id
-WHERE (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND
-             (dbo.task.responsible = dbo.users_get_id(SUSER_NAME())) AND (dbo.task.deactivate = 0) AND (dbo.project.started = 1) AND (dbo.task.predecessor IS NULL OR 
-			 dbo.task.id IN
-                 (SELECT predecessor
-                 FROM    dbo.task
-                 WHERE fulfillment = 100 AND dbo.task.predecessor IS NOT NULL))
 GO
 PRINT N'Funktion "[dbo].[xml_diff]" wird erstellt...';
 
@@ -10287,6 +10333,27 @@ BEGIN
 	END
 END
 GO
+PRINT N'Prozedur "[dbo].[project_duplicate]" wird erstellt...';
+
+
+GO
+CREATE PROCEDURE [dbo].[project_duplicate]
+	-- Add the parameters for the stored procedure here
+	@pProject As INT
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	INSERT INTO project (title, description, profile, owner, customer) SELECT title + '_duplicate', description, profile, owner, customer FROM project WHERE id = @pProject
+
+	ALTER TABLE task DISABLE TRIGGER task_insert_update
+	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, SCOPE_IDENTITY() FROM task WHERE task.project = @pProject)
+	ALTER TABLE task ENABLE TRIGGER task_insert_update
+END
+GO
 PRINT N'Prozedur "[dbo].[profile_duplicate]" wird erstellt...';
 
 
@@ -10318,27 +10385,6 @@ BEGIN
 	INSERT INTO profile_analysis (profile, analysis, method, sortkey, applies, true_value, acceptance, tsl, lsl, lsl_include, usl, usl_include) (SELECT @id, analysis, method, sortkey, applies, true_value, acceptance, tsl, lsl, lsl_include, usl, usl_include FROM profile_analysis WHERE profile = @pProfile)
 END
 GO
-PRINT N'Prozedur "[dbo].[project_duplicate]" wird erstellt...';
-
-
-GO
-CREATE PROCEDURE [dbo].[project_duplicate]
-	-- Add the parameters for the stored procedure here
-	@pProject As INT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	INSERT INTO project (title, description, profile, owner, customer) SELECT title + '_duplicate', description, profile, owner, customer FROM project WHERE id = @pProject
-
-	ALTER TABLE task DISABLE TRIGGER task_insert_update
-	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, SCOPE_IDENTITY() FROM task WHERE task.project = @pProject)
-	ALTER TABLE task ENABLE TRIGGER task_insert_update
-END
-GO
 PRINT N'Prozedur "[dbo].[version_be]" wird erstellt...';
 
 
@@ -10358,7 +10404,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.9.5'
+	SET @version_be = 'v2.9.6'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -11667,22 +11713,6 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, 
 
 
 GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[type].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, A-Attribute, T-Text', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'type';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
-
-
-GO
 PRINT N'Erweiterte Eigenschaft "[dbo].[state].[title].[MS_Description]" wird erstellt...';
 
 
@@ -12243,6 +12273,156 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_attachment_revision].[MS_DiagramPane
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_attachment_revision';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPane1]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[43] 4[22] 2[16] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "task"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 136
+               Right = 223
+            End
+            DisplayFlags = 280
+            TopColumn = 10
+         End
+         Begin Table = "project"
+            Begin Extent = 
+               Top = 6
+               Left = 262
+               Bottom = 136
+               Right = 432
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+      Begin ColumnWidths = 15
+         Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 1470
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 3480
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPaneCount]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
 
 
 GO
@@ -13308,153 +13488,19 @@ EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @leve
 
 
 GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPane1]" wird erstellt...';
+PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[type].[MS_Description]" wird erstellt...';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[43] 4[22] 2[16] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "task"
-            Begin Extent = 
-               Top = 6
-               Left = 38
-               Bottom = 136
-               Right = 223
-            End
-            DisplayFlags = 280
-            TopColumn = 10
-         End
-         Begin Table = "project"
-            Begin Extent = 
-               Top = 6
-               Left = 262
-               Bottom = 136
-               Right = 432
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      Begin ColumnWidths = 15
-         Width = 284
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-         Width = 1500
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 1470
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 3480
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, A-Attribute, T-Text', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'type';
 
 
 GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[view_task].[MS_DiagramPaneCount]" wird erstellt...';
+PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Description]" wird erstellt...';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_task';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
 
 
 GO
@@ -13470,6 +13516,10 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('de9e1acc-8b35-431c-8d71-853c09436f9c')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'a2c82950-859a-4bd4-b850-6a32df402938')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('a2c82950-859a-4bd4-b850-6a32df402938')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '50343e7a-3aeb-4d82-bcdb-a00ab8828cae')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('50343e7a-3aeb-4d82-bcdb-a00ab8828cae')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '3829aef3-bd5f-4d71-8f56-3bceacfc3c20')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('3829aef3-bd5f-4d71-8f56-3bceacfc3c20')
 
 GO
 

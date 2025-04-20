@@ -1,10 +1,10 @@
 ﻿CREATE TABLE [dbo].[template] (
     [id]              INT            IDENTITY (1, 1) NOT NULL,
-    [customer]        INT            NOT NULL,
+    [customer]        INT            NULL,
     [title]           VARCHAR (255)  NULL,
     [description]     NVARCHAR (MAX) NULL,
     [client_order_id]  VARCHAR (255)   NULL,
-    [priority]        INT            NOT NULL,
+    [priority]        INT            NULL,
     [workflow]        INT            NOT NULL,
     [report_template] VARCHAR (255)  NULL,
     [deactivate]      BIT            CONSTRAINT [DF_template_deactivate] DEFAULT ((0)) NOT NULL,
