@@ -3,10 +3,6 @@ C:\Users\lkoge\Documents\GitHub\labdesk.be\source\bin\Release\dbo\Script.PreDepl
 C:\Users\lkoge\Documents\GitHub\labdesk.be\source\bin\Release\labdesk_be.dll
 C:\Users\lkoge\Documents\GitHub\labdesk.be\source\bin\Release\labdesk_be.pdb
 C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\labdesk_be.sqlproj.AssemblyReference.cache
-C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\Model.xml
-C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\refactor.xml
-C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\postdeploy.sql
-C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\predeploy.sql
 C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\labdesk_be.dll
 C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\labdesk_be.pdb
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\bin\Release\labdesk_be.dacpac
@@ -20,3 +16,18 @@ C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\sourc
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\refactor.xml
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\postdeploy.sql
 C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\predeploy.sql
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\bin\Release\labdesk_be.dacpac
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\labdesk_be.sqlproj.AssemblyReference.cache
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\Model.xml
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\refactor.xml
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\postdeploy.sql
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\predeploy.sql
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\labdesk_be.dll
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\obj\Release\labdesk_be.pdb
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\bin\Release\dbo\Script.PreDeployment.sql
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\bin\Release\labdesk_be.dll
+C:\Users\lkoge\Documents\Labdesk\labdesk.be\source\bin\Release\labdesk_be.pdb
+C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\Model.xml
+C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\refactor.xml
+C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\postdeploy.sql
+C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\predeploy.sql

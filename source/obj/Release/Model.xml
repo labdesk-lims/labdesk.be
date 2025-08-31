@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="labdesk_be.dll" />
-			<Metadata Name="FileName" Value="C:\USERS\LKOGE\ONEDRIVE - KOLUMA GMBH\DOKUMENTE - EIGENE\GITHUB\LABDESK.BE\SOURCE\OBJ\RELEASE\LABDESK_BE.DLL" />
+			<Metadata Name="FileName" Value="C:\USERS\LKOGE\DOCUMENTS\GITHUB\LABDESK.BE\SOURCE\OBJ\RELEASE\LABDESK_BE.DLL" />
 			<Metadata Name="AssemblyName" Value="labdesk_be" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="C:\Users\lkoge\OneDrive - KOLUMA GmbH\Dokumente - Eigene\GitHub\labdesk.be\source\obj\Release\labdesk_be.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Users\lkoge\Documents\GitHub\labdesk.be\source\obj\Release\labdesk_be.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
@@ -46,6 +46,38 @@
 		</Element>
 		<Element Type="SqlDefaultConstraint">
 			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[((0))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[translation]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[translation].[mandantory]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="6" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[((0))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[translation]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[translation].[factory]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="7" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
 				<Value><![CDATA[0]]></Value>
 			</Property>
 			<Relationship Name="DefiningTable">
@@ -58,7 +90,7 @@
 					<References Name="[dbo].[setup].[nav_button]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="6" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="8" />
 		</Element>
 		<Element Type="SqlDefaultConstraint">
 			<Property Name="DefaultExpressionScript">
@@ -74,7 +106,7 @@
 					<References Name="[dbo].[setup].[num_format]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="7" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="9" />
 		</Element>
 		<Element Type="SqlDefaultConstraint">
 			<Property Name="DefaultExpressionScript">
@@ -88,38 +120,6 @@
 			<Relationship Name="ForColumn">
 				<Entry>
 					<References Name="[dbo].[setup].[num_culture]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="8" />
-		</Element>
-		<Element Type="SqlDefaultConstraint">
-			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[((0))]]></Value>
-			</Property>
-			<Relationship Name="DefiningTable">
-				<Entry>
-					<References Name="[dbo].[translation]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="ForColumn">
-				<Entry>
-					<References Name="[dbo].[translation].[mandantory]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="9" />
-		</Element>
-		<Element Type="SqlDefaultConstraint">
-			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[((0))]]></Value>
-			</Property>
-			<Relationship Name="DefiningTable">
-				<Entry>
-					<References Name="[dbo].[translation]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="ForColumn">
-				<Entry>
-					<References Name="[dbo].[translation].[factory]" />
 				</Entry>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="10" />
@@ -11202,22 +11202,6 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="171" />
 		</Element>
-		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_users_uid]">
-			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[(newid())]]></Value>
-			</Property>
-			<Relationship Name="DefiningTable">
-				<Entry>
-					<References Name="[dbo].[users]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="ForColumn">
-				<Entry>
-					<References Name="[dbo].[users].[uid]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="172" />
-		</Element>
 		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_workflow_deactivate]">
 			<Property Name="DefaultExpressionScript">
 				<Value><![CDATA[((0))]]></Value>
@@ -11232,7 +11216,7 @@ END]]></Value>
 					<References Name="[dbo].[workflow].[deactivate]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="173" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="172" />
 		</Element>
 		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_workload_created_by]">
 			<Property Name="DefaultExpressionScript">
@@ -11248,7 +11232,7 @@ END]]></Value>
 					<References Name="[dbo].[task_workload].[created_by]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="174" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="173" />
 		</Element>
 		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_workplace_deactivate]">
 			<Property Name="DefaultExpressionScript">
@@ -11264,7 +11248,7 @@ END]]></Value>
 					<References Name="[dbo].[workplace].[deactivate]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="175" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="174" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[errorlog]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -11357,7 +11341,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="176" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="175" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[filter]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -11484,7 +11468,7 @@ END]]></Value>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="177" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="176" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[filter_insert_update]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -12226,6 +12210,30 @@ END]]></Value>
 			<Relationship Name="DefiningTable">
 				<Entry>
 					<References Name="[dbo].[formulation]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[project].[id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[project]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="177" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_handbook_project]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[handbook].[project]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[handbook]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="ForeignColumns">
@@ -14660,7 +14668,7 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="270" />
-			<AttachedAnnotation Disambiguator="178" />
+			<AttachedAnnotation Disambiguator="177" />
 		</Element>
 		<Element Type="SqlDmlTrigger" Name="[dbo].[formulation_audit]">
 			<Property Name="IsInsertTrigger" Value="True" />
@@ -14990,7 +14998,21 @@ END]]></Value>
 				</Entry>
 				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[handbook].[request]">
-						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[handbook].[project]">
 						<Relationship Name="TypeSpecifier">
 							<Entry>
 								<Element Type="SqlTypeSpecifier">
@@ -15012,6 +15034,7 @@ END]]></Value>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="271" />
 			<AttachedAnnotation Disambiguator="179" />
+			<AttachedAnnotation Disambiguator="178" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[import]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -22469,7 +22492,7 @@ END]]></Value>
 					<References Name="[dbo].[errorlog]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="176" />
+			<AttachedAnnotation Disambiguator="175" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_filter]">
 			<Relationship Name="ColumnSpecifications">
@@ -22488,7 +22511,7 @@ END]]></Value>
 					<References Name="[dbo].[filter]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="177" />
+			<AttachedAnnotation Disambiguator="176" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_formulation]">
 			<Relationship Name="ColumnSpecifications">
@@ -25111,15 +25134,49 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
+	DECLARE @item As INT
+	DECLARE @i INT
+	DECLARE cur CURSOR FOR SELECT id FROM attachment WHERE attachment.project = @pProject
+
 	INSERT INTO project (title, description, profile, owner, customer) SELECT title + '_duplicate', description, profile, owner, customer FROM project WHERE id = @pProject
+	
+	SET @item = SCOPE_IDENTITY()
 
 	ALTER TABLE task DISABLE TRIGGER task_insert_update
-	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, SCOPE_IDENTITY() FROM task WHERE task.project = @pProject)
+	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, @item FROM task WHERE task.project = @pProject)
 	ALTER TABLE task ENABLE TRIGGER task_insert_update
+
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		INSERT INTO attachment (title, file_name, attach, blob, project) (SELECT title, file_name, attach, blob, @item FROM attachment WHERE attachment.id = @i)
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />
 			<Relationship Name="BodyDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[int]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[id]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[project]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[project_duplicate].[@pProject]" />
+				</Entry>
 				<Entry>
 					<References Name="[dbo].[project]" />
 				</Entry>
@@ -25140,9 +25197,6 @@ END]]></Value>
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[project].[id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[project_duplicate].[@pProject]" />
 				</Entry>
 				<Entry>
 					<References Name="[dbo].[task]" />
@@ -25183,6 +25237,24 @@ END]]></Value>
 				<Entry>
 					<References Name="[dbo].[task].[project]" />
 				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[title]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[file_name]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[attach]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[blob]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[project]" />
+				</Entry>
+				<Entry>
+					<References Name="[dbo].[attachment].[id]" />
+				</Entry>
 			</Relationship>
 			<Relationship Name="Parameters">
 				<Entry>
@@ -25207,7 +25279,7 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="904" />
+				<Property Name="Length" Value="1357" />
 				<Property Name="StartLine" Value="1" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="CREATE PROCEDURE [dbo].[project_duplicate]&#xD;&#xA;&#x9;-- Add the parameters for the stored procedure here&#xD;&#xA;&#x9;@pProject As INT&#xD;&#xA;AS" />
@@ -30478,7 +30550,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="6" />
+						<AttachedAnnotation Disambiguator="8" />
 					</Element>
 				</Entry>
 				<Entry>
@@ -30496,7 +30568,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="7" />
+						<AttachedAnnotation Disambiguator="9" />
 					</Element>
 				</Entry>
 				<Entry>
@@ -30514,7 +30586,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="8" />
+						<AttachedAnnotation Disambiguator="10" />
 					</Element>
 				</Entry>
 				<Entry>
@@ -34701,7 +34773,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="174" />
+						<AttachedAnnotation Disambiguator="173" />
 					</Element>
 				</Entry>
 				<Entry>
@@ -35911,7 +35983,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="9" />
+						<AttachedAnnotation Disambiguator="6" />
 					</Element>
 				</Entry>
 				<Entry>
@@ -35928,7 +36000,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="10" />
+						<AttachedAnnotation Disambiguator="7" />
 					</Element>
 				</Entry>
 			</Relationship>
@@ -36499,38 +36571,6 @@ END]]></Value>
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[uid]">
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[uniqueidentifier]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-						<AttachedAnnotation Disambiguator="172" />
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[uak]">
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Property Name="IsMax" Value="True" />
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[role]">
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -36706,10 +36746,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="753" />
+				<Property Name="Offset" Value="644" />
 				<Property Name="CreateOffset" Value="194" />
 				<Property Name="Length" Value="1449" />
-				<Property Name="StartLine" Value="21" />
+				<Property Name="StartLine" Value="19" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;&lt;Author,,Name&gt;&#xD;&#xA;-- Create date: &lt;Create Date,,&gt;&#xD;&#xA;-- Description:&#x9;&lt;Description,,&gt;&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER users_audit &#xD;&#xA;   ON  users&#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -37105,7 +37145,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.9.6'
+	SET @version_be = 'v2.9.8'
 END]]></Value>
 			</Property>
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -39766,7 +39806,7 @@ ORDER BY sortkey_measurement, sortkey_technique, sortkey_analysis]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="173" />
+						<AttachedAnnotation Disambiguator="172" />
 					</Element>
 				</Entry>
 			</Relationship>
@@ -40057,7 +40097,7 @@ END]]></Value>
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="175" />
+						<AttachedAnnotation Disambiguator="174" />
 					</Element>
 				</Entry>
 				<Entry>

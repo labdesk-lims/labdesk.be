@@ -330,13 +330,11 @@ PRINT N'Tabelle "[dbo].[users]" wird erstellt...';
 
 GO
 CREATE TABLE [dbo].[users] (
-    [id]       INT              IDENTITY (1, 1) NOT NULL,
-    [name]     VARCHAR (255)    NOT NULL,
-    [uid]      UNIQUEIDENTIFIER NULL,
-    [uak]      NVARCHAR (MAX)   NULL,
-    [role]     INT              NULL,
-    [contact]  INT              NULL,
-    [language] VARCHAR (32)     NOT NULL,
+    [id]       INT           IDENTITY (1, 1) NOT NULL,
+    [name]     VARCHAR (255) NOT NULL,
+    [role]     INT           NULL,
+    [contact]  INT           NULL,
+    [language] VARCHAR (32)  NOT NULL,
     CONSTRAINT [PK_users_name] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
@@ -486,6 +484,25 @@ CREATE TABLE [dbo].[project_customfield] (
     [field_value] NVARCHAR (MAX) NULL,
     [project]     INT            NOT NULL,
     CONSTRAINT [PK_project_customfield] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[translation]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[translation] (
+    [id]         INT            IDENTITY (1, 1) NOT NULL,
+    [container]  VARCHAR (255)  NULL,
+    [item]       VARCHAR (255)  NULL,
+    [en]         NVARCHAR (MAX) NULL,
+    [de]         NVARCHAR (MAX) NULL,
+    [custom]     NVARCHAR (MAX) NULL,
+    [mandantory] BIT            NOT NULL,
+    [factory]    BIT            NOT NULL,
+    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
 );
 
 
@@ -824,7 +841,8 @@ CREATE TABLE [dbo].[handbook] (
     [message]    NVARCHAR (MAX) NULL,
     [message_by] VARCHAR (255)  NULL,
     [message_at] DATETIME       NULL,
-    [request]    INT            NOT NULL,
+    [request]    INT            NULL,
+    [project]    INT            NULL,
     CONSTRAINT [PK_handbook] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
@@ -965,6 +983,32 @@ CREATE TABLE [dbo].[traversal] (
     [traversal_by]   VARCHAR (255) NULL,
     [request]        INT           NULL,
     CONSTRAINT [PK_traversal] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
+PRINT N'Tabelle "[dbo].[analysis]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[analysis] (
+    [id]                   INT            IDENTITY (1, 1) NOT NULL,
+    [title]                VARCHAR (255)  NULL,
+    [technique]            INT            NULL,
+    [description]          NVARCHAR (MAX) NULL,
+    [unit]                 VARCHAR (255)  NULL,
+    [type]                 CHAR (1)       NOT NULL,
+    [precision]            INT            NOT NULL,
+    [ldl]                  FLOAT (53)     NULL,
+    [udl]                  FLOAT (53)     NULL,
+    [calculation]          NVARCHAR (MAX) NULL,
+    [calculation_activate] BIT            NOT NULL,
+    [condition_activate]   BIT            NOT NULL,
+    [uncertainty_activate] BIT            NOT NULL,
+    [sortkey]              INT            NULL,
+    [deactivate]           BIT            NOT NULL,
+    [price]                MONEY          NOT NULL,
+    CONSTRAINT [PK_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 
@@ -1758,60 +1802,6 @@ CREATE TABLE [dbo].[material_hp] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[analysis]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[analysis] (
-    [id]                   INT            IDENTITY (1, 1) NOT NULL,
-    [title]                VARCHAR (255)  NULL,
-    [technique]            INT            NULL,
-    [description]          NVARCHAR (MAX) NULL,
-    [unit]                 VARCHAR (255)  NULL,
-    [type]                 CHAR (1)       NOT NULL,
-    [precision]            INT            NOT NULL,
-    [ldl]                  FLOAT (53)     NULL,
-    [udl]                  FLOAT (53)     NULL,
-    [calculation]          NVARCHAR (MAX) NULL,
-    [calculation_activate] BIT            NOT NULL,
-    [condition_activate]   BIT            NOT NULL,
-    [uncertainty_activate] BIT            NOT NULL,
-    [sortkey]              INT            NULL,
-    [deactivate]           BIT            NOT NULL,
-    [price]                MONEY          NOT NULL,
-    CONSTRAINT [PK_analysis] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
-PRINT N'Tabelle "[dbo].[translation]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[translation] (
-    [id]         INT            IDENTITY (1, 1) NOT NULL,
-    [container]  VARCHAR (255)  NULL,
-    [item]       VARCHAR (255)  NULL,
-    [en]         NVARCHAR (MAX) NULL,
-    [de]         NVARCHAR (MAX) NULL,
-    [custom]     NVARCHAR (MAX) NULL,
-    [mandantory] BIT            NOT NULL,
-    [factory]    BIT            NOT NULL,
-    CONSTRAINT [PK_translation] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [CK_Translation] UNIQUE NONCLUSTERED ([container] ASC, [item] ASC)
-);
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_uid]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[users]
-    ADD CONSTRAINT [DF_users_uid] DEFAULT (newid()) FOR [uid];
-
-
-GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_language]" wird erstellt...';
 
 
@@ -1944,6 +1934,24 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_invoice]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[project]
     ADD CONSTRAINT [DF_project_invoice] DEFAULT ((0)) FOR [invoice];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[translation]
+    ADD DEFAULT ((0)) FOR [mandantory];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[translation]
+    ADD DEFAULT ((0)) FOR [factory];
 
 
 GO
@@ -2223,6 +2231,69 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_filter_active]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[filter]
     ADD CONSTRAINT [DF_filter_active] DEFAULT ((0)) FOR [active];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_type]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_type] DEFAULT ('N') FOR [type];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_precision]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_precision] DEFAULT ((0)) FOR [precision];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_calculation_activate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_calculation_activate] DEFAULT ((0)) FOR [calculation_activate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_condition_activate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_condition_activate] DEFAULT ((0)) FOR [condition_activate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_uncertainty_activate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_uncertainty_activate] DEFAULT ((0)) FOR [uncertainty_activate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_price]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [DF_analysis_price] DEFAULT ((0)) FOR [price];
 
 
 GO
@@ -2757,87 +2828,6 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_type]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_type] DEFAULT ('N') FOR [type];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_precision]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_precision] DEFAULT ((0)) FOR [precision];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_calculation_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_calculation_activate] DEFAULT ((0)) FOR [calculation_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_condition_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_condition_activate] DEFAULT ((0)) FOR [condition_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_uncertainty_activate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_uncertainty_activate] DEFAULT ((0)) FOR [uncertainty_activate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_analysis_price]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [DF_analysis_price] DEFAULT ((0)) FOR [price];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[translation]
-    ADD DEFAULT ((0)) FOR [mandantory];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "unbenannte Einschränkungen auf [dbo].[translation]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[translation]
-    ADD DEFAULT ((0)) FOR [factory];
-
-
-GO
 PRINT N'Fremdschlüssel "[dbo].[FK_users_contact]" wird erstellt...';
 
 
@@ -3189,6 +3179,15 @@ ALTER TABLE [dbo].[handbook]
 
 
 GO
+PRINT N'Fremdschlüssel "[dbo].[FK_handbook_project]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[handbook]
+    ADD CONSTRAINT [FK_handbook_project] FOREIGN KEY ([project]) REFERENCES [dbo].[project] ([id]) ON DELETE CASCADE;
+
+
+GO
 PRINT N'Fremdschlüssel "[dbo].[FK_method_analysis_analysis]" wird erstellt...';
 
 
@@ -3303,6 +3302,15 @@ PRINT N'Fremdschlüssel "[dbo].[FK_traversal_request]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[traversal]
     ADD CONSTRAINT [FK_traversal_request] FOREIGN KEY ([request]) REFERENCES [dbo].[request] ([id]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_analysis_technique]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[analysis]
+    ADD CONSTRAINT [FK_analysis_technique] FOREIGN KEY ([technique]) REFERENCES [dbo].[technique] ([id]);
 
 
 GO
@@ -3954,15 +3962,6 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
-PRINT N'Fremdschlüssel "[dbo].[FK_analysis_technique]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[analysis]
-    ADD CONSTRAINT [FK_analysis_technique] FOREIGN KEY ([technique]) REFERENCES [dbo].[technique] ([id]);
-
-
-GO
 PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
 
 
@@ -4465,6 +4464,83 @@ BEGIN
 	-- Insert log
     INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER translation_audit 
+   ON  translation
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[translation_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2025 April
+-- Description:	Preserve factory seetings
+-- =============================================
+CREATE TRIGGER translation_update 
+   ON  translation
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT factory FROM inserted) = 1 AND (SELECT mandantory FROM inserted) <> (SELECT mandantory FROM deleted)
+		THROW 51000, 'Factory settings can not be modified.', 1
 END
 GO
 PRINT N'Trigger "[dbo].[qualification_insert_update]" wird erstellt...';
@@ -6052,6 +6128,136 @@ BEGIN
 	-- Allow just one filter by form to be activated
 	-- IF ( (SELECT trigger_nestlevel() ) < 2 )
 	-- 	   UPDATE filter SET active = 0 WHERE id <> (SELECT id FROM inserted) AND form = (SELECT form FROM inserted)
+END
+GO
+PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 April
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[analysis_audit] 
+   ON  dbo.analysis
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[analysis_insert_update]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[analysis_insert_update]
+   ON  dbo.analysis
+   AFTER INSERT, UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM method_analysis WHERE applies = 1 AND analysis = (SELECT (id) FROM inserted)) > 0
+		THROW 51000, 'Deactivation failed. Analysis is still in use.', 1
+
+	-- Update instrument_method and method_analysis cross table
+	DECLARE @id INT
+
+	SET @id = (SELECT id FROM inserted)
+
+	IF NOT EXISTS (SELECT id FROM deleted)
+	BEGIN
+		INSERT INTO method_analysis (method, analysis) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_analysis WHERE analysis = @id) AND deactivate = 0
+		IF (SELECT COUNT(id) FROM PROFILE) > 0
+		BEGIN
+			INSERT INTO profile_analysis (profile, analysis) SELECT DISTINCT profile.id, @id FROM analysis LEFT JOIN profile ON (profile.id <> 0)
+		END
+	END
+
+	IF (SELECT calculation_activate FROM inserted) = 1 AND (SELECT calculation FROM inserted) IS NULL
+		THROW 51000, 'Activation failed. Calculation not found.', 1
+
+	IF (SELECT ldl FROM inserted) > (SELECT udl FROM inserted)
+		THROW 51000,  'LDL bigger than UDL.', 1
+
+	IF (SELECT precision FROM inserted) < 0
+		THROW 51000,  'Precision must be zero or bigger.', 1
+
+	IF (SELECT type FROM inserted) <> 'N' AND (SELECT type FROM inserted) <> 'A' AND (SELECT type FROM inserted) <> 'T'
+		THROW 51000,  'Type unknown.', 1
+END
+GO
+PRINT N'Trigger "[dbo].[analysis_delete]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- ==============================================
+CREATE TRIGGER [dbo].[analysis_delete] 
+   ON  dbo.analysis 
+   INSTEAD OF DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @err_msg NVARCHAR(MAX)
+
+	IF (SELECT COUNT(*) FROM cfield WHERE analysis_id = (SELECT id FROM deleted)) > 0 OR (SELECT COUNT(*) FROM profile_analysis WHERE analysis = (SELECT id FROM deleted) AND applies = 1) > 0
+		THROW 51000, 'Can not delete. Analysis used in cfield or profile.', 1
+	ELSE
+		DELETE FROM analysis WHERE id = (SELECT id FROM deleted)
 END
 GO
 PRINT N'Trigger "[dbo].[department_audit]" wird erstellt...';
@@ -8522,213 +8728,6 @@ BEGIN
     SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
 END
 GO
-PRINT N'Trigger "[dbo].[analysis_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 April
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[analysis_audit] 
-   ON  dbo.analysis
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[analysis_insert_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[analysis_insert_update]
-   ON  dbo.analysis
-   AFTER INSERT, UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT deactivate FROM inserted) = 1 AND (SELECT COUNT(id) FROM method_analysis WHERE applies = 1 AND analysis = (SELECT (id) FROM inserted)) > 0
-		THROW 51000, 'Deactivation failed. Analysis is still in use.', 1
-
-	-- Update instrument_method and method_analysis cross table
-	DECLARE @id INT
-
-	SET @id = (SELECT id FROM inserted)
-
-	IF NOT EXISTS (SELECT id FROM deleted)
-	BEGIN
-		INSERT INTO method_analysis (method, analysis) SELECT id, @id FROM method WHERE id NOT IN (SELECT method FROM method_analysis WHERE analysis = @id) AND deactivate = 0
-		IF (SELECT COUNT(id) FROM PROFILE) > 0
-		BEGIN
-			INSERT INTO profile_analysis (profile, analysis) SELECT DISTINCT profile.id, @id FROM analysis LEFT JOIN profile ON (profile.id <> 0)
-		END
-	END
-
-	IF (SELECT calculation_activate FROM inserted) = 1 AND (SELECT calculation FROM inserted) IS NULL
-		THROW 51000, 'Activation failed. Calculation not found.', 1
-
-	IF (SELECT ldl FROM inserted) > (SELECT udl FROM inserted)
-		THROW 51000,  'LDL bigger than UDL.', 1
-
-	IF (SELECT precision FROM inserted) < 0
-		THROW 51000,  'Precision must be zero or bigger.', 1
-
-	IF (SELECT type FROM inserted) <> 'N' AND (SELECT type FROM inserted) <> 'A' AND (SELECT type FROM inserted) <> 'T'
-		THROW 51000,  'Type unknown.', 1
-END
-GO
-PRINT N'Trigger "[dbo].[analysis_delete]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- ==============================================
-CREATE TRIGGER [dbo].[analysis_delete] 
-   ON  dbo.analysis 
-   INSTEAD OF DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @err_msg NVARCHAR(MAX)
-
-	IF (SELECT COUNT(*) FROM cfield WHERE analysis_id = (SELECT id FROM deleted)) > 0 OR (SELECT COUNT(*) FROM profile_analysis WHERE analysis = (SELECT id FROM deleted) AND applies = 1) > 0
-		THROW 51000, 'Can not delete. Analysis used in cfield or profile.', 1
-	ELSE
-		DELETE FROM analysis WHERE id = (SELECT id FROM deleted)
-END
-GO
-PRINT N'Trigger "[dbo].[translation_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE TRIGGER translation_audit 
-   ON  translation
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[translation_update]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2025 April
--- Description:	Preserve factory seetings
--- =============================================
-CREATE TRIGGER translation_update 
-   ON  translation
-   AFTER UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	IF (SELECT factory FROM inserted) = 1 AND (SELECT mandantory FROM inserted) <> (SELECT mandantory FROM deleted)
-		THROW 51000, 'Factory settings can not be modified.', 1
-END
-GO
 PRINT N'Sicht "[dbo].[view_billing_position]" wird erstellt...';
 
 
@@ -10347,11 +10346,27 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
+	DECLARE @item As INT
+	DECLARE @i INT
+	DECLARE cur CURSOR FOR SELECT id FROM attachment WHERE attachment.project = @pProject
+
 	INSERT INTO project (title, description, profile, owner, customer) SELECT title + '_duplicate', description, profile, owner, customer FROM project WHERE id = @pProject
+	
+	SET @item = SCOPE_IDENTITY()
 
 	ALTER TABLE task DISABLE TRIGGER task_insert_update
-	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, SCOPE_IDENTITY() FROM task WHERE task.project = @pProject)
+	INSERT INTO task (title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, project) (SELECT title, description, created_by, created_at, responsible, planned_end, planned_start, workload_planned, predecessor, @item FROM task WHERE task.project = @pProject)
 	ALTER TABLE task ENABLE TRIGGER task_insert_update
+
+	OPEN cur
+	FETCH NEXT FROM cur INTO @i
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		INSERT INTO attachment (title, file_name, attach, blob, project) (SELECT title, file_name, attach, blob, @item FROM attachment WHERE attachment.id = @i)
+		FETCH NEXT FROM cur INTO @i
+	END
+	CLOSE cur
+	DEALLOCATE cur
 END
 GO
 PRINT N'Prozedur "[dbo].[profile_duplicate]" wird erstellt...';
@@ -10404,7 +10419,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SET @version_be = 'v2.9.6'
+	SET @version_be = 'v2.9.8'
 END
 GO
 PRINT N'Trigger "[dbo].[request_update]" wird erstellt...';
@@ -11710,6 +11725,22 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[condition].[type].[MS_Description]" wird 
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, A-Attribute, T-Text', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'condition', @level2type = N'COLUMN', @level2name = N'type';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[type].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, A-Attribute, T-Text', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'type';
+
+
+GO
+PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Description]" wird erstellt...';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
 
 
 GO
@@ -13485,22 +13516,6 @@ PRINT N'Erweiterte Eigenschaft "[dbo].[view_request_role].[MS_DiagramPaneCount]"
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'view_request_role';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[type].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'N-Numeric, A-Attribute, T-Text', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'type';
-
-
-GO
-PRINT N'Erweiterte Eigenschaft "[dbo].[analysis].[uncertainty_activate].[MS_Description]" wird erstellt...';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'R-Range,C-Calculation', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'analysis', @level2type = N'COLUMN', @level2name = N'uncertainty_activate';
 
 
 GO
