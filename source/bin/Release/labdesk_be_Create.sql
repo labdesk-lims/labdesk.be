@@ -455,25 +455,6 @@ CREATE TABLE [dbo].[template] (
 
 
 GO
-PRINT N'Tabelle "[dbo].[project]" wird erstellt...';
-
-
-GO
-CREATE TABLE [dbo].[project] (
-    [id]          INT            IDENTITY (1, 1) NOT NULL,
-    [title]       VARCHAR (255)  NULL,
-    [description] NVARCHAR (MAX) NULL,
-    [profile]     INT            NULL,
-    [owner]       VARCHAR (255)  NOT NULL,
-    [started]     BIT            NULL,
-    [deactivate]  BIT            NULL,
-    [customer]    INT            NULL,
-    [invoice]     BIT            NULL,
-    CONSTRAINT [PK_project] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-
-
-GO
 PRINT N'Tabelle "[dbo].[project_customfield]" wird erstellt...';
 
 
@@ -1802,6 +1783,26 @@ CREATE TABLE [dbo].[material_hp] (
 
 
 GO
+PRINT N'Tabelle "[dbo].[project]" wird erstellt...';
+
+
+GO
+CREATE TABLE [dbo].[project] (
+    [id]          INT            IDENTITY (1, 1) NOT NULL,
+    [title]       VARCHAR (255)  NULL,
+    [description] NVARCHAR (MAX) NULL,
+    [reminder]    DATETIME       NULL,
+    [profile]     INT            NULL,
+    [owner]       VARCHAR (255)  NOT NULL,
+    [started]     BIT            NULL,
+    [deactivate]  BIT            NULL,
+    [customer]    INT            NULL,
+    [invoice]     BIT            NULL,
+    CONSTRAINT [PK_project] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+
+GO
 PRINT N'DEFAULT-Einschränkung "[dbo].[DF_users_language]" wird erstellt...';
 
 
@@ -1898,42 +1899,6 @@ PRINT N'DEFAULT-Einschränkung "[dbo].[DF_template_deactivate]" wird erstellt...
 GO
 ALTER TABLE [dbo].[template]
     ADD CONSTRAINT [DF_template_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_owner]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_owner] DEFAULT (suser_name()) FOR [owner];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_started]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_started] DEFAULT ((0)) FOR [started];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_deactivate]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_deactivate] DEFAULT ((0)) FOR [deactivate];
-
-
-GO
-PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_invoice]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [DF_project_invoice] DEFAULT ((0)) FOR [invoice];
 
 
 GO
@@ -2828,6 +2793,42 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_owner]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_owner] DEFAULT (suser_name()) FOR [owner];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_started]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_started] DEFAULT ((0)) FOR [started];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_deactivate]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_deactivate] DEFAULT ((0)) FOR [deactivate];
+
+
+GO
+PRINT N'DEFAULT-Einschränkung "[dbo].[DF_project_invoice]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [DF_project_invoice] DEFAULT ((0)) FOR [invoice];
+
+
+GO
 PRINT N'Fremdschlüssel "[dbo].[FK_users_contact]" wird erstellt...';
 
 
@@ -2960,24 +2961,6 @@ PRINT N'Fremdschlüssel "[dbo].[FK_template_workflow]" wird erstellt...';
 GO
 ALTER TABLE [dbo].[template]
     ADD CONSTRAINT [FK_template_workflow] FOREIGN KEY ([workflow]) REFERENCES [dbo].[workflow] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_customer]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [FK_project_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
-
-
-GO
-PRINT N'Fremdschlüssel "[dbo].[FK_project_profile]" wird erstellt...';
-
-
-GO
-ALTER TABLE [dbo].[project]
-    ADD CONSTRAINT [FK_project_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
 
 
 GO
@@ -3962,6 +3945,24 @@ ALTER TABLE [dbo].[material_hp]
 
 
 GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_customer]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [FK_project_customer] FOREIGN KEY ([customer]) REFERENCES [dbo].[customer] ([id]);
+
+
+GO
+PRINT N'Fremdschlüssel "[dbo].[FK_project_profile]" wird erstellt...';
+
+
+GO
+ALTER TABLE [dbo].[project]
+    ADD CONSTRAINT [FK_project_profile] FOREIGN KEY ([profile]) REFERENCES [dbo].[profile] ([id]);
+
+
+GO
 PRINT N'CHECK-Einschränkung "[dbo].[CK_setup]" wird erstellt...';
 
 
@@ -4344,85 +4345,6 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[template_audit] 
    ON  dbo.template 
-   AFTER INSERT,DELETE,UPDATE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-	DECLARE @table_name nvarchar(256)
-	DECLARE @table_id INT
-	DECLARE @action_type char(1)
-	DECLARE @inserted xml, @deleted xml
-
-	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
-    RETURN;
-
-	-- Get table infos
-	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
-
-	-- Get action
-	IF EXISTS (SELECT * FROM inserted)
-		BEGIN
-			SELECT @table_id = id FROM inserted
-			IF EXISTS (SELECT * FROM deleted)
-				SELECT @action_type = 'U'
-			ELSE
-				SELECT @action_type = 'I'
-		END
-	ELSE
-		BEGIN
-			SELECT @table_id = id FROM deleted
-			SELECT @action_type = 'D'
-		END
-
-	-- Create xml log
-	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
-	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
-
-	-- Insert log
-    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
-    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
-END
-GO
-PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2023 June
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[project_insert]
-   ON  [dbo].[project]
-   AFTER INSERT
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-
-	-- Insert custom fields
-	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
-
-END
-GO
-PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
-
-
-GO
--- =============================================
--- Author:		Kogel, Lutz
--- Create date: 2022 January
--- Description:	-
--- =============================================
-CREATE TRIGGER [dbo].[project_audit]
-   ON  dbo.project
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -8685,6 +8607,85 @@ GO
 -- =============================================
 CREATE TRIGGER [dbo].[instrument_method_audit]
    ON  [dbo].[instrument_method]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+	DECLARE @table_name nvarchar(256)
+	DECLARE @table_id INT
+	DECLARE @action_type char(1)
+	DECLARE @inserted xml, @deleted xml
+
+	IF NOT EXISTS(SELECT 1 FROM deleted) AND NOT EXISTS(SELECT 1 FROM inserted) 
+    RETURN;
+
+	-- Get table infos
+	SELECT @table_name = OBJECT_NAME(parent_object_id) FROM sys.objects WHERE sys.objects.name = OBJECT_NAME(@@PROCID)
+
+	-- Get action
+	IF EXISTS (SELECT * FROM inserted)
+		BEGIN
+			SELECT @table_id = id FROM inserted
+			IF EXISTS (SELECT * FROM deleted)
+				SELECT @action_type = 'U'
+			ELSE
+				SELECT @action_type = 'I'
+		END
+	ELSE
+		BEGIN
+			SELECT @table_id = id FROM deleted
+			SELECT @action_type = 'D'
+		END
+
+	-- Create xml log
+	SET @inserted = (SELECT * FROM inserted FOR XML PATH)
+	SET @deleted = (SELECT * FROM deleted FOR XML PATH)
+
+	-- Insert log
+    INSERT INTO audit(table_name, table_id, action_type, changed_by, value_old, value_new)
+    SELECT @table_name, @table_id, @action_type, SUSER_SNAME(), @deleted, @inserted
+END
+GO
+PRINT N'Trigger "[dbo].[project_insert]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2023 June
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_insert]
+   ON  [dbo].[project]
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+
+	-- Insert custom fields
+	INSERT INTO project_customfield (field_name, project) SELECT field_name, (SELECT id FROM inserted) FROM customfield WHERE table_name = 'project'
+
+END
+GO
+PRINT N'Trigger "[dbo].[project_audit]" wird erstellt...';
+
+
+GO
+-- =============================================
+-- Author:		Kogel, Lutz
+-- Create date: 2022 January
+-- Description:	-
+-- =============================================
+CREATE TRIGGER [dbo].[project_audit]
+   ON  dbo.project
    AFTER INSERT,DELETE,UPDATE
 AS 
 BEGIN
@@ -13535,6 +13536,8 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('50343e7a-3aeb-4d82-bcdb-a00ab8828cae')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '3829aef3-bd5f-4d71-8f56-3bceacfc3c20')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('3829aef3-bd5f-4d71-8f56-3bceacfc3c20')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'e68f04f9-6cc9-4c78-9c07-4e27ffe42301')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('e68f04f9-6cc9-4c78-9c07-4e27ffe42301')
 
 GO
 

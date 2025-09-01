@@ -24836,6 +24836,21 @@ END]]></Value>
 					</Element>
 				</Entry>
 				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[project].[reminder]">
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[datetime]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[project].[profile]">
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -25040,10 +25055,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="1476" />
+				<Property Name="Offset" Value="1505" />
 				<Property Name="CreateOffset" Value="174" />
 				<Property Name="Length" Value="1444" />
-				<Property Name="StartLine" Value="40" />
+				<Property Name="StartLine" Value="41" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2022 January&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[project_audit]&#xD;&#xA;   ON  dbo.project&#xD;&#xA;   AFTER INSERT,DELETE,UPDATE&#xD;&#xA;AS" />
 			</Annotation>
@@ -25332,10 +25347,10 @@ END]]></Value>
 				</Entry>
 			</Relationship>
 			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Offset" Value="861" />
+				<Property Name="Offset" Value="890" />
 				<Property Name="CreateOffset" Value="171" />
 				<Property Name="Length" Value="607" />
-				<Property Name="StartLine" Value="18" />
+				<Property Name="StartLine" Value="19" />
 				<Property Name="StartColumn" Value="1" />
 				<Property Name="HeaderContents" Value="-- =============================================&#xD;&#xA;-- Author:&#x9;&#x9;Kogel, Lutz&#xD;&#xA;-- Create date: 2023 June&#xD;&#xA;-- Description:&#x9;-&#xD;&#xA;-- =============================================&#xD;&#xA;CREATE TRIGGER [dbo].[project_insert]&#xD;&#xA;   ON  [dbo].[project]&#xD;&#xA;   AFTER INSERT&#xD;&#xA;AS" />
 			</Annotation>

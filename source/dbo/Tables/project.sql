@@ -2,6 +2,7 @@
     [id]          INT NOT NULL IDENTITY,
     [title]       VARCHAR (255)  NULL,
     [description] NVARCHAR (MAX) NULL,
+	[reminder] DATETIME NULL, 
     [profile]     INT            NULL,
     [owner]       VARCHAR (255)  CONSTRAINT [DF_project_owner] DEFAULT (suser_name()) NOT NULL,
     [started]     BIT            CONSTRAINT [DF_project_started] DEFAULT ((0)) NULL,
